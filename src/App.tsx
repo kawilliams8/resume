@@ -1,6 +1,7 @@
 import { Box, Typography, Button, Stack } from "@mui/material";
-
-export default function HomePage() {
+import GitHubIcon from "@mui/icons-material/GitHub";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+export default function App() {
   return (
     <Box
       sx={{
@@ -19,7 +20,7 @@ export default function HomePage() {
       <Typography variant="h3" sx={{ fontWeight: 600, mb: 1 }}>
         Katherine Williams
       </Typography>
-      <Typography variant="h6" sx={{ fontWeight: 300, opacity: 0.85, mb: 4 }}>
+      <Typography variant="h6" sx={{ fontWeight: 300, opacity: 0.85, mb: 2 }}>
         Senior Frontend / Fullstack Software Engineer
       </Typography>
 
@@ -29,8 +30,9 @@ export default function HomePage() {
           target="_blank"
           rel="noopener"
           variant="contained"
+          startIcon={<GitHubIcon />}
           sx={{
-            backgroundColor: "rgba(255, 255, 255, 0.3)",
+            backgroundColor: "rgba(255, 255, 255, 0.1)",
             color: "white",
             fontWeight: 500,
             backdropFilter: "blur(4px)",
@@ -49,8 +51,9 @@ export default function HomePage() {
           target="_blank"
           rel="noopener"
           variant="contained"
+          startIcon={<LinkedInIcon />}
           sx={{
-            backgroundColor: "rgba(255, 255, 255, 0.3)",
+            backgroundColor: "rgba(255, 255, 255, 0.1)",
             color: "white",
             fontWeight: 500,
             backdropFilter: "blur(4px)",
