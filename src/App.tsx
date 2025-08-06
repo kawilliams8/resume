@@ -1,6 +1,7 @@
 import { Box, Typography, Button, Stack } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+
 export default function App() {
   return (
     <Box
@@ -17,10 +18,10 @@ export default function App() {
         px: 2,
       }}
     >
-      <Typography variant="h3" sx={{ fontWeight: 600, mb: 1 }}>
+      <Typography variant="h2" sx={{ fontWeight: 600, mb: 1 }}>
         Katherine Williams
       </Typography>
-      <Typography variant="h6" sx={{ fontWeight: 300, opacity: 0.85, mb: 2 }}>
+      <Typography variant="h5" sx={{ fontWeight: 300, opacity: 0.85, mb: 2 }}>
         Senior Frontend / Fullstack Software Engineer
       </Typography>
 
@@ -66,6 +67,15 @@ export default function App() {
         >
           LinkedIn
         </Button>
+      </Stack>
+      <Stack direction="column" sx={{ mt: 4 }}>
+        <Typography variant="h6" sx={{ fontWeight: 100, opacity: 0.85, mb: 2 }}>
+          React | Vue | TypeScript | Redux | Design Systems | E2E Testing
+        </Typography>
+        <Typography variant="h6" sx={{ fontWeight: 100, opacity: 0.85, mb: 2 }}>
+          RESTful APIs | Cursor AI | Claude | Web Sockets | Laravel | Node |
+          Docker | AWS
+        </Typography>
       </Stack>
     </Box>
   );
