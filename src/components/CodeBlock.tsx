@@ -1,41 +1,57 @@
-import React, { CSSProperties } from "react";
+import { Box, Stack, Typography } from "@mui/material";
+import React from "react";
 
-type CodeBlockProps = {
+interface CodeBlockProps {
   code: string;
-  language?: string;
-  style?: CSSProperties;
-};
+  title: string;
+}
 
-export const CodeBlock: React.FC<CodeBlockProps> = ({
-  code,
-  language = "javascript",
-  style,
-}) => {
+export const CodeBlock: React.FC<CodeBlockProps> = ({ code, title }) => {
   return (
-    <div style={{ ...containerStyle, ...style }}>
+    <Box
+      style={{ ...containerStyle }}
+      sx={{
+        maxWidth: {
+          xs: "400px",
+          sm: "500px",
+          md: "650px",
+          lg: "550px",
+        },
+      }}
+    >
       <div style={headerStyle}>
         <span style={dotStyle("#ff5f56")} />
         <span style={dotStyle("#ffbd2e")} />
         <span style={dotStyle("#27c93f")} />
+        <Stack sx={{ width: "100%", mr: "10%" }}>
+          <Typography color="black">{title}</Typography>
+        </Stack>
       </div>
-      <pre style={preStyle}>
-        <code className={`language-${language}`}>{code}</code>
-      </pre>
-    </div>
+      <div style={{ ...windowStyle }}>
+        <pre style={preStyle}>
+          <code>{code}</code>
+        </pre>
+      </div>
+    </Box>
   );
+};
+
+const windowStyle: React.CSSProperties = {
+  overflow: "scroll",
+  maxHeight: "410px",
 };
 
 const containerStyle: React.CSSProperties = {
   borderRadius: "8px",
-  overflow: "hidden",
   border: "1px solid #ccc",
   fontSize: "14px",
   fontFamily: "monospace",
   backgroundColor: "#282c34",
   color: "#f8f8f2",
   boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
-  maxWidth: "100%",
-  margin: "5px auto",
+  height: "450px",
+  margin: "5px 10px",
+  lineHeight: "1.25",
 };
 
 const headerStyle: React.CSSProperties = {
@@ -49,14 +65,14 @@ const headerStyle: React.CSSProperties = {
 
 const dotStyle = (color: string): React.CSSProperties => ({
   height: "12px",
-  width: "12px",
+  width: "14px",
   borderRadius: "50%",
   backgroundColor: color,
 });
 
 const preStyle: React.CSSProperties = {
   margin: 0,
-  padding: "20px",
+  padding: "10px 20px",
   overflowX: "auto",
   textAlign: "left",
 };
