@@ -5,11 +5,7 @@ import EmailOutlineIcon from "@mui/icons-material/EmailOutlined";
 import { ShootingStars } from "./components/ShootingStars";
 import styled from "@emotion/styled";
 import { CodeBlock } from "./components/CodeBlock";
-
-import "./assets/fonts/SFPRODISPLAYREGULAR.otf";
-import "./assets/fonts/SFPRODISPLAYBOLD.otf";
-import "./assets/fonts/SFPRODISPLAYMEDIUM.otf";
-
+import "./fonts.css";
 import "./App.css";
 
 export default function App() {
