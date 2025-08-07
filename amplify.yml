@@ -7,7 +7,6 @@ frontend:
         - nvm use 20
         - node --version
         - npm --version
-        - cd resume  # if your project is in a subdirectory
         - npm ci
     build:
       commands:
