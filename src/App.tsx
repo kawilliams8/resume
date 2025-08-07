@@ -6,7 +6,6 @@ import { ShootingStars } from "./components/ShootingStars";
 import styled from "@emotion/styled";
 import { CodeBlock } from "./components/CodeBlock";
 import "./fonts.css";
-import "./App.css";
 
 export default function App() {
   return (
