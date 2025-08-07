@@ -1,20 +1,23 @@
 @font-face {
   font-family: 'SF Pro Display';
-  src: url('./assets/fonts/SFPRODISPLAYREGULAR.otf?url') format('opentype');
+  src: url('./fonts/SFPRODISPLAYREGULAR.otf?url') format('opentype'),
+    url('./assets/fonts/SFPRODISPLAYREGULAR.otf?url') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'SF Pro Display';
-  src: url('./assets/fonts/SFPRODISPLAYBOLD.otf?url') format('opentype');
+  src: url('./fonts/SFPRODISPLAYBOLD.otf?url') format('opentype'),
+    url('./assets/fonts/SFPRODISPLAYBOLD.otf?url') format('opentype');
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'SF Pro Display';
-  src: url('./assets/fonts/SFPRODISPLAYMEDIUM.otf?url') format('opentype');
+  src: url('./fonts/SFPRODISPLAYMEDIUM.otf?url') format('opentype'),
+  url('./assets/fonts/SFPRODISPLAYMEDIUM.otf?url') format('opentype');
   font-weight: 500;
   font-style: normal;
 }
