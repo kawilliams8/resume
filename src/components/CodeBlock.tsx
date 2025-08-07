@@ -12,7 +12,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, title }) => {
       style={{ ...containerStyle }}
       sx={{
         maxWidth: {
-          xs: "400px",
+          xs: "275px",
           sm: "500px",
           md: "650px",
           lg: "550px",

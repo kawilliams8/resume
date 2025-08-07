@@ -42,7 +42,7 @@ export default function App() {
               maxWidth: "100%",
               wordBreak: "break-word",
               whiteSpace: "normal",
-              fontSize: { xs: "2rem", sm: "3rem", md: "4rem" },
+              fontSize: { xs: "1.5rem", sm: "2rem", md: "3rem" },
             }}
           >
             Katherine Williams
@@ -51,14 +51,15 @@ export default function App() {
             variant="h5"
             sx={{
               mb: 1,
-              fontSize: { xs: "1.25rem", sm: "1.5rem" },
+              mx: 3,
+              fontSize: { xs: "1.1rem", sm: "1.5rem" },
             }}
           >
             Senior Frontend / Fullstack Software Engineer
           </Typography>
 
           <Stack
-            direction="row"
+            direction={{ sx: "column", sm: "row" }}
             spacing={2}
             sx={{
               justifyContent: "center",
@@ -78,6 +79,9 @@ export default function App() {
               href="https://www.linkedin.com/in/kawilliamsco/"
               variant="contained"
               startIcon={<LinkedInIcon />}
+              sx={{
+                marginTop: { xs: 2, sm: 0 },
+              }}
             >
               LinkedIn
             </StyledButton>
@@ -85,6 +89,9 @@ export default function App() {
               href="mailto:kawilliams8@gmail.com?subject=Hey,%20Katie!"
               variant="contained"
               startIcon={<EmailOutlineIcon />}
+              sx={{
+                marginTop: { xs: 2, sm: 0 },
+              }}
             >
               Email Me
             </StyledButton>
