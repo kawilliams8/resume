@@ -5,7 +5,7 @@ import EmailOutlineIcon from "@mui/icons-material/EmailOutlined";
 import { ShootingStars } from "./components/ShootingStars";
 import styled from "@emotion/styled";
 import { CodeBlock } from "./components/CodeBlock";
-import "./fonts.css";
+import "./index.css";
 
 export default function App() {
   return (
@@ -32,7 +32,6 @@ export default function App() {
             alignItems: "center",
             textAlign: "center",
             mt: 2,
-            fontFamily: "SF Pro Display",
           }}
         >
           <Typography
@@ -44,7 +43,6 @@ export default function App() {
               wordBreak: "break-word",
               whiteSpace: "normal",
               fontSize: { xs: "2rem", sm: "3rem", md: "4rem" },
-              fontFamily: "SF Pro Display",
             }}
           >
             Katherine Williams
@@ -52,10 +50,8 @@ export default function App() {
           <Typography
             variant="h5"
             sx={{
-              fontWeight: 300,
               mb: 1,
               fontSize: { xs: "1.25rem", sm: "1.5rem" },
-              fontFamily: "SF Pro Display",
             }}
           >
             Senior Frontend / Fullstack Software Engineer
@@ -101,7 +97,6 @@ export default function App() {
                 opacity: 0.85,
                 mb: 1,
                 fontSize: { xs: "1rem", sm: "1.25rem" },
-                fontFamily: "SF Pro Display",
               }}
             >
               React | Vue | TypeScript | Redux | UI Libraries | Playwright
@@ -113,7 +108,6 @@ export default function App() {
                 opacity: 0.85,
                 mb: 1,
                 fontSize: { xs: ".9rem", sm: "1rem" },
-                fontFamily: "SF Pro Display",
               }}
             >
               RESTful APIs | Laravel | Node | AWS | Docker | Cursor AI
