@@ -29,7 +29,7 @@ export default function App() {
             justifyContent: "center",
             alignItems: "center",
             textAlign: "center",
-            px: 2,
+            my: 2,
           }}
         >
           <Typography
@@ -40,7 +40,7 @@ export default function App() {
               maxWidth: "100%",
               wordBreak: "break-word",
               whiteSpace: "normal",
-              fontSize: { xs: "2rem", sm: "3rem", md: "4rem" },
+              fontSize: { xs: "2rem", sm: "3rem", md: "3.5rem" },
             }}
           >
             Katherine Williams
@@ -50,7 +50,7 @@ export default function App() {
             sx={{
               fontWeight: 300,
               mb: 1,
-              fontSize: { xs: "1.25rem", sm: "1.75rem" },
+              fontSize: { xs: "1.25rem", sm: "1.5rem" },
             }}
           >
             Senior Frontend / Fullstack Software Engineer
@@ -66,59 +66,32 @@ export default function App() {
               mb: 1,
             }}
           >
-            <Button
+            <StyledButton
               href="https://github.com/kawilliams8"
-              target="_blank"
-              rel="noopener"
               variant="contained"
               startIcon={<GitHubIcon />}
-              sx={{
-                backgroundColor: "rgba(255, 255, 255, 0.1)",
-                color: "white",
-                fontWeight: 500,
-                backdropFilter: "blur(4px)",
-                borderRadius: "4px",
-                textTransform: "none",
-                "&:hover": {
-                  backgroundColor: "rgba(255, 255, 255, 0.3)",
-                },
-              }}
             >
               GitHub
-            </Button>
-
-            <Button
+            </StyledButton>
+            <StyledButton
               href="https://www.linkedin.com/in/kawilliamsco/"
-              target="_blank"
-              rel="noopener"
               variant="contained"
               startIcon={<LinkedInIcon />}
-              sx={{
-                backgroundColor: "rgba(255, 255, 255, 0.1)",
-                color: "white",
-                fontWeight: 500,
-                backdropFilter: "blur(4px)",
-                borderRadius: "4px",
-                textTransform: "none",
-                "&:hover": {
-                  backgroundColor: "rgba(255, 255, 255, 0.3)",
-                },
-              }}
             >
               LinkedIn
-            </Button>
+            </StyledButton>
           </Stack>
-          <Stack direction="column" sx={{ mt: 1, maxWidth: "80%" }}>
+          <Stack direction="column" sx={{ mt: 1, maxWidth: "90%" }}>
             <Typography
               variant="h6"
               sx={{
                 fontWeight: 100,
                 opacity: 0.85,
                 mb: 2,
-                fontSize: { xs: "1.25rem" },
+                fontSize: { xs: "1rem", sm: "1.25rem" },
               }}
             >
-              React | Vue | TypeScript | Redux | Design Systems | E2E Testing
+              React | Vue | TypeScript | Redux | UI Libraries | Playwright
             </Typography>
             <Typography
               variant="h6"
@@ -126,11 +99,10 @@ export default function App() {
                 fontWeight: 100,
                 opacity: 0.85,
                 mb: 2,
-                fontSize: { xs: "1.25rem" },
+                fontSize: { xs: ".9rem", sm: "1rem" },
               }}
             >
-              RESTful APIs | Cursor AI | Claude | Web Sockets | Laravel | Node |
-              Docker | AWS
+              RESTful APIs | Laravel | Node | AWS | Docker | Cursor AI
             </Typography>
             <CodeBlock code={code} language="javascript" />
           </Stack>
@@ -144,6 +116,7 @@ const code = `{
   "candidate": "Katherine Williams",
   "years_of_experience": 7,
   "education": "Turing School of Software and Design",
+  "work_environment" : "remote",
   "interview": {
     "technical": "passed ✅",
     "behavioral": "nailed it 💬",
@@ -151,15 +124,15 @@ const code = `{
   },
   "offer": {
     "position": "Senior Frontend Engineer",
-    "stack": ["React", "TypeScript", "Material UI", "Playwright", "Storybook"],
-    "salary": "💰 competitive",
+    "responsibilities": ["UI Development", "End-to-End Testing", "Mentorship", "Collaboration" ],
+    "salary": "competitive 💰",
     "start_date": "ASAP 🚀"
   },
   "next_steps": [
     "Sign offer letter ✍️",
     "Celebrate 🎉",
     "Clone the repo 🧑‍💻",
-    "Push great code 🔥"
+    "Hit the ground running 🔥"
   ]
 }`;
 
@@ -187,3 +160,18 @@ const ForegroundLayer = styled.div`
   width: 100%;
   overflow-wrap: break-word;
 `;
+
+const StyledButton = styled(Button)(({}) => ({
+  target: "_blank",
+  rel: "noopener",
+  backgroundColor: "rgba(255, 255, 255, 0.1)",
+  color: "white",
+  fontWeight: 500,
+  backdropFilter: "blur(4px)",
+  borderRadius: "4px",
+  textTransform: "none",
+  "&:hover": {
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
+  },
+  width: "110px",
+}));
