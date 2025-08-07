@@ -120,7 +120,7 @@ export default function App() {
             </Typography>
           </Stack>
           <Stack direction={{ xs: "column", lg: "row" }}>
-            <CodeBlock code={code1} title="career.ts" />
+            <CodeBlock code={code1} title="top_applicant.ts" />
             <CodeBlock code={code2} title="types/index.ts" />
           </Stack>
         </Stack>

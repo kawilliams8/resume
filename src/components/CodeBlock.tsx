@@ -61,6 +61,7 @@ const headerStyle: React.CSSProperties = {
   alignItems: "center",
   padding: "0 12px",
   gap: "8px",
+  borderRadius: "7px 7px 0 0",
 };
 
 const dotStyle = (color: string): React.CSSProperties => ({
