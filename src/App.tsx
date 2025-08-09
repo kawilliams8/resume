@@ -6,6 +6,10 @@ import "./index.css";
 import { ButtonLinks } from "./components/ButtonLinks";
 
 export default function App() {
+  console.log(
+    "⚡️ Thanks for checking under the hood! Let's build something amazing together. ⚡️"
+  );
+
   return (
     <>
       <BackgroundLayer>
