@@ -120,7 +120,7 @@ export default function App() {
               RESTful APIs | Laravel | Node | AWS | Docker | Cursor AI
             </Typography>
           </Stack>
-          <Stack direction={{ xs: "column", lg: "row" }}>
+          <Stack direction={{ xs: "column", lg: "row" }} mt={2}>
             <CodeBlock code={code1} title="top_applicant.ts" />
             <CodeBlock code={code2} title="types/index.ts" />
           </Stack>
@@ -171,21 +171,24 @@ const StyledButton = styled(Button)(({}) => ({
   width: "120px",
 }));
 
-const code1 = `const top_applicant: Applicant = {
+const code1 = `  // She's ready to ship features on day one!
+  // Excellent fit for the React/TypeScript team 👍🏻
+
+  const top_applicant: Applicant = {
   "candidate": "Katherine Williams",
   "years_of_experience": 7,
   "education": "Turing School of Software and Design - Frontend Engineering",
   "work_environment" : "remote",
   "interview": {
-    "technical": "passed ✅",
-    "behavioral": "nailed it 💬",
-    "team_fit": "excellent 🤝"
+    "technical": "passed",
+    "behavioral": "nailed it",
+    "team_fit": "excellent"
   },
   "offer": {
     "position": "Senior Frontend Engineer",
     "responsibilities": ["UI Development", "End-to-End Testing", "Mentorship" ],
-    "salary": "competitive 💰",
-    "start_date": "ASAP 🚀"
+    "salary": "competitive",
+    "start_date": "ASAP"
   },
   "next_steps": [
     "Sign offer letter ✍️",

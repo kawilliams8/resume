@@ -1,3 +1,4 @@
+import { highlightSyntax } from "@/utils";
 import { Box, Stack, Typography } from "@mui/material";
 import React from "react";
 
@@ -7,6 +8,7 @@ interface CodeBlockProps {
 }
 
 export const CodeBlock: React.FC<CodeBlockProps> = ({ code, title }) => {
+  const highlightedCode = highlightSyntax(code);
   return (
     <Box
       style={{ ...containerStyle }}
@@ -29,7 +31,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, title }) => {
       </div>
       <div style={{ ...windowStyle }}>
         <pre style={preStyle}>
-          <code>{code}</code>
+          <code>{highlightedCode}</code>
         </pre>
       </div>
     </Box>
