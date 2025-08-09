@@ -32,9 +32,9 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, title }) => {
   };
 
   const easterEggMessages = [
-    "🕵️ Nice find! You're clearly detail-oriented.",
+    "🕵️ Nice find! You're clearly detail-oriented, like me!.",
     "🎉 Easter egg activated! Hire this developer!",
-    "🔍 Curiosity is a great developer trait!",
+    "🔍 Curiosity is a great trait in a developer, don't you think!?",
     "🚀 You found the secret! I write clean code AND enjoy fun surprises.",
     "💎 Hidden gem discovered! This developer thinks about UX.",
     "🧩 Puzzle solver detected! Perfect for our debugging sessions.",
