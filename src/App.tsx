@@ -1,11 +1,9 @@
-import { Typography, Button, Stack } from "@mui/material";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import EmailOutlineIcon from "@mui/icons-material/EmailOutlined";
+import { Typography, Stack } from "@mui/material";
 import { ShootingStars } from "./components/ShootingStars";
 import styled from "@emotion/styled";
 import { CodeBlock } from "./components/CodeBlock";
 import "./index.css";
+import { ButtonLinks } from "./components/ButtonLinks";
 
 export default function App() {
   return (
@@ -57,45 +55,8 @@ export default function App() {
           >
             Senior Frontend / Fullstack Software Engineer
           </Typography>
+          <ButtonLinks />
 
-          <Stack
-            direction={{ sx: "column", sm: "row" }}
-            spacing={2}
-            sx={{
-              justifyContent: "center",
-              alignItems: "center",
-              flexWrap: "wrap",
-              my: 1,
-            }}
-          >
-            <StyledButton
-              href="https://github.com/kawilliams8"
-              variant="contained"
-              startIcon={<GitHubIcon />}
-            >
-              GitHub
-            </StyledButton>
-            <StyledButton
-              href="https://www.linkedin.com/in/kawilliamsco/"
-              variant="contained"
-              startIcon={<LinkedInIcon />}
-              sx={{
-                marginTop: { xs: 2, sm: 0 },
-              }}
-            >
-              LinkedIn
-            </StyledButton>
-            <StyledButton
-              href="mailto:kawilliams8@gmail.com?subject=Hey,%20Katie!"
-              variant="contained"
-              startIcon={<EmailOutlineIcon />}
-              sx={{
-                marginTop: { xs: 2, sm: 0 },
-              }}
-            >
-              Email Me
-            </StyledButton>
-          </Stack>
           <Stack direction="column" sx={{ mt: 1, maxWidth: "90%" }}>
             <Typography
               variant="h6"
@@ -155,21 +116,6 @@ const ForegroundLayer = styled.div`
   overflow-wrap: break-word;
   min-height: 100vh;
 `;
-
-const StyledButton = styled(Button)(({}) => ({
-  target: "_blank",
-  rel: "noopener",
-  backgroundColor: "rgba(255, 255, 255, 0.1)",
-  color: "white",
-  fontWeight: 500,
-  backdropFilter: "blur(4px)",
-  borderRadius: "4px",
-  textTransform: "none",
-  "&:hover": {
-    backgroundColor: "rgba(255, 255, 255, 0.3)",
-  },
-  width: "120px",
-}));
 
 const code1 = `  // She's ready to ship features on day one!
   // Excellent fit for the React/TypeScript team 👍🏻

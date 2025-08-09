@@ -1,110 +1,132 @@
 import { Box, Stack, Typography } from "@mui/material";
 import React from "react";
 import { highlightSyntax } from "../utils";
+import { BlueScreenOfDeath } from "../components/BlueScreenOfDeath";
+import { EasterEggMessages } from "./EasterEggMessages";
+import { MinimizedWindow } from "./MinimizedWindow";
 
 interface CodeBlockProps {
   code: string;
   title: string;
 }
 
+type WindowState = "normal" | "closed" | "minimized";
+
+const COLORS = {
+  dots: {
+    red: "#ff5f56",
+    yellow: "#ffbd2e",
+    green: "#27c93f",
+  },
+  background: {
+    normal: "#282c34",
+    bsod: "#0078d4",
+  },
+} as const;
+
+const RESPONSIVE_WIDTHS = {
+  xs: "275px",
+  sm: "500px",
+  md: "650px",
+  lg: "550px",
+} as const;
+
+const TIMEOUTS = {
+  close: 3000,
+  minimize: 5000,
+  message: 3000,
+} as const;
+
+const DOT_ACTIONS = {
+  [COLORS.dots.red]: {
+    label: "Close window (shows blue screen)",
+    action: "close",
+    description: "Close editor window",
+  },
+  [COLORS.dots.yellow]: {
+    label: "Minimize window",
+    action: "minimize",
+    description: "Minimize editor window",
+  },
+  [COLORS.dots.green]: {
+    label: "Easter egg",
+    action: "easter-egg",
+    description: "Maximize editor with secret message",
+  },
+} as const;
+
 export const CodeBlock: React.FC<CodeBlockProps> = ({ code, title }) => {
-  const [windowState, setWindowState] = React.useState<
-    "normal" | "closed" | "minimized"
-  >("normal");
+  const [windowState, setWindowState] = React.useState<WindowState>("normal");
   const [showMessage, setShowMessage] = React.useState(false);
 
-  const handleDotClick = (dotColor: string) => {
-    if (dotColor === "#ff5f56") {
-      // Red dot - "close"
+  const handleDotClick = React.useCallback((dotColor: string) => {
+    if (dotColor === COLORS.dots.red) {
       setWindowState("closed");
-      // Reset after 3 seconds
-      setTimeout(() => setWindowState("normal"), 3000);
-    } else if (dotColor === "#ffbd2e") {
-      // Yellow dot - "minimize"
+      setTimeout(() => setWindowState("normal"), TIMEOUTS.close);
+    } else if (dotColor === COLORS.dots.yellow) {
       setWindowState("minimized");
-      // Reset after 2 seconds
-      setTimeout(() => setWindowState("normal"), 3000);
-    } else if (dotColor === "#27c93f") {
-      // Green dot - easter egg
+      setTimeout(() => setWindowState("normal"), TIMEOUTS.minimize);
+    } else if (dotColor === COLORS.dots.green) {
       setShowMessage(true);
-      setTimeout(() => setShowMessage(false), 3000);
+      setTimeout(() => setShowMessage(false), TIMEOUTS.message);
+    }
+  }, []);
+
+  const handleKeyDown = React.useCallback(
+    (event: React.KeyboardEvent, dotColor: string) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        handleDotClick(dotColor);
+      }
+    },
+    [handleDotClick]
+  );
+
+  const getWindowStateAnnouncement = () => {
+    switch (windowState) {
+      case "closed":
+        return "Code window closed, showing blue screen of death";
+      case "minimized":
+        return "Code window minimized";
+      case "normal":
+        return "Code window restored to normal view";
+      default:
+        return "";
     }
   };
 
-  const easterEggMessages = [
-    "🕵️ Nice find! You're clearly detail-oriented, like me!.",
-    "🎉 Easter egg activated! Hire this developer!",
-    "🔍 Curiosity is a great trait in a developer, don't you think!?",
-    "🚀 You found the secret! I write clean code AND enjoy fun surprises.",
-    "💎 Hidden gem discovered! This developer thinks about UX.",
-    "🧩 Puzzle solver detected! Perfect for our debugging sessions.",
-  ];
-
-  const randomMessage =
-    easterEggMessages[Math.floor(Math.random() * easterEggMessages.length)];
-
-  // Blue Screen of Death component
-  const BlueScreenOfDeath = () => (
-    <div
-      style={{
-        backgroundColor: "#0078d4",
-        color: "white",
-        padding: "40px 20px",
-        fontFamily: "Consolas, monospace",
-        fontSize: "14px",
-        lineHeight: "1.4",
-        height: "100%",
-        width: "100%",
-        minHeight: "410px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        margin: 0,
-        boxSizing: "border-box",
-        overflow: "hidden",
-      }}
-    >
-      <div style={{ fontSize: "120px", marginBottom: "20px" }}>:(</div>
-      <div style={{ fontSize: "24px", marginBottom: "20px" }}>
-        Recruiter ran into a problem and needs to reboot.
-      </div>
-      <div style={{ marginBottom: "20px" }}>
-        Please wait while the error is processed and you will return to the
-        prior screen.
-      </div>
-      <div style={{ marginBottom: "30px" }}>0% complete</div>
-      <div style={{ fontSize: "12px", opacity: 0.8 }}>
-        Recruiter error code:
-        <br />
-        DEVELOPER_TOO_GOOD_TO_IGNORE
-      </div>
-    </div>
-  );
-
-  // Minimized state component
-  const MinimizedWindow = () => (
-    <div
-      style={{
-        backgroundColor: "#f0f0f0",
-        color: "#666",
-        padding: "8px 16px",
-        textAlign: "center",
-        fontStyle: "italic",
-        height: "15px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: "12px",
-        border: "1px solid #ddd",
-        borderRadius: "4px",
-        margin: "20px auto",
-        width: "fit-content",
-        minWidth: "200px",
-        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-        cursor: "pointer",
-      }}
-    >
-      📉 Small window, but a large UI/UX experience!
+  const renderDots = () => (
+    <div role="group" aria-label="Window controls">
+      {Object.entries(COLORS.dots).map(([_, color]) => {
+        const dotAction = DOT_ACTIONS[color];
+        return (
+          <button
+            key={color}
+            style={{
+              ...dotStyle(color),
+              cursor: "pointer",
+              border: "none",
+              padding: 0,
+              margin: 3,
+              outline: "none",
+            }}
+            onClick={() => handleDotClick(color)}
+            onKeyDown={(e) => handleKeyDown(e, color)}
+            aria-label={dotAction.label}
+            title={dotAction.description}
+            tabIndex={0}
+            onFocus={(e) => {
+              e.target.style.outline = "2px solid #0066cc";
+              e.target.style.outlineOffset = "2px";
+            }}
+            onBlur={(e) => {
+              e.target.style.outline = "none";
+            }}
+          >
+            <span aria-hidden="true"></span>
+          </button>
+        );
+      })}
     </div>
   );
 
@@ -112,79 +134,65 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, title }) => {
     <Box
       style={{
         ...containerStyle,
-        backgroundColor: windowState === "closed" ? "#0078d4" : "#282c34",
+        backgroundColor:
+          windowState === "closed"
+            ? COLORS.background.bsod
+            : COLORS.background.normal,
         height: windowState === "minimized" ? "80px" : "450px",
         transition: "height 0.3s ease-in-out",
         marginBottom: windowState === "minimized" ? "30px" : "10px",
       }}
       sx={{
-        maxWidth: {
-          xs: "275px",
-          sm: "500px",
-          md: "650px",
-          lg: "550px",
-        },
+        maxWidth: RESPONSIVE_WIDTHS,
         position: "relative",
       }}
+      role="region"
+      aria-label={`Code block: ${title}`}
     >
-      <div style={headerStyle}>
-        <span
-          style={{ ...dotStyle("#ff5f56"), cursor: "pointer" }}
-          onClick={() => handleDotClick("#ff5f56")}
-        />
-        <span
-          style={{ ...dotStyle("#ffbd2e"), cursor: "pointer" }}
-          onClick={() => handleDotClick("#ffbd2e")}
-        />
-        <span
-          style={{ ...dotStyle("#27c93f"), cursor: "pointer" }}
-          onClick={() => handleDotClick("#27c93f")}
-        />
-        <Stack sx={{ width: "100%", mr: "10%" }}>
-          <Typography color="black">{title}</Typography>
-        </Stack>
+      {/* Screen reader announcements for state changes */}
+      <div
+        aria-live="polite"
+        aria-atomic="true"
+        style={{
+          position: "absolute",
+          left: "-10000px",
+          width: "1px",
+          height: "1px",
+          overflow: "hidden",
+        }}
+      >
+        {getWindowStateAnnouncement()}
       </div>
 
-      {/* Green dot easter egg message */}
-      {showMessage && windowState === "normal" && (
-        <Box
-          sx={{
-            position: "absolute",
-            top: "45px",
-            left: "12px",
-            backgroundColor: "black",
-            color: "white",
-            padding: "8px 12px",
-            borderRadius: "6px",
-            fontSize: "12px",
-            fontWeight: "500",
-            zIndex: 10,
-            animation: "fadeInOut 3s ease-in-out",
-            boxShadow: "0 4px 12px rgba(137, 221, 168, 0.3)",
-          }}
-        >
-          {randomMessage}
-        </Box>
-      )}
+      <header style={headerStyle}>
+        <Stack sx={{ width: { xs: "30%", sm: "15%" } }}>{renderDots()}</Stack>
+        <Stack sx={{ width: "70%", mr: "15%" }}>
+          <Typography component="h3" color="black" aria-level={3}>
+            {title}
+          </Typography>
+        </Stack>
+      </header>
 
-      <div
+      {showMessage && windowState === "normal" && <EasterEggMessages />}
+
+      <main
         style={{
           ...windowStyle,
-          backgroundColor: windowState === "closed" ? "#0078d4" : "#282c34", // Blue background for BSOD
-
-          borderRadius: windowState === "minimized" ? "7px" : "7px 7px 0 0",
+          backgroundColor:
+            windowState === "closed"
+              ? COLORS.background.bsod
+              : COLORS.background.normal,
+          borderRadius: "7px",
         }}
+        aria-label="Code content"
       >
         {windowState === "closed" && (
           <Box
             sx={{
-              width: {
-                xs: "275px",
-                sm: "500px",
-                md: "650px",
-                lg: "550px",
-              },
+              width: RESPONSIVE_WIDTHS,
             }}
+            role="alert"
+            aria-label="Blue screen of death error message"
           >
             <BlueScreenOfDeath />
           </Box>
@@ -192,13 +200,10 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, title }) => {
         {windowState === "minimized" && (
           <Box
             sx={{
-              width: {
-                xs: "275px",
-                sm: "500px",
-                md: "650px",
-                lg: "550px",
-              },
+              width: RESPONSIVE_WIDTHS,
             }}
+            role="status"
+            aria-label="Window minimized"
           >
             <div
               style={{
@@ -214,22 +219,16 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, title }) => {
           </Box>
         )}
         {windowState === "normal" && (
-          <pre style={preStyle}>
+          <pre
+            style={preStyle}
+            role="code"
+            aria-label={`Code snippet: ${title}`}
+            tabIndex={0}
+          >
             <code>{highlightSyntax(code)}</code>
           </pre>
         )}
-      </div>
-
-      <style>
-        {`
-          @keyframes fadeInOut {
-            0% { opacity: 0; transform: translateY(-10px); }
-            20% { opacity: 1; transform: translateY(0); }
-            80% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-10px); }
-          }
-        `}
-      </style>
+      </main>
     </Box>
   );
 };
@@ -267,6 +266,7 @@ const dotStyle = (color: string): React.CSSProperties => ({
   width: "14px",
   borderRadius: "50%",
   backgroundColor: color,
+  display: "inline-block",
 });
 
 const preStyle: React.CSSProperties = {
