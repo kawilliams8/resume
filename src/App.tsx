@@ -86,7 +86,7 @@ export default function App() {
             </Typography>
           </Stack>
           <Stack direction={{ xs: "column", lg: "row" }} mt={2}>
-            <CodeBlock code={code1} title="top_applicant.ts" />
+            <CodeBlock code={code1} title="top_applicant.ts" withTypewriter />
             <CodeBlock code={code2} title="types/index.ts" />
           </Stack>
         </Stack>
@@ -121,9 +121,7 @@ const ForegroundLayer = styled.div`
   min-height: 100vh;
 `;
 
-const code1 = `  // She's ready to ship features on day one!
-  // Excellent fit for the React/TypeScript team 👍🏻
-
+const code1 = `
   const top_applicant: Applicant = {
   "candidate": "Katherine Williams",
   "years_of_experience": 7,
@@ -148,9 +146,10 @@ const code1 = `  // She's ready to ship features on day one!
   ]
 }`;
 
-const code2 = `type WorkEnvironment = 'remote' | 'hybrid' | 'onsite';
-type InterviewStatus = 'passed' | 'failed' | 'pending';
+const code2 = `
 type Position = 'Senior Frontend Engineer' | 'Frontend Engineer' | 'Junior Frontend Engineer';
+type WorkEnvironment = 'remote' | 'hybrid' | 'onsite';
+type InterviewStatus = 'passed' | 'failed' | 'pending';
 
 interface Applicant {
   candidate: string;

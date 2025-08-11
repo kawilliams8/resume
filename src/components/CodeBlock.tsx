@@ -1,13 +1,15 @@
 import { Box, Stack, Typography } from "@mui/material";
 import React from "react";
-import { highlightSyntax } from "../utils";
 import { BlueScreenOfDeath } from "../components/BlueScreenOfDeath";
 import { EasterEggMessages } from "./EasterEggMessages";
 import { MinimizedWindow } from "./MinimizedWindow";
+import { Typewriter } from "./Typewriter";
+import { highlightSyntax } from "@/utils";
 
 interface CodeBlockProps {
   code: string;
   title: string;
+  withTypewriter?: boolean;
 }
 
 type WindowState = "normal" | "closed" | "minimized";
@@ -55,7 +57,11 @@ const DOT_ACTIONS = {
   },
 } as const;
 
-export const CodeBlock: React.FC<CodeBlockProps> = ({ code, title }) => {
+export const CodeBlock: React.FC<CodeBlockProps> = ({
+  code,
+  title,
+  withTypewriter,
+}) => {
   const [windowState, setWindowState] = React.useState<WindowState>("normal");
   const [showMessage, setShowMessage] = React.useState(false);
 
@@ -219,14 +225,17 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, title }) => {
           </Box>
         )}
         {windowState === "normal" && (
-          <pre
-            style={preStyle}
-            role="code"
-            aria-label={`Code snippet: ${title}`}
-            tabIndex={0}
-          >
-            <code>{highlightSyntax(code)}</code>
-          </pre>
+          <>
+            {withTypewriter && <Typewriter />}
+            <pre
+              style={preStyle}
+              role="code"
+              aria-label={`Code snippet: ${title}`}
+              tabIndex={0}
+            >
+              <code>{highlightSyntax(code)}</code>
+            </pre>
+          </>
         )}
       </main>
     </Box>
@@ -242,7 +251,7 @@ const containerStyle: React.CSSProperties = {
   borderRadius: "8px",
   border: "1px solid #ccc",
   fontSize: "14px",
-  fontFamily: "monospace",
+  fontFamily: 'Consolas, Monaco, "Courier New", monospace',
   backgroundColor: "#282c34",
   color: "#f8f8f2",
   boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
