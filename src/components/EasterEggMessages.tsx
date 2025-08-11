@@ -1,6 +1,11 @@
 import { Box } from "@mui/material";
+import React from "react";
 
 export const EasterEggMessages = () => {
+  const [randomMessage] = React.useState(
+    () =>
+      easterEggMessages[Math.floor(Math.random() * easterEggMessages.length)]
+  );
   return (
     <Box
       sx={{
@@ -38,9 +43,8 @@ const easterEggMessages = [
   "🎉 Easter egg activated! Hire this developer!",
   "🔍 Curiosity is a great trait in a developer, don't you think!?",
   "🚀 You found the secret! I write clean code AND enjoy fun surprises.",
-  "💎 Hidden gem discovered! This developer thinks about UX.",
+  "💎 Hidden gem discovered! You think about great UX, and so do I!",
   "🧩 Puzzle solver detected! Perfect for our debugging sessions.",
+  "⚡  UX Explorer mode activated! Enjoy!",
+  "🔮 Magic button clicked! This kind of curiosity makes great developers.",
 ];
-
-const randomMessage =
-  easterEggMessages[Math.floor(Math.random() * easterEggMessages.length)];
