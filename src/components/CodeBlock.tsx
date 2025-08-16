@@ -1,5 +1,5 @@
 import { Box, Stack, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { BlueScreenOfDeath } from "../components/BlueScreenOfDeath";
 import { EasterEggMessages } from "./EasterEggMessages";
 import { MinimizedWindow } from "./MinimizedWindow";
@@ -62,10 +62,10 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
   title,
   withTypewriter,
 }) => {
-  const [windowState, setWindowState] = React.useState<WindowState>("normal");
-  const [showMessage, setShowMessage] = React.useState(false);
+  const [windowState, setWindowState] = useState<WindowState>("normal");
+  const [showMessage, setShowMessage] = useState(false);
 
-  const handleDotClick = React.useCallback((dotColor: string) => {
+  const handleDotClick = (dotColor: string) => {
     if (dotColor === COLORS.dots.red) {
       setWindowState("closed");
       setTimeout(() => setWindowState("normal"), TIMEOUTS.close);
@@ -76,17 +76,14 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
       setShowMessage(true);
       setTimeout(() => setShowMessage(false), TIMEOUTS.message);
     }
-  }, []);
+  };
 
-  const handleKeyDown = React.useCallback(
-    (event: React.KeyboardEvent, dotColor: string) => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        handleDotClick(dotColor);
-      }
-    },
-    [handleDotClick]
-  );
+  const handleKeyDown = (event: React.KeyboardEvent, dotColor: string) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      handleDotClick(dotColor);
+    }
+  };
 
   const getWindowStateAnnouncement = () => {
     switch (windowState) {
@@ -102,35 +99,62 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
   };
 
   const renderDots = () => (
-    <div role="group" aria-label="Window controls">
+    <div role="group" aria-label="Window controls" style={{ display: "flex" }}>
       {Object.entries(COLORS.dots).map(([_, color]) => {
         const dotAction = DOT_ACTIONS[color];
+        const buttonRef = React.useRef<HTMLButtonElement>(null);
+
         return (
-          <button
+          <Box
             key={color}
-            style={{
-              ...dotStyle(color),
-              cursor: "pointer",
-              border: "none",
-              padding: 0,
-              margin: 3,
-              outline: "none",
-            }}
             onClick={() => handleDotClick(color)}
             onKeyDown={(e) => handleKeyDown(e, color)}
+            sx={{
+              border: "2px red",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "32px",
+              height: "32px",
+              cursor: "pointer",
+              outline: "none",
+              "&:focus": {
+                outline: "none",
+              },
+            }}
+            role="button"
+            tabIndex={0}
             aria-label={dotAction.label}
             title={dotAction.description}
-            tabIndex={0}
-            onFocus={(e) => {
-              e.target.style.outline = "2px solid #0066cc";
-              e.target.style.outlineOffset = "2px";
+            onFocus={() => {
+              if (buttonRef.current) {
+                buttonRef.current.style.outline = "2px solid #0066cc";
+                buttonRef.current.style.outlineOffset = "2px";
+              }
             }}
-            onBlur={(e) => {
-              e.target.style.outline = "none";
+            onBlur={() => {
+              if (buttonRef.current) {
+                buttonRef.current.style.outline = "none";
+              }
             }}
           >
-            <span aria-hidden="true"></span>
-          </button>
+            <button
+              ref={buttonRef}
+              style={{
+                ...dotStyle(color),
+                border: "none",
+                padding: 0,
+                margin: 0,
+                outline: "none",
+                cursor: "inherit",
+                pointerEvents: "none",
+              }}
+              aria-hidden="true"
+              tabIndex={-1}
+            >
+              <span aria-hidden="true"></span>
+            </button>
+          </Box>
         );
       })}
     </div>
