@@ -61,6 +61,10 @@ export default function App() {
           </Typography>
           <ButtonLinks />
 
+          <Stack direction={{ xs: "column", lg: "row" }} mt={2}>
+            <CodeBlock code={code1} title="top_applicant.ts" withTypewriter />
+            <CodeBlock code={code2} title="types/index.ts" />
+          </Stack>
           <Stack direction="column" sx={{ mt: 1, maxWidth: "90%" }}>
             <Typography
               variant="h6"
@@ -84,10 +88,6 @@ export default function App() {
             >
               RESTful APIs | Laravel | Node | AWS | Docker | Cursor AI
             </Typography>
-          </Stack>
-          <Stack direction={{ xs: "column", lg: "row" }} mt={2}>
-            <CodeBlock code={code1} title="top_applicant.ts" withTypewriter />
-            <CodeBlock code={code2} title="types/index.ts" />
           </Stack>
         </Stack>
       </ForegroundLayer>
