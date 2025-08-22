@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import { CodeBlock } from "./components/CodeBlock";
 import "./index.css";
 import { ButtonLinks } from "./components/ButtonLinks";
+import { ResumeCards } from "./components/ResumeCards";
 
 export default function App() {
   console.log(
@@ -37,31 +38,34 @@ export default function App() {
           }}
         >
           <Typography
-            variant="h2"
+            variant="h1"
             sx={{
-              fontWeight: 600,
+              fontWeight: 800,
               mt: 1,
               maxWidth: "100%",
               wordBreak: "break-word",
               whiteSpace: "normal",
-              fontSize: { xs: "1.5rem", sm: "2rem", md: "3rem" },
+              fontSize: { xs: "2.25rem", sm: "2.5rem", md: "3.5rem" },
+              letterSpacing: 2,
             }}
           >
             Katherine Williams
           </Typography>
           <Typography
-            variant="h5"
+            variant="h2"
             sx={{
               mb: 1,
               mx: 3,
+              fontWeight: 100,
               fontSize: { xs: "1.1rem", sm: "1.5rem" },
+              letterSpacing: 3,
+              opacity: 0.7,
             }}
           >
             Senior Frontend / Fullstack Software Engineer
           </Typography>
           <ButtonLinks />
-
-          <Stack direction="column" sx={{ mt: 1, maxWidth: "90%" }}>
+          <Stack direction="column" sx={{ mt: 2, maxWidth: "90%" }}>
             <Typography
               variant="h6"
               sx={{
@@ -85,10 +89,27 @@ export default function App() {
               RESTful APIs | Laravel | Node | AWS | Docker | Cursor AI
             </Typography>
           </Stack>
+
           <Stack direction={{ xs: "column", lg: "row" }} mt={2}>
             <CodeBlock code={code1} title="top_applicant.ts" withTypewriter />
             <CodeBlock code={code2} title="types/index.ts" />
           </Stack>
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: 100,
+              mt: 4,
+              fontSize: { xs: "1.5rem", sm: "1.75rem" },
+              letterSpacing: 6,
+              opacity: 0.7,
+              maxWidth: "90%",
+              wordBreak: "break-word",
+              whiteSpace: "normal",
+            }}
+          >
+            PROFESSIONAL EXPERIENCE:
+          </Typography>
+          <ResumeCards />
         </Stack>
       </ForegroundLayer>
     </>
@@ -111,7 +132,7 @@ const ForegroundLayer = styled.div`
   color: white;
   width: 100%;
   max-width: 1000px;
-  margin: 0 auto;
+  margin: 0 auto 100px;
   display: flex;
   flex-direction: column;
   justify-content: center;
