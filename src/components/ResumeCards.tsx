@@ -14,7 +14,7 @@ import { useState } from "react";
 import { FireworkStars } from "./FireworkStars";
 
 const FlipCard = styled(Card)({
-  minHeight: 210,
+  minHeight: 265,
   width: 320,
   cursor: "pointer",
   flexShrink: 0,
@@ -82,7 +82,7 @@ const resumeData: ResumeCardData[] = [
     id: "card2",
     title: "Fullstack Developer",
     company: "Array",
-    duration: "2021-2024",
+    duration: "2021 - 2024",
     story:
       "Built live presentation apps for thousands of concurrent users. Learned that excellent test coverage is worth its weight in gold.",
     technologies: [
@@ -101,9 +101,9 @@ const resumeData: ResumeCardData[] = [
     id: "card3",
     title: "Fullstack Developer",
     company: "National Renewable Energy Lab",
-    duration: "2019-2021",
+    duration: "2019 - 2021",
     story:
-      "In an agency-like setting, built web applications to connect professional researchers and administer national energy prize competitions.",
+      "Built web applications to connect professional researchers and administer national energy prize competitions.",
     technologies: [
       "React",
       "JavaScript",
@@ -162,19 +162,24 @@ const FlipCardItem = ({
               mt="2"
               variant="h4"
               sx={{
-                fontSize: "1.75rem",
-                color: "rgba(139, 92, 246, 0.8)",
+                fontSize: "1.5rem",
+                color: "#282c34",
               }}
             >
               {data.title}
             </Typography>
-            <Divider sx={{ my: 1 }} />
-            <Typography variant="subtitle2" mt="4" color="rgba(6, 182, 212, 1)">
-              {data.company} • {data.duration}
+            <Divider
+              sx={{ mb: 1, mx: 2, background: "rgba(6, 182, 212, 0.1)" }}
+            />
+            <Typography mt="2" color="rgba(139, 92, 246, 1)">
+              {data.company}
+            </Typography>
+            <Typography color="rgba(139, 92, 246, 1)">
+              {data.duration}
             </Typography>
             <Typography
               variant="body2"
-              sx={{ mt: 2, mb: 1 }}
+              sx={{ mt: 1, mb: 1 }}
               color="text.secondary"
             >
               <DoubleArrowIcon
@@ -183,7 +188,7 @@ const FlipCardItem = ({
                   opacity: 0.05,
                   fontSize: "5rem",
                   position: "absolute",
-                  bottom: 90,
+                  bottom: 120,
                   left: 0,
                 }}
               />
@@ -203,9 +208,20 @@ const FlipCardItem = ({
           </>
         ) : (
           <Box sx={{ border: ".5px solid lightgrey" }}>
+            <Typography
+              variant="h5"
+              sx={{
+                marginTop: 2,
+                fontSize: "1.25rem",
+                color: "#282c34",
+              }}
+            >
+              Development Stack
+            </Typography>
             <ChipContainer>
               {data.technologies.map((tech) => (
                 <Chip
+                  variant="outlined"
                   key={tech}
                   label={tech}
                   sx={{ mt: "3px", backgroundColor: "rgba(6, 182, 212, 0.2)" }}
