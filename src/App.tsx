@@ -124,7 +124,7 @@ export default function App() {
               whiteSpace: "normal",
             }}
           >
-            PERSONAL CODE PROJECT:
+            PERSONAL PROJECT:
           </Typography>
           <Bot />
         </Stack>

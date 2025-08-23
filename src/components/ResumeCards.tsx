@@ -207,32 +207,39 @@ const FlipCardItem = ({
             />
           </>
         ) : (
-          <Box sx={{ padding: 1, border: ".5px solid rgba(139, 92, 246, 1)" }}>
-            <Box sx={{ border: ".5px solid rgba(6, 182, 212, 0.5)" }}>
-              <Typography
-                variant="h5"
-                sx={{
-                  marginTop: 2,
-                  fontSize: "1.25rem",
-                  color: "#282c34",
-                }}
-              >
-                Development Stack
-              </Typography>
-              <ChipContainer>
-                {data.technologies.map((tech) => (
-                  <Chip
-                    variant="outlined"
-                    key={tech}
-                    label={tech}
-                    sx={{
-                      mt: "3px",
-                      backgroundColor: "rgba(6, 182, 212, 0.2)",
-                    }}
-                  />
-                ))}
-              </ChipContainer>
-            </Box>
+          <Box sx={{ border: ".5px solid rgba(139, 92, 246, 1)" }}>
+            <Typography
+              mt={1}
+              variant="h5"
+              sx={{
+                fontSize: "1rem",
+                color: "#282c34",
+              }}
+            >
+              {data.company}
+            </Typography>
+            <Typography
+              variant="h5"
+              sx={{
+                fontSize: "1.25rem",
+                color: "#282c34",
+              }}
+            >
+              Development Stack
+            </Typography>
+            <ChipContainer>
+              {data.technologies.map((tech) => (
+                <Chip
+                  variant="outlined"
+                  key={tech}
+                  label={tech}
+                  sx={{
+                    mt: "3px",
+                    backgroundColor: "rgba(6, 182, 212, 0.2)",
+                  }}
+                />
+              ))}
+            </ChipContainer>
           </Box>
         )}
       </CardContent>
