@@ -110,6 +110,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
             onClick={() => handleDotClick(color)}
             onKeyDown={(e) => handleKeyDown(e, color)}
             sx={{
+              paddingRight: 0.5,
               border: "2px red",
               display: "flex",
               alignItems: "center",
@@ -195,7 +196,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
       </div>
 
       <header style={headerStyle}>
-        <Stack sx={{ width: { xs: "30%", sm: "15%" } }}>{renderDots()}</Stack>
+        <Stack sx={{ width: { xs: "25%", sm: "10%" } }}>{renderDots()}</Stack>
         <Stack sx={{ width: "70%", mr: "15%" }}>
           <Typography component="h3" color="black" aria-level={3}>
             {title}
