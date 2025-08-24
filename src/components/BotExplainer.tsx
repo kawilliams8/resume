@@ -23,6 +23,9 @@ export const BotExplainer = () => {
   >([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const terminalBodyRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
 
   // Set initial message
   useEffect(() => {
@@ -37,7 +40,10 @@ export const BotExplainer = () => {
         {
           id: "1",
           content: (
-            <TerminalLine type="success">
+            <TerminalLine
+              type="success"
+              prefersReducedMotion={prefersReducedMotion}
+            >
               Welcome to Colorado History Photos - Bluesky Bot Terminal v1.0.0
             </TerminalLine>
           ),
@@ -45,7 +51,10 @@ export const BotExplainer = () => {
         {
           id: "2",
           content: (
-            <TerminalLine type="info">
+            <TerminalLine
+              type="info"
+              prefersReducedMotion={prefersReducedMotion}
+            >
               Click a command button to explore how the Colorado History Photos
               bot works.
             </TerminalLine>
@@ -53,7 +62,11 @@ export const BotExplainer = () => {
         },
         {
           id: "3",
-          content: <TerminalLine></TerminalLine>,
+          content: (
+            <TerminalLine
+              prefersReducedMotion={prefersReducedMotion}
+            ></TerminalLine>
+          ),
         },
       ]);
     };
@@ -76,7 +89,7 @@ export const BotExplainer = () => {
     const commandLine = {
       id: `cmd-${Date.now()}`,
       content: (
-        <TerminalLine type="input">
+        <TerminalLine type="input" prefersReducedMotion={prefersReducedMotion}>
           <Prompt>$</Prompt>
           <Command>{command}</Command>
         </TerminalLine>
@@ -91,7 +104,10 @@ export const BotExplainer = () => {
         {
           id: "0",
           content: (
-            <TerminalLine type="info">
+            <TerminalLine
+              type="info"
+              prefersReducedMotion={prefersReducedMotion}
+            >
               <Prompt>$</Prompt>
               Select a command.
             </TerminalLine>
@@ -109,7 +125,10 @@ export const BotExplainer = () => {
       const outputLine = {
         id: `out-${Date.now()}-${Math.random()}`,
         content: (
-          <TerminalLine type={output.type || "output"}>
+          <TerminalLine
+            type={output.type || "output"}
+            prefersReducedMotion={prefersReducedMotion}
+          >
             <span style={{ lineHeight: "30px" }}>&gt; {output.text}</span>
             {output.tech && (
               <Box sx={{ ml: 1 }}>
@@ -130,7 +149,7 @@ export const BotExplainer = () => {
       {
         id: `empty-${Date.now()}`,
         content: (
-          <TerminalLine>
+          <TerminalLine prefersReducedMotion={prefersReducedMotion}>
             <Prompt>$</Prompt>
           </TerminalLine>
         ),
@@ -147,13 +166,13 @@ export const BotExplainer = () => {
     <Box
       sx={{
         p: 3,
-        width: { xs: "275px", sm: "550px", md: "800px", lg: "1000px" },
+        width: { xs: "300px", sm: "550px", md: "800px", lg: "1000px" },
       }}
     >
       <Paper
         elevation={1}
         sx={{
-          p: 2,
+          p: { xs: 0, sm: 2 },
           background:
             "linear-gradient(#fdfdfd, #fdfdfd) padding-box, linear-gradient(110deg, rgba(6, 182, 212, 0.5) 0%, rgba(139, 92, 246, 0.9) 50%) border-box",
           border: "2px solid transparent",
@@ -163,11 +182,14 @@ export const BotExplainer = () => {
         <Stack spacing={2}>
           <Typography
             variant="h4"
-            sx={{ fontSize: { xs: "1.25rem", md: "1.5rem" }, color: "#282c34" }}
+            sx={{
+              fontSize: { xs: "1.25rem", md: "1.5rem" },
+              color: "#282c34",
+              pt: { xs: 2, sm: 0 },
+            }}
           >
             Colorado History Photos: A Social Media Bot for Bluesky 🤖
           </Typography>
-          {/* Command buttons */}
           <Paper>
             <Stack mb={2}>
               <Typography
@@ -192,6 +214,9 @@ export const BotExplainer = () => {
                   onClick={() => executeCommand("bot status")}
                   disabled={isProcessing}
                   sx={{ minWidth: { lg: 110 } }}
+                  tabIndex={0}
+                  role="button"
+                  aria-label="Check bot status"
                 >
                   <KeyboardDoubleArrowRightTwoTone
                     sx={{ mr: 0.5, color: "#3b82f6" }}
@@ -202,6 +227,9 @@ export const BotExplainer = () => {
                   onClick={() => executeCommand("bot run")}
                   disabled={isProcessing}
                   sx={{ minWidth: { lg: 110 } }}
+                  tabIndex={0}
+                  role="button"
+                  aria-label="Run post sequence"
                 >
                   <KeyboardDoubleArrowRightTwoTone
                     sx={{ mr: 0.5, color: "#3b82f6" }}
@@ -212,6 +240,9 @@ export const BotExplainer = () => {
                   onClick={() => executeCommand("bot tech")}
                   disabled={isProcessing}
                   sx={{ minWidth: { lg: 110 } }}
+                  tabIndex={0}
+                  role="button"
+                  aria-label="Print tech stack"
                 >
                   <KeyboardDoubleArrowRightTwoTone
                     sx={{ mr: 0.5, color: "#3b82f6" }}
@@ -222,6 +253,9 @@ export const BotExplainer = () => {
                   onClick={() => executeCommand("clear")}
                   disabled={isProcessing}
                   sx={{ minWidth: { lg: 110 } }}
+                  tabIndex={0}
+                  role="button"
+                  aria-label="Clear terminal"
                 >
                   <KeyboardDoubleArrowRightTwoTone
                     sx={{ mr: 0.5, color: "#3b82f6" }}
@@ -229,10 +263,16 @@ export const BotExplainer = () => {
                   clear terminal
                 </CommandButton>
               </Stack>
-              <TerminalWindow elevation={4} sx={{ mt: 2, mx: 2 }}>
+              <TerminalWindow
+                role="region"
+                aria-label="Bluesky Bot Demonstration"
+                aria-live="polite"
+                elevation={4}
+                sx={{ mt: 2, mx: 2 }}
+              >
                 <TerminalHeader>
                   <Stack
-                    direction="row"
+                    direction={{ xs: "column", md: "row" }}
                     spacing={1}
                     sx={{ boxSizing: "border-box", width: 20 }}
                   >
@@ -241,6 +281,9 @@ export const BotExplainer = () => {
                       onClick={handleClear}
                       sx={{ cursor: "pointer" }}
                       disabled={isProcessing}
+                      tabIndex={0}
+                      role="button"
+                      aria-label="Clear terminal"
                     />
                     <TerminalButton bg="#fbbf24" disabled={true} />
                     <TerminalButton bg="#10b981" disabled={true} />
@@ -252,6 +295,7 @@ export const BotExplainer = () => {
                       fontSize: "13px",
                       color: "#94a3b8",
                       fontFamily: "monospace",
+                      maxWidth: "80%",
                     }}
                   >
                     colorado-history-photos@bluesky-bot ~ terminal
@@ -279,7 +323,12 @@ export const BotExplainer = () => {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <CommandButton sx={{ minWidth: { lg: 110 } }}>
+                <CommandButton
+                  sx={{ minWidth: { lg: 110 } }}
+                  tabIndex={0}
+                  role="button"
+                  aria-label="Open Repository"
+                >
                   <OpenInNew sx={{ mr: 0.5, color: "#3b82f6" }} />
                   open repository
                 </CommandButton>
@@ -290,7 +339,12 @@ export const BotExplainer = () => {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <CommandButton sx={{ minWidth: { lg: 110 } }}>
+                <CommandButton
+                  sx={{ minWidth: { lg: 110 } }}
+                  tabIndex={0}
+                  role="button"
+                  aria-label="View live output"
+                >
                   <OpenInNew sx={{ mr: 0.5, color: "#3b82f6" }} />
                   view live output
                 </CommandButton>
@@ -316,6 +370,7 @@ const TerminalHeader = styled(Box)({
   background: "linear-gradient(90deg, #1e293b 0%,rgb(13, 18, 1) 100%)",
   padding: "12px 16px",
   display: "flex",
+  justifyContent: "space-between",
   alignItems: "center",
   gap: "8px",
   borderBottom: "1px solid rgba(59, 130, 246, 0.2)",
@@ -355,7 +410,9 @@ const TerminalBody = styled(Box)({
 
 const TerminalLine = styled(Box)<{
   type?: "input" | "output" | "error" | "success" | "info";
-}>(({ type = "output" }) => ({
+  prefersReducedMotion: boolean;
+}>(({ type = "output", prefersReducedMotion }) => ({
+  animation: prefersReducedMotion ? "none" : "fadeIn 0.3s ease-in",
   lineHeight: "28px",
   marginBottom: "0px",
   color:
@@ -371,7 +428,6 @@ const TerminalLine = styled(Box)<{
   display: "flex",
   alignItems: "flex-start",
   fontFamily: "inherit",
-  animation: "fadeIn 0.3s ease-in",
   "@keyframes fadeIn": {
     from: { opacity: 0, transform: "translateY(5px)" },
     to: { opacity: 1, transform: "translateY(0)" },
@@ -425,6 +481,7 @@ const TechBadge = styled(Box)({
 });
 
 const AsciiArt = styled(Box)({
+  ariaHidden: "true",
   color: "#3b82f6",
   fontSize: "14px",
   lineHeight: "1.2",
