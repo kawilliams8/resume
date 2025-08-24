@@ -11,7 +11,9 @@ import {
   Tooltip,
 } from "@mui/material";
 import { HelpOutline } from "@mui/icons-material";
-import { TerminalSharp } from "@mui/icons-material";
+import { KeyboardDoubleArrowRightTwoTone } from "@mui/icons-material";
+import { FavoriteBorder } from "@mui/icons-material";
+import { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 
 const TerminalWindow = styled(Paper)(({}) => ({
   background: "#0a0e27",
@@ -19,12 +21,10 @@ const TerminalWindow = styled(Paper)(({}) => ({
   overflow: "hidden",
   fontFamily: '"JetBrains Mono", "Courier New", monospace',
   position: "relative",
-  boxShadow: "0 20px 40px rgba(0, 0, 0, 0.5)",
-  border: "1px solid rgba(59, 130, 246, 0.2)",
 }));
 
 const TerminalHeader = styled(Box)({
-  background: "linear-gradient(90deg, #1e293b 0%, #334155 100%)",
+  background: "linear-gradient(90deg, #1e293b 0%,rgb(13, 18, 1) 100%)",
   padding: "12px 16px",
   display: "flex",
   alignItems: "center",
@@ -66,14 +66,15 @@ const TerminalBody = styled(Box)({
 const TerminalLine = styled(Box)<{
   type?: "input" | "output" | "error" | "success" | "info";
 }>(({ type = "output" }) => ({
-  marginBottom: "8px",
+  lineHeight: "20px",
+  marginBottom: "0px",
   color:
     type === "input"
-      ? "#06b6d4"
+      ? "#06b6d4" // teal
       : type === "error"
-        ? "#ef4444"
+        ? "#ef4444" // red
         : type === "success"
-          ? "#10b981"
+          ? "#10b981" // green
           : type === "info"
             ? "#8b5cf6"
             : "#94a3b8",
@@ -99,15 +100,23 @@ const Command = styled("span")({
 
 const SuggestionChip = styled(Button)(({}) => ({
   background: alpha("#0a0e27", 0.8),
-  color: "white",
-  fontFamily: '"JetBrains Mono", monospace',
+  color: alpha("#fff", 0.9),
+  fontFamily: '"JetBrains Mono", "Courier New", monospace',
   fontSize: "12px",
   cursor: "pointer",
   transition: "all 0.2s ease",
+  paddingRight: 3,
+  minWidth: "200px",
   "&:hover": {
     background: alpha("#0a0e27", 0.6),
     borderColor: "#3b82f6",
     color: "black",
+  },
+  "&:disabled": {
+    borderColor: "white",
+    color: alpha("#fff", 0.6),
+    cursor: "not-allowed",
+    pointerEvents: "auto",
   },
 }));
 
@@ -122,7 +131,8 @@ const TechBadge = styled(Box)({
   fontSize: "11px",
   marginRight: "8px",
   marginTop: "4px",
-  marginBottom: "4px",
+  marginBottom: "14px",
+  lineHeight: "1rem",
 });
 
 const AsciiArt = styled(Box)({
@@ -130,9 +140,21 @@ const AsciiArt = styled(Box)({
   fontSize: "12px",
   lineHeight: "1.2",
   marginBottom: "16px",
-  fontFamily: "monospace",
+  fontFamily: '"JetBrains Mono", "Courier New", monospace',
   whiteSpace: "pre",
 });
+
+const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: "#f5f5f9",
+    color: "rgba(0, 0, 0, 0.87)",
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: "1px solid #dadde9",
+  },
+}));
 
 // Terminal command data
 interface TerminalCommand {
@@ -222,30 +244,29 @@ const commands: Record<string, TerminalCommand> = {
     output: [
       { text: "Loading tech stack...", type: "info", delay: 300 },
       { text: "", delay: 100 },
-      { text: "🛠️  Core Technologies:", type: "info", delay: 200 },
+      { text: "🛠️ Core Technologies:", type: "info", delay: 200 },
       {
         text: "├─ Runtime: Node.js v20 (AWS Lambda)",
         delay: 100,
-        tech: ["Node.js", "AWS"],
+        tech: ["Node.js", "AWS", "nvm", "TypeScript"],
       },
       { text: "├─ Language: TypeScript 5.3", delay: 100, tech: ["TypeScript"] },
-      { text: "├─ Database: PostgreSQL 15", delay: 100, tech: ["PostgreSQL"] },
+      { text: "├─ Database: SQLite 3.46.1", delay: 100, tech: ["SQLite"] },
       {
-        text: "├─ Scheduler: Cron (every 2 hours)",
+        text: "├─ Scheduler: Cron (every 12 hours)",
         delay: 100,
         tech: ["Cron"],
       },
-      { text: "├─ AI: OpenAI GPT-4", delay: 100, tech: ["OpenAI"] },
+      { text: "├─ AI: Claude/Anthropic", delay: 100, tech: ["Claude API"] },
       {
         text: "├─ API: Bluesky AT Protocol",
         delay: 100,
         tech: ["Bluesky API"],
       },
-      { text: "└─ Monitoring: CloudWatch", delay: 100, tech: ["AWS"] },
       { text: "", delay: 100 },
       { text: "📦 Key Dependencies:", delay: 200 },
       { text: "├─ @atproto/api: ^0.7.0", delay: 100 },
-      { text: "├─ openai: ^4.20.0", delay: 100 },
+      { text: "├─ claude-api: ^4.20.0", delay: 100 },
       { text: "├─ node-cron: ^3.0.3", delay: 100 },
       { text: "└─ pg: ^8.11.3", delay: 100 },
     ],
@@ -255,25 +276,25 @@ const commands: Record<string, TerminalCommand> = {
     output: [
       { text: "Streaming recent logs...", type: "info", delay: 300 },
       { text: "[2024-03-15 09:23:01] Schedule trigger activated", delay: 200 },
-      { text: "[2024-03-15 09:23:02] Generating post...", delay: 150 },
+      { text: "[2024-03-15 09:23:02] Generating post...", delay: 110 },
       {
         text: "[2024-03-15 09:23:04] Post published: ID #8423",
         type: "success",
-        delay: 150,
+        delay: 110,
       },
-      { text: "[2024-03-15 11:23:01] Schedule trigger activated", delay: 150 },
-      { text: "[2024-03-15 11:23:02] Generating post...", delay: 150 },
+      { text: "[2024-03-15 11:23:01] Schedule trigger activated", delay: 110 },
+      { text: "[2024-03-15 11:23:02] Generating post...", delay: 110 },
       {
         text: "[2024-03-15 11:23:05] Post published: ID #8424",
         type: "success",
-        delay: 150,
+        delay: 110,
       },
-      { text: "[2024-03-15 13:23:01] Schedule trigger activated", delay: 150 },
-      { text: "[2024-03-15 13:23:02] Rate limit check...", delay: 150 },
+      { text: "[2024-03-15 13:23:01] Schedule trigger activated", delay: 110 },
+      { text: "[2024-03-15 13:23:02] Rate limit check...", delay: 110 },
       {
         text: "[2024-03-15 13:23:02] Skipping: Daily limit reached",
         type: "info",
-        delay: 150,
+        delay: 110,
       },
     ],
   },
@@ -306,7 +327,7 @@ export const Bot = () => {
           id: "1",
           content: (
             <TerminalLine type="success">
-              Welcome to Bluesky Bot Terminal v2.0.3
+              Welcome to Colorado History Photos - Bluesky Bot Terminal v2.0.3
             </TerminalLine>
           ),
         },
@@ -314,8 +335,8 @@ export const Bot = () => {
           id: "2",
           content: (
             <TerminalLine type="info">
-              Click any command above to explore how the Colorado History Photos
-              bot works
+              Click any command to explore how the Colorado History Photos bot
+              works.
             </TerminalLine>
           ),
         },
@@ -353,6 +374,22 @@ export const Bot = () => {
     };
 
     setLines((prev) => [...prev, commandLine]);
+
+    // Handle stop command
+    if (command === "stop") {
+      setLines([
+        {
+          id: "0",
+          content: (
+            <TerminalLine type="info">
+              Execution halted. Click any command above to continue.
+            </TerminalLine>
+          ),
+        },
+      ]);
+      setIsProcessing(false);
+      return;
+    }
 
     // Handle clear command
     if (command === "clear") {
@@ -396,9 +433,9 @@ export const Bot = () => {
         id: `out-${Date.now()}-${Math.random()}`,
         content: (
           <TerminalLine type={output.type || "output"}>
-            {output.text}
+            <span style={{ lineHeight: "30px" }}>&gt; {output.text}</span>
             {output.tech && (
-              <Box sx={{ mt: 0.5 }}>
+              <Box sx={{ ml: 1 }}>
                 {output.tech.map((tech) => (
                   <TechBadge key={tech}>{tech}</TechBadge>
                 ))}
@@ -428,165 +465,222 @@ export const Bot = () => {
   };
 
   return (
-    <Box sx={{ p: 3, maxWidth: "1000px", margin: "0 auto" }}>
-      <Stack spacing={3}>
-        <Box>
-          <Paper
-            sx={{
-              p: 2,
-              background:
-                "linear-gradient(#fdfdfd, #fdfdfd) padding-box, linear-gradient(135deg, rgba(6, 182, 212, 0.5) 0%, rgba(139, 92, 246, 0.9) 50%) border-box",
-              border: "2px solid transparent",
-              borderRadius: 2,
-            }}
-          >
-            <Stack spacing={1}>
-              <Paper sx={{ background: alpha("#000", 0.02), p: 1 }}>
-                <Typography
-                  variant="h4"
-                  sx={{ mb: 1, fontSize: "1.5rem", color: "#282c34" }}
-                >
-                  Colorado History Photos
-                </Typography>
-                <Typography
-                  mt="2"
-                  variant="h5"
-                  sx={{
-                    fontSize: "1.25rem",
-                    color: "#282c34",
-                  }}
-                >
-                  💡 What is it?
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{ color: "text.secondary", textAlign: "left" }}
-                >
-                  Colorado History Photos is a bot created to automatically post
-                  images from the Denver Public Library Digital Archive to
-                  Bluesky.
-                </Typography>
-                <Typography
-                  mt="2"
-                  variant="h5"
-                  sx={{
-                    fontSize: "1.25rem",
-                    color: "#282c34",
-                  }}
-                >
-                  💡 How it works:
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{ color: "text.secondary", textAlign: "left" }}
-                >
-                  The Colorado History Photos bot runs on GitHub Actions,
-                  triggered twice daily via cron jobs. The bot retrieves a
-                  curated post_id from a SQLite database, downloads the
-                  associated photograph from the Library's Digital Archive,
-                  resizes the photo as necessary, then scrapes the description
-                  text from the Archive page. The description text is passed to
-                  the Claude API, where it is structured and formatted for
-                  clarity and character count, and two social media-friendly
-                  hash tags are created.
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{ color: "text.secondary", textAlign: "left", mt: 2 }}
-                >
-                  The photo is then posted to Bluesky via the AT Protocol. If
-                  the image post is successful, a text post is linked and
-                  created. Finally, the bot posts a threaded reply that contains
-                  a Rich Text link to the original photograph with searchable
-                  Rich Text hash tags. The post_id is moved from the scheduled
-                  table to the posted table and the changes are committed to the
-                  repository. The entire pipeline completes in under ~5 seconds.
-                </Typography>
-                {/* Command buttons */}
-                <Typography
-                  variant="h5"
-                  sx={{
-                    fontSize: "1.25rem",
-                    color: "#282c34",
-                    my: 2,
-                  }}
-                >
-                  Click to execute a terminal command:
-                </Typography>
-                <Stack
-                  direction="row"
-                  spacing={2}
-                  flexWrap="wrap"
-                  useFlexGap
-                  justifyContent="center "
-                >
-                  <SuggestionChip
-                    onClick={() => executeCommand("bot status")}
-                    disabled={isProcessing}
-                    sx={{ fontWeight: "bold" }}
-                  >
-                    <TerminalSharp sx={{ mr: 1, color: "limegreen" }} />
-                    DISPLAY BOT STATUS
-                  </SuggestionChip>
-                  <SuggestionChip
-                    onClick={() => executeCommand("bot run")}
-                    disabled={isProcessing}
-                    sx={{ fontWeight: "bold" }}
-                  >
-                    <TerminalSharp sx={{ mr: 1, color: "limegreen" }} />
-                    WATCH POST SEQUENCE
-                  </SuggestionChip>
-                  <SuggestionChip
-                    onClick={() => executeCommand("bot tech")}
-                    disabled={isProcessing}
-                    sx={{ fontWeight: "bold" }}
-                  >
-                    <TerminalSharp sx={{ mr: 1, color: "limegreen" }} />
-                    DISPLAY TECH STACK
-                  </SuggestionChip>
-                  <SuggestionChip
-                    onClick={() => executeCommand("clear")}
-                    disabled={isProcessing}
-                    sx={{ fontWeight: "bold" }}
-                  >
-                    <TerminalSharp sx={{ mr: 1, color: "limegreen" }} />
-                    CLEAR TERMINAL
-                  </SuggestionChip>
-                </Stack>
-              </Paper>
-            </Stack>
-            <TerminalWindow elevation={8} sx={{ mt: 2 }}>
-              <TerminalHeader>
-                <TerminalButton color="#ef4444" onClick={handleReset} />
-                <TerminalButton color="#fbbf24" />
-                <TerminalButton color="#10b981" />
-                <Typography
-                  sx={{
-                    flex: 1,
-                    textAlign: "center",
-                    fontSize: "13px",
-                    color: "#94a3b8",
-                    fontFamily: "monospace",
-                  }}
-                >
-                  bot@bluesky ~ terminal
-                </Typography>
-                <Tooltip title="About this terminal">
-                  <IconButton size="small" sx={{ color: "#94a3b8" }}>
-                    <HelpOutline fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-              </TerminalHeader>
+    <Box
+      sx={{
+        p: 3,
+        width: { xs: "275px", sm: "550px", md: "800px", lg: "1000px" },
+      }}
+    >
+      <Paper
+        elevation={1}
+        sx={{
+          p: 2,
+          background:
+            "linear-gradient(#fdfdfd, #fdfdfd) padding-box, linear-gradient(110deg, rgba(6, 182, 212, 0.5) 0%, rgba(139, 92, 246, 0.9) 50%) border-box",
+          border: "2px solid transparent",
+          borderRadius: 2,
+        }}
+      >
+        <Stack spacing={4}>
+          <Stack>
+            <Typography
+              variant="h4"
+              sx={{ mb: 1, fontSize: { xs: "1.25rem" }, color: "#282c34" }}
+            >
+              Colorado History Photos - A Social Media Bot for Bluesky
+            </Typography>
 
-              <TerminalBody ref={terminalBodyRef}>
-                {lines.map((line) => (
-                  <Box key={line.id}>{line.content}</Box>
-                ))}
-              </TerminalBody>
-            </TerminalWindow>
+            <Typography
+              mb={1}
+              variant="h5"
+              sx={{
+                fontSize: "1.25rem",
+                color: "#282c34",
+              }}
+            >
+              💡 What is it?
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{ color: "text.secondary", textAlign: "left" }}
+            >
+              Colorado History Photos is a bot created to automatically post
+              curated images from the Denver Public Library Digital Archive to
+              Bluesky.
+            </Typography>
+            <Typography
+              my={1}
+              variant="h5"
+              sx={{
+                fontSize: "1.25rem",
+                color: "#282c34",
+              }}
+            >
+              💡 How it works:
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{ color: "text.secondary", textAlign: "left" }}
+            >
+              The bot runs on GitHub Actions, triggered twice daily via cron
+              jobs. The bot looks up a post_id from a SQLite database, downloads
+              the associated photograph and description text from the Library's
+              Digital Archive, and resizes the photo as necessary. The text is
+              passed to the Claude API, where it is formatted for clarity and
+              character count. Two social media-friendly hash tags are also
+              created.
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{ color: "text.secondary", textAlign: "left", mt: 2 }}
+            >
+              With a successful response from Claude, the photo is uploaded to
+              Bluesky via the AT Protocol. If the upload is successful, a text
+              post is linked to the photo and posted for the public. Finally,
+              the bot posts a threaded reply that contains a Rich Text link to
+              the original photograph with searchable Rich Text hash tags. The
+              post_id is moved from the scheduled table to the posted table and
+              these changes are committed to the repository. The entire pipeline
+              completes in under ~5 seconds.
+            </Typography>
+          </Stack>
+          {/* Command buttons */}
+          <Paper>
+            <Stack mb={2}>
+              <Typography
+                variant="h5"
+                sx={{
+                  fontFamily: '"JetBrains Mono", "Courier New", monospace',
+                  fontSize: "1.25rem",
+                  color: "#282c34",
+                  my: 2,
+                }}
+              >
+                Select a terminal command:
+              </Typography>
+              <Stack
+                direction="row"
+                spacing={2}
+                flexWrap="wrap"
+                useFlexGap
+                justifyContent="center"
+              >
+                <SuggestionChip
+                  onClick={() => executeCommand("bot status")}
+                  disabled={isProcessing}
+                  sx={{ fontWeight: "bold", pr: 2, minWidth: { lg: 110 } }}
+                >
+                  <KeyboardDoubleArrowRightTwoTone
+                    sx={{ mr: 1, color: "#3b82f6" }}
+                  />
+                  SHOW BOT STATUS
+                </SuggestionChip>
+                <SuggestionChip
+                  onClick={() => executeCommand("bot run")}
+                  disabled={isProcessing}
+                  sx={{ fontWeight: "bold", pr: 2, minWidth: { lg: 110 } }}
+                >
+                  <KeyboardDoubleArrowRightTwoTone
+                    sx={{ mr: 1, color: "#3b82f6" }}
+                  />
+                  WATCH POST SEQUENCE
+                </SuggestionChip>
+                <SuggestionChip
+                  onClick={() => executeCommand("bot tech")}
+                  disabled={isProcessing}
+                  sx={{ fontWeight: "bold", pr: 2, minWidth: { lg: 110 } }}
+                >
+                  <KeyboardDoubleArrowRightTwoTone
+                    sx={{ mr: 1, color: "#3b82f6" }}
+                  />
+                  SHOW TECH STACK
+                </SuggestionChip>
+                <SuggestionChip
+                  onClick={() => executeCommand("stop")}
+                  sx={{ fontWeight: "bold", pr: 2, minWidth: { lg: 110 } }}
+                >
+                  <KeyboardDoubleArrowRightTwoTone
+                    sx={{ mr: 1, color: "#3b82f6" }}
+                  />
+                  HALT COMMAND
+                </SuggestionChip>
+                <SuggestionChip
+                  onClick={() => executeCommand("clear")}
+                  sx={{ fontWeight: "bold", pr: 2, minWidth: { lg: 110 } }}
+                >
+                  <KeyboardDoubleArrowRightTwoTone
+                    sx={{ mr: 1, color: "#3b82f6" }}
+                  />
+                  CLEAR TERMINAL
+                </SuggestionChip>
+              </Stack>
+              <TerminalWindow elevation={4} sx={{ mt: 2, mx: 2 }}>
+                <TerminalHeader>
+                  <TerminalButton color="#ef4444" onClick={handleReset} />
+                  <TerminalButton color="#fbbf24" />
+                  <TerminalButton color="#10b981" />
+                  <Typography
+                    sx={{
+                      flex: 1,
+                      textAlign: "center",
+                      fontSize: "13px",
+                      color: "#94a3b8",
+                      fontFamily: '"JetBrains Mono", "Courier New", monospace',
+                    }}
+                  >
+                    colorado-history-photos@bluesky-bot ~ terminal
+                  </Typography>
+                  <HtmlTooltip
+                    id="thing"
+                    title={
+                      <React.Fragment>
+                        <Box sx={{ p: 1 }}>
+                          <Typography variant="body1" mb={1}>
+                            Is this a real Terminal app?
+                          </Typography>
+                          <Typography variant="body2" mb={1}>
+                            Nope, please click around without fear. It's
+                            standard JavaScript that uses complex CSS to look
+                            like something it isn't. It's a visual gag set up to
+                            show off more skills and explain something really
+                            complex.
+                          </Typography>
+                          <Typography variant="body1" mb={1}>
+                            Does it control your real Bluesky bot code?
+                          </Typography>
+                          <Typography variant="body2" mb={1}>
+                            Not at all. It is not connected to GitHub, Bluesky,
+                            or anything outside of this website.
+                          </Typography>
+                          <Stack sx={{ justifySelf: "flex-end" }}>
+                            <FavoriteBorder
+                              sx={{
+                                textAlign: "right",
+                                fontSize: "28px",
+                                color: "salmon",
+                              }}
+                            />
+                          </Stack>
+                        </Box>
+                      </React.Fragment>
+                    }
+                  >
+                    <IconButton size="small" sx={{ color: "#94a3b8" }}>
+                      <HelpOutline fontSize="small" />
+                    </IconButton>
+                  </HtmlTooltip>
+                </TerminalHeader>
+
+                <TerminalBody ref={terminalBodyRef}>
+                  {lines.map((line) => (
+                    <Box key={line.id}>{line.content}</Box>
+                  ))}
+                </TerminalBody>
+              </TerminalWindow>
+            </Stack>
           </Paper>
-        </Box>
-      </Stack>
+        </Stack>
+      </Paper>
     </Box>
   );
 };
