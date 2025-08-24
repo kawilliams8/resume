@@ -37,14 +37,14 @@ export const BotInstructions = () => {
             Colorado History Photos is an automated Bluesky bot that shares
             curated historical photographs from the Denver Public Library
             Digital Archive, bringing Colorado's rich history to social media
-            daily.
+            users.
           </Typography>
           <Typography
             my={2}
             variant="h5"
             sx={{
               fontSize: "1.25rem",
-              color: "text.secondary",
+
               textAlign: "left",
             }}
           >
@@ -55,7 +55,9 @@ export const BotInstructions = () => {
             sx={{ color: "text.secondary", textAlign: "left" }}
           >
             This bot runs on GitHub Actions with twice-daily cron triggers and
-            executes a sophisticated pipeline:
+            executes a sophisticated series of steps. The posting script
+            executes in under 5 seconds, ensuring reliable twice-daily posts
+            with minimal failures. The pipeline:
           </Typography>
           <Typography
             variant="body2"
@@ -75,32 +77,24 @@ export const BotInstructions = () => {
               </ListItem>
               <ListItem>
                 - Enhances descriptions using Claude API for clarity and
-                engagement - Generates contextual hashtags for discoverability
+                engagement
+              </ListItem>
+              <ListItem>
+                - Generates contextual hashtags for discoverability
               </ListItem>
               <ListItem>
                 - Publishes to Bluesky via the AT Protocol with proper threading
               </ListItem>
               <ListItem>
-                Links back to the original archive with rich text formatting
+                - Links back to the original archive with rich text formatting
               </ListItem>
               <ListItem>
-                Updates database tables and commits changes to the repository
+                - Posts searchable custom hash tags with rich text formatting
+              </ListItem>
+              <ListItem>
+                - Updates database tables and commits changes to the repository
               </ListItem>
             </List>
-          </Typography>
-          <Typography
-            variant="body1"
-            sx={{ color: "text.secondary", textAlign: "left" }}
-          >
-            Performance: The posting script executes in under 5 seconds,
-            ensuring reliable twice-daily posts without failures.
-          </Typography>
-          <Typography
-            variant="body1"
-            sx={{ color: "text.secondary", textAlign: "left", mt: 1 }}
-          >
-            Tech Stack: GitHub Actions • SQLite • Claude API • AT Protocol •
-            Node.js • TypeScript • Image Processing
           </Typography>
         </AccordionDetails>
       </Accordion>
