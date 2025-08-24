@@ -5,7 +5,7 @@ import { CodeBlock } from "./components/CodeBlock";
 import "./index.css";
 import { ButtonLinks } from "./components/ButtonLinks";
 import { ResumeCards } from "./components/ResumeCards";
-import { Bot } from "./components/Bot";
+import { BotExplainer } from "./components/BotExplainer";
 
 export default function App() {
   console.log(
@@ -126,7 +126,7 @@ export default function App() {
           >
             PERSONAL PROJECT:
           </Typography>
-          <Bot />
+          <BotExplainer />
         </Stack>
       </ForegroundLayer>
     </>
