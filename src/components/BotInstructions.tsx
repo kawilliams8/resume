@@ -22,6 +22,7 @@ export const BotInstructions = () => {
             component="span"
             variant="h6"
             sx={{
+              fontSize: "1rem",
               color: "#282c34",
             }}
           >
