@@ -14,7 +14,7 @@ import { useState } from "react";
 import { FireworkStars } from "./FireworkStars";
 
 const FlipCard = styled(Card)({
-  minHeight: 265,
+  minHeight: 270,
   width: 320,
   cursor: "pointer",
   flexShrink: 0,
@@ -43,7 +43,7 @@ const ChipContainer = styled(Stack)({
   flexDirection: "row",
   gap: 10,
   flexWrap: "wrap",
-  marginBottom: 25,
+  marginBottom: 15,
   paddingTop: 20,
   paddingBottom: 10,
   width: "100%",
@@ -91,10 +91,10 @@ const resumeData: ResumeCardData[] = [
       "RTK Query",
       "Material UI",
       "Laravel",
+      "AWS",
       "Web Sockets",
       "Playwright",
       "Docker",
-      "AWS",
     ],
   },
   {
@@ -207,11 +207,20 @@ const FlipCardItem = ({
             />
           </>
         ) : (
-          <Box sx={{ border: ".5px solid lightgrey" }}>
+          <Box sx={{ border: ".5px solid rgba(139, 92, 246, 1)" }}>
+            <Typography
+              mt={1}
+              variant="h5"
+              sx={{
+                fontSize: "1rem",
+                color: "#282c34",
+              }}
+            >
+              {data.company}
+            </Typography>
             <Typography
               variant="h5"
               sx={{
-                marginTop: 2,
                 fontSize: "1.25rem",
                 color: "#282c34",
               }}
@@ -224,7 +233,10 @@ const FlipCardItem = ({
                   variant="outlined"
                   key={tech}
                   label={tech}
-                  sx={{ mt: "3px", backgroundColor: "rgba(6, 182, 212, 0.2)" }}
+                  sx={{
+                    mt: "3px",
+                    backgroundColor: "rgba(6, 182, 212, 0.2)",
+                  }}
                 />
               ))}
             </ChipContainer>

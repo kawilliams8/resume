@@ -117,7 +117,7 @@ const FireworkStar = styled("div")<{
       "20%": { opacity: 1, color: StarColors.BRIGHT_YELLOW },
       "50%": { color: StarColors.ORANGE_YELLOW },
       "100%": {
-        transform: "translate(280px, 250px) scale(1.6)",
+        transform: "translate(280px, 210px) scale(1.6)",
         opacity: 0,
         color: StarColors.KHAKI,
       },
@@ -131,7 +131,7 @@ const FireworkStar = styled("div")<{
       "45%": { opacity: 1, color: StarColors.GOLD },
       "75%": { color: StarColors.AMBER },
       "100%": {
-        transform: "translate(-50px, 190px) scale(0.9)",
+        transform: "translate(-50px, 160px) scale(0.9)",
         opacity: 0,
         color: StarColors.LIGHT_YELLOW,
       },
@@ -173,7 +173,7 @@ const FireworkStar = styled("div")<{
       "35%": { opacity: 1, color: StarColors.LIGHT_YELLOW },
       "70%": { color: StarColors.AMBER },
       "100%": {
-        transform: "translate(-90px, -310px) scale(1.1)",
+        transform: "translate(-90px, -350px) scale(1.1)",
         opacity: 0,
         color: StarColors.GOLD,
       },
@@ -229,7 +229,7 @@ const FireworkStar = styled("div")<{
       "45%": { opacity: 1, color: StarColors.ORANGE_YELLOW },
       "80%": { color: StarColors.GOLD },
       "100%": {
-        transform: "translate(110px, 270px) scale(1.7)",
+        transform: "translate(110px, 200px) scale(1.7)",
         opacity: 0,
         color: StarColors.MATERIAL_YELLOW,
       },
@@ -271,7 +271,7 @@ const FireworkStar = styled("div")<{
       "30%": { opacity: 1, color: StarColors.GOLD },
       "65%": { color: StarColors.ORANGE_YELLOW },
       "100%": {
-        transform: "translate(-150px, -280px) scale(1.0)",
+        transform: "translate(-150px, -200px) scale(1.0)",
         opacity: 0,
         color: StarColors.AMBER,
       },

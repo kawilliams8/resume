@@ -5,6 +5,7 @@ import { CodeBlock } from "./components/CodeBlock";
 import "./index.css";
 import { ButtonLinks } from "./components/ButtonLinks";
 import { ResumeCards } from "./components/ResumeCards";
+import { BotExplainer } from "./components/BotExplainer";
 
 export default function App() {
   console.log(
@@ -110,6 +111,22 @@ export default function App() {
             PROFESSIONAL EXPERIENCE:
           </Typography>
           <ResumeCards />
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: 100,
+              mt: 4,
+              fontSize: { xs: "1.5rem", sm: "1.75rem" },
+              letterSpacing: 6,
+              opacity: 0.7,
+              maxWidth: "90%",
+              wordBreak: "break-word",
+              whiteSpace: "normal",
+            }}
+          >
+            PERSONAL PROJECT:
+          </Typography>
+          <BotExplainer />
         </Stack>
       </ForegroundLayer>
     </>
