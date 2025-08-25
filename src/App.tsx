@@ -1,147 +1,161 @@
-import { Typography, Stack } from "@mui/material";
+import { Typography, Stack, ThemeProvider, Box } from "@mui/material";
 import { ShootingStars } from "./components/ShootingStars";
 import styled from "@emotion/styled";
 import { CodeBlock } from "./components/CodeBlock";
-import "./index.css";
+import CssBaseline from "@mui/material/CssBaseline";
 import { ButtonLinks } from "./components/ButtonLinks";
 import { ResumeCards } from "./components/ResumeCards";
 import { BotExplainer } from "./components/BotExplainer";
+import { ThemeToggle } from "./theme/ThemeToggle";
+import { createDarkTheme, createLightTheme } from "../src/theme/theme";
+import { useMemo } from "react";
+import { useThemeMode } from "../src/theme/useThemeMode";
 
 export default function App() {
   console.log(
     "⚡️ Thanks for checking under the hood! Let's build something amazing together. ⚡️"
   );
+  const { toggleMode, isDark } = useThemeMode();
+
+  const theme = useMemo(
+    () => (isDark ? createDarkTheme : createLightTheme),
+    [isDark]
+  );
 
   return (
     <>
-      <BackgroundLayer>
-        <Stack
-          className="floatAnimation"
-          sx={{
-            height: "100vh",
-            width: "100%",
-            background: `linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #06b6d4 100%)`,
-          }}
-        >
-          <ShootingStars />
-        </Stack>
-      </BackgroundLayer>
-      <ForegroundLayer>
-        <Stack
-          sx={{
-            width: "100%",
-            maxWidth: "900px",
-            margin: "auto",
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-            mt: 2,
-          }}
-        >
-          <Typography
-            variant="h1"
+      <CssBaseline />
+      <ThemeProvider theme={theme}>
+        <ThemeToggle onToggle={toggleMode} />
+        <BackgroundLayer>
+          <Stack
+            className="floatAnimation"
             sx={{
-              fontWeight: 800,
-              mt: 1,
-              maxWidth: "100%",
-              wordBreak: "break-word",
-              whiteSpace: "normal",
-              fontSize: { xs: "2.25rem", sm: "2.5rem", md: "3.5rem" },
-              letterSpacing: 2,
+              height: "100vh",
+              width: "100%",
+              background: theme.palette.background.default,
             }}
           >
-            Katherine Williams
-          </Typography>
-          <Typography
-            variant="h2"
-            sx={{
-              mb: 1,
-              mx: 3,
-              fontWeight: 100,
-              fontSize: { xs: "1.1rem", sm: "1.5rem" },
-              letterSpacing: 3,
-              opacity: 0.7,
-            }}
-          >
-            Senior Frontend / Fullstack Software Engineer
-          </Typography>
-          <ButtonLinks />
-          <Stack direction="column" sx={{ mt: 2, maxWidth: "90%" }}>
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: 100,
-                opacity: 0.85,
-                mb: 1,
-                fontSize: { xs: "1rem", sm: "1.25rem" },
-              }}
-            >
-              React | Vue | TypeScript | Redux | UI Libraries | Playwright
-            </Typography>
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: 100,
-                opacity: 0.85,
-                mb: 1,
-                fontSize: { xs: ".9rem", sm: "1rem" },
-              }}
-            >
-              RESTful APIs | Laravel | Node | AWS | Docker | Cursor AI
-            </Typography>
+            <ShootingStars />
           </Stack>
+        </BackgroundLayer>
+        <ForegroundLayer>
+          <Stack
+            sx={{
+              width: "100%",
+              maxWidth: "900px",
+              margin: "auto",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              mt: 2,
+            }}
+          >
+            <Typography
+              variant="h1"
+              sx={{
+                fontWeight: 800,
+                mt: 1,
+                maxWidth: "100%",
+                wordBreak: "break-word",
+                whiteSpace: "normal",
+                fontSize: { xs: "2.25rem", sm: "2.5rem", md: "3.5rem" },
+                letterSpacing: 2,
+              }}
+            >
+              Katherine Williams
+            </Typography>
+            <Typography
+              variant="h2"
+              sx={{
+                mb: 1,
+                mx: 3,
+                fontWeight: 100,
+                fontSize: { xs: "1.1rem", sm: "1.5rem" },
+                letterSpacing: 3,
+                opacity: 0.7,
+              }}
+            >
+              Senior Frontend / Fullstack Software Engineer
+            </Typography>
+            <ButtonLinks />
+            <Stack direction="column" sx={{ mt: 2, maxWidth: "90%" }}>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 100,
+                  opacity: 0.85,
+                  mb: 1,
+                  fontSize: { xs: "1rem", sm: "1.25rem" },
+                }}
+              >
+                React | Vue | TypeScript | Redux | UI Libraries | Playwright
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 100,
+                  opacity: 0.85,
+                  mb: 1,
+                  fontSize: { xs: ".9rem", sm: "1rem" },
+                }}
+              >
+                RESTful APIs | Laravel | Node | AWS | Docker | Cursor AI
+              </Typography>
+            </Stack>
 
-          <Stack direction={{ xs: "column", lg: "row" }} mt={2}>
-            <CodeBlock code={code1} title="top_applicant.ts" withTypewriter />
-            <CodeBlock code={code2} title="types/index.ts" />
+            <Stack direction={{ xs: "column", lg: "row" }} mt={2}>
+              <CodeBlock code={code1} title="top_applicant.ts" withTypewriter />
+              <CodeBlock code={code2} title="types/index.ts" />
+            </Stack>
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: 100,
+                mt: 4,
+                fontSize: { xs: "1.5rem", sm: "1.75rem" },
+                letterSpacing: 6,
+                opacity: 0.7,
+                maxWidth: "90%",
+                wordBreak: "break-word",
+                whiteSpace: "normal",
+              }}
+            >
+              PROFESSIONAL EXPERIENCE:
+            </Typography>
+            <ResumeCards />
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: 100,
+                mt: 4,
+                fontSize: { xs: "1.5rem", sm: "1.75rem" },
+                letterSpacing: 6,
+                opacity: 0.7,
+                maxWidth: "90%",
+                wordBreak: "break-word",
+                whiteSpace: "normal",
+              }}
+            >
+              PERSONAL PROJECT:
+            </Typography>
+            <BotExplainer />
           </Stack>
-          <Typography
-            variant="h4"
-            sx={{
-              fontWeight: 100,
-              mt: 4,
-              fontSize: { xs: "1.5rem", sm: "1.75rem" },
-              letterSpacing: 6,
-              opacity: 0.7,
-              maxWidth: "90%",
-              wordBreak: "break-word",
-              whiteSpace: "normal",
-            }}
-          >
-            PROFESSIONAL EXPERIENCE:
-          </Typography>
-          <ResumeCards />
-          <Typography
-            variant="h4"
-            sx={{
-              fontWeight: 100,
-              mt: 4,
-              fontSize: { xs: "1.5rem", sm: "1.75rem" },
-              letterSpacing: 6,
-              opacity: 0.7,
-              maxWidth: "90%",
-              wordBreak: "break-word",
-              whiteSpace: "normal",
-            }}
-          >
-            PERSONAL PROJECT:
-          </Typography>
-          <BotExplainer />
-        </Stack>
-      </ForegroundLayer>
+        </ForegroundLayer>
+      </ThemeProvider>
     </>
   );
 }
 
-const BackgroundLayer = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  z-index: 0;
-  pointer-events: none;
-`;
+const BackgroundLayer = styled(Box)({
+  position: "fixed",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100vh",
+  zIndex: 0,
+  pointerEvents: "none",
+});
 
 const ForegroundLayer = styled.div`
   position: relative;

@@ -47,7 +47,7 @@ const FireworkStar = styled("div")<{
     animationDelay: `${delay}s`,
     animation: animations[animationType],
     pointerEvents: "none",
-    zIndex: 0,
+    zIndex: 5,
     "&::before": {
       content: '"★"',
       display: "block",

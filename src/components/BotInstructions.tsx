@@ -6,10 +6,12 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  useTheme,
 } from "@mui/material";
 import { KeyboardArrowDown } from "@mui/icons-material";
 
 export const BotInstructions = () => {
+  const theme = useTheme();
   return (
     <Stack mt={2}>
       <Accordion>
@@ -23,7 +25,7 @@ export const BotInstructions = () => {
             variant="h6"
             sx={{
               fontSize: "1rem",
-              color: "#282c34",
+              color: theme.palette.primary.dark,
             }}
           >
             🤖 What is the Colorado History Photos Bot?
@@ -45,7 +47,7 @@ export const BotInstructions = () => {
             variant="h5"
             sx={{
               fontSize: "1.25rem",
-
+              color: theme.palette.primary.dark,
               textAlign: "left",
             }}
           >
@@ -60,43 +62,38 @@ export const BotInstructions = () => {
             executes in under 5 seconds, ensuring reliable twice-daily posts
             with minimal failures. The pipeline:
           </Typography>
-          <Typography
-            variant="body2"
-            sx={{ color: "text.secondary", textAlign: "left", mt: 1 }}
-          >
-            <List>
-              <ListItem>
-                - Retrieves the next post ID from a SQLite database
-              </ListItem>
-              <ListItem>
-                - Downloads historical photograph and metadata from the
-                Library's Digital Archive
-              </ListItem>
-              <ListItem>
-                - Optimizes images for social media (automatic resizing &
-                compression)
-              </ListItem>
-              <ListItem>
-                - Enhances descriptions using Claude API for clarity and
-                engagement
-              </ListItem>
-              <ListItem>
-                - Generates contextual hashtags for discoverability
-              </ListItem>
-              <ListItem>
-                - Publishes to Bluesky via the AT Protocol with proper threading
-              </ListItem>
-              <ListItem>
-                - Links back to the original archive with rich text formatting
-              </ListItem>
-              <ListItem>
-                - Posts searchable custom hash tags with rich text formatting
-              </ListItem>
-              <ListItem>
-                - Updates database tables and commits changes to the repository
-              </ListItem>
-            </List>
-          </Typography>
+          <List sx={{ color: "text.secondary" }}>
+            <ListItem>
+              - Retrieves the next post ID from a SQLite database
+            </ListItem>
+            <ListItem>
+              - Downloads historical photograph and metadata from the Library's
+              Digital Archive
+            </ListItem>
+            <ListItem>
+              - Optimizes images for social media (automatic resizing &
+              compression)
+            </ListItem>
+            <ListItem>
+              - Enhances descriptions using Claude API for clarity and
+              engagement
+            </ListItem>
+            <ListItem>
+              - Generates contextual hashtags for discoverability
+            </ListItem>
+            <ListItem>
+              - Publishes to Bluesky via the AT Protocol with proper threading
+            </ListItem>
+            <ListItem>
+              - Links back to the original archive with rich text formatting
+            </ListItem>
+            <ListItem>
+              - Posts searchable custom hash tags with rich text formatting
+            </ListItem>
+            <ListItem>
+              - Updates database tables and commits changes to the repository
+            </ListItem>
+          </List>
         </AccordionDetails>
       </Accordion>
     </Stack>
