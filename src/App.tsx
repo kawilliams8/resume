@@ -56,7 +56,7 @@ export default function App() {
               sx={{
                 fontWeight: 800,
                 mt: 1,
-                maxWidth: "100%",
+                maxWidth: "80%",
                 wordBreak: "break-word",
                 whiteSpace: "normal",
                 fontSize: { xs: "2.25rem", sm: "2.5rem", md: "3.5rem" },

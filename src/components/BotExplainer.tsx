@@ -182,7 +182,7 @@ export const BotExplainer = () => {
     <Box
       sx={{
         p: 3,
-        width: { xs: "300px", sm: "550px", md: "800px", lg: "1000px" },
+        width: { xs: "350px", sm: "550px", md: "800px", lg: "1000px" },
       }}
     >
       <Paper
@@ -231,6 +231,7 @@ export const BotExplainer = () => {
                   tabIndex={0}
                   role="button"
                   aria-label="Check bot status"
+                  isDark={isDark}
                 >
                   <KeyboardDoubleArrowRightTwoTone
                     sx={{ mr: 0.5, color: "#3b82f6" }}
@@ -244,6 +245,7 @@ export const BotExplainer = () => {
                   tabIndex={0}
                   role="button"
                   aria-label="Run post sequence"
+                  isDark={isDark}
                 >
                   <KeyboardDoubleArrowRightTwoTone
                     sx={{ mr: 0.5, color: "#3b82f6" }}
@@ -257,6 +259,7 @@ export const BotExplainer = () => {
                   tabIndex={0}
                   role="button"
                   aria-label="Print tech stack"
+                  isDark={isDark}
                 >
                   <KeyboardDoubleArrowRightTwoTone
                     sx={{ mr: 0.5, color: "#3b82f6" }}
@@ -270,6 +273,7 @@ export const BotExplainer = () => {
                   tabIndex={0}
                   role="button"
                   aria-label="Clear terminal"
+                  isDark={isDark}
                 >
                   <KeyboardDoubleArrowRightTwoTone
                     sx={{ mr: 0.5, color: "#3b82f6" }}
@@ -343,6 +347,7 @@ export const BotExplainer = () => {
                   tabIndex={0}
                   role="button"
                   aria-label="Open Repository"
+                  isDark={isDark}
                 >
                   <OpenInNew sx={{ mr: 0.5, color: "#3b82f6" }} />
                   open repository
@@ -359,6 +364,7 @@ export const BotExplainer = () => {
                   tabIndex={0}
                   role="button"
                   aria-label="View live output"
+                  isDark={isDark}
                 >
                   <OpenInNew sx={{ mr: 0.5, color: "#3b82f6" }} />
                   view live output
@@ -458,6 +464,7 @@ const TerminalLine = styled(Box)<{
   display: "flex",
   alignItems: "flex-start",
   fontFamily: "inherit",
+  fontWeight: 800,
   "@keyframes fadeIn": {
     from: { opacity: 0, transform: "translateY(5px)" },
     to: { opacity: 1, transform: "translateY(0)" },
@@ -474,18 +481,19 @@ const Command = styled("span")({
   color: "#06b6d4",
 });
 
-const CommandButton = styled(Button)(({}) => ({
-  background: alpha("#0a0e27", 0.8),
-  color: alpha("#fff", 0.9),
+const CommandButton = styled(Button)<{ isDark: boolean }>(({ isDark }) => ({
+  background: isDark ? alpha("#0a0e27", 0.8) : alpha("#0a0e27", 0.1),
+  color: isDark ? alpha("#fff", 0.9) : "#000",
   fontFamily: '"Courier New", monospace',
   fontSize: "12px",
+  fontWeight: 600,
   cursor: "pointer",
   transition: "all 0.2s ease",
   minWidth: "200px",
   "&:hover": {
-    background: alpha("#0a0e27", 0.6),
+    background: isDark ? alpha("#0a0e27", 0.5) : alpha("#0a0e27", 0.2),
     borderColor: "#3b82f6",
-    color: "black",
+    color: isDark ? alpha("#fff", 0.9) : "#000",
   },
   "&:disabled": {
     borderColor: "white",
