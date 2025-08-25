@@ -8,6 +8,7 @@ import {
   styled,
   alpha,
   Link,
+  useTheme,
 } from "@mui/material";
 import {
   KeyboardDoubleArrowRightTwoTone,
@@ -16,6 +17,7 @@ import {
 import { asciiArt, commands } from "./Bot";
 import { BotInstructions } from "./BotInstructions";
 import { BotTooltip } from "./BotTooltip";
+import { grey } from "@mui/material/colors";
 
 export const BotExplainer = () => {
   const [lines, setLines] = useState<
@@ -26,6 +28,8 @@ export const BotExplainer = () => {
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)"
   ).matches;
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
 
   // Set initial message
   useEffect(() => {
@@ -42,6 +46,7 @@ export const BotExplainer = () => {
           content: (
             <TerminalLine
               type="success"
+              isDark={isDark}
               prefersReducedMotion={prefersReducedMotion}
             >
               Welcome to Colorado History Photos - Bluesky Bot Terminal v1.0.0
@@ -53,6 +58,7 @@ export const BotExplainer = () => {
           content: (
             <TerminalLine
               type="info"
+              isDark={isDark}
               prefersReducedMotion={prefersReducedMotion}
             >
               Click a command button to explore how the Colorado History Photos
@@ -64,6 +70,7 @@ export const BotExplainer = () => {
           id: "3",
           content: (
             <TerminalLine
+              isDark={isDark}
               prefersReducedMotion={prefersReducedMotion}
             ></TerminalLine>
           ),
@@ -89,7 +96,11 @@ export const BotExplainer = () => {
     const commandLine = {
       id: `cmd-${Date.now()}`,
       content: (
-        <TerminalLine type="input" prefersReducedMotion={prefersReducedMotion}>
+        <TerminalLine
+          type="input"
+          isDark={isDark}
+          prefersReducedMotion={prefersReducedMotion}
+        >
           <Prompt>$</Prompt>
           <Command>{command}</Command>
         </TerminalLine>
@@ -106,6 +117,7 @@ export const BotExplainer = () => {
           content: (
             <TerminalLine
               type="info"
+              isDark={isDark}
               prefersReducedMotion={prefersReducedMotion}
             >
               <Prompt>$</Prompt>
@@ -127,6 +139,7 @@ export const BotExplainer = () => {
         content: (
           <TerminalLine
             type={output.type || "output"}
+            isDark={isDark}
             prefersReducedMotion={prefersReducedMotion}
           >
             <span style={{ lineHeight: "30px" }}>&gt; {output.text}</span>
@@ -149,7 +162,10 @@ export const BotExplainer = () => {
       {
         id: `empty-${Date.now()}`,
         content: (
-          <TerminalLine prefersReducedMotion={prefersReducedMotion}>
+          <TerminalLine
+            isDark={isDark}
+            prefersReducedMotion={prefersReducedMotion}
+          >
             <Prompt>$</Prompt>
           </TerminalLine>
         ),
@@ -173,10 +189,8 @@ export const BotExplainer = () => {
         elevation={1}
         sx={{
           p: { xs: 0, sm: 2 },
-          background:
-            "linear-gradient(#fdfdfd, #fdfdfd) padding-box, linear-gradient(110deg, rgba(6, 182, 212, 0.5) 0%, rgba(139, 92, 246, 0.9) 50%) border-box",
-          border: "2px solid transparent",
           borderRadius: 2,
+          background: theme.palette.mode === "dark" ? "#282c34" : "white",
         }}
       >
         <Stack spacing={2}>
@@ -184,20 +198,20 @@ export const BotExplainer = () => {
             variant="h4"
             sx={{
               fontSize: { xs: "1.25rem", md: "1.5rem" },
-              color: "#282c34",
+              color: theme.palette.primary.dark,
               pt: { xs: 2, sm: 0 },
             }}
           >
             Colorado History Photos: A Social Media Bot for Bluesky 🤖
           </Typography>
-          <Paper>
+          <Paper elevation={2}>
             <Stack mb={2}>
               <Typography
                 variant="h5"
                 sx={{
                   fontFamily: '"JetBrains Mono", "Courier New", monospace',
                   fontSize: "1.25rem",
-                  color: "#282c34",
+                  color: theme.palette.primary.dark,
                   my: 2,
                 }}
               >
@@ -269,6 +283,7 @@ export const BotExplainer = () => {
                 aria-live="polite"
                 elevation={4}
                 sx={{ mt: 2, mx: 2 }}
+                bg={theme.palette.mode === "dark" ? "#0a0e27" : grey[50]}
               >
                 <TerminalHeader>
                   <Stack
@@ -358,8 +373,8 @@ export const BotExplainer = () => {
   );
 };
 
-const TerminalWindow = styled(Paper)(({}) => ({
-  background: "#0a0e27",
+const TerminalWindow = styled(Paper)<{ bg: string }>(({ bg }) => ({
+  background: bg,
   borderRadius: "8px",
   overflow: "hidden",
   fontFamily: '"JetBrains Mono", "Courier New", monospace',
@@ -408,23 +423,38 @@ const TerminalBody = styled(Box)({
   },
 });
 
+const getTerminalColor = (
+  type: "input" | "output" | "error" | "success" | "info",
+  isDark: boolean
+): string => {
+  const darkColors = {
+    input: "#06b6d4",
+    error: "#ef4444",
+    success: "#10b981",
+    info: "#8b5cf6",
+    output: "#94a3b8",
+  };
+
+  const lightColors = {
+    input: "#0891b2",
+    error: "#dc2626",
+    success: "#059669",
+    info: "#7c3aed",
+    output: "#475569",
+  };
+
+  return isDark ? darkColors[type] : lightColors[type];
+};
+
 const TerminalLine = styled(Box)<{
   type?: "input" | "output" | "error" | "success" | "info";
+  isDark: boolean;
   prefersReducedMotion: boolean;
-}>(({ type = "output", prefersReducedMotion }) => ({
+}>(({ type = "output", isDark, prefersReducedMotion }) => ({
   animation: prefersReducedMotion ? "none" : "fadeIn 0.3s ease-in",
   lineHeight: "28px",
   marginBottom: "0px",
-  color:
-    type === "input"
-      ? "#06b6d4" // teal
-      : type === "error"
-        ? "#ef4444" // red
-        : type === "success"
-          ? "#10b981" // green
-          : type === "info"
-            ? "#8b5cf6"
-            : "#94a3b8",
+  color: getTerminalColor(type, isDark),
   display: "flex",
   alignItems: "flex-start",
   fontFamily: "inherit",

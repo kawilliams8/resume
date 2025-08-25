@@ -7,24 +7,199 @@ import {
   styled,
   Stack,
   Divider,
+  useTheme,
 } from "@mui/material";
 import { Star } from "@mui/icons-material";
+import { grey } from "@mui/material/colors";
 import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
 import { useState } from "react";
 import { FireworkStars } from "./FireworkStars";
 
+interface FlipCardItemProps {
+  data: ResumeCardData;
+  isFlipped: boolean;
+  onFlip: () => void;
+  index: number;
+}
+
+const FlipCardItem = ({
+  data,
+  isFlipped,
+  onFlip,
+  index,
+}: FlipCardItemProps) => {
+  const [showFireworks, setShowFireworks] = useState(false);
+  const theme = useTheme();
+
+  const handleFlip = () => {
+    if (!isFlipped) {
+      setShowFireworks(true);
+      // Hide after animation completes
+      setTimeout(() => setShowFireworks(false), 5000);
+    }
+    onFlip();
+  };
+
+  return (
+    <FlipCard
+      onClick={handleFlip}
+      sx={{
+        // On sm screens, span both columns and center
+        ...(index === 2 && {
+          gridColumn: { sm: "span 2", lg: "auto" },
+          justifySelf: { sm: "center", lg: "auto" },
+        }),
+      }}
+    >
+      <FireworkStars show={showFireworks} />
+      <CardContent sx={{ position: "relative", height: "100%" }}>
+        {!isFlipped ? (
+          <>
+            <Typography
+              mt="2"
+              variant="h4"
+              sx={{
+                fontSize: "1.5rem",
+                color: theme.palette.primary.dark,
+              }}
+            >
+              {data.title}
+            </Typography>
+            <Divider
+              sx={{ mb: 1, mx: 2, background: "rgba(6, 182, 212, 0.1)" }}
+            />
+            <Typography mt="2" color="rgba(139, 92, 246, 1)">
+              {data.company}
+            </Typography>
+            <Typography color="rgba(139, 92, 246, 1)">
+              {data.duration}
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{ mt: 1, mb: 1 }}
+              color="text.secondary"
+            >
+              <DoubleArrowIcon
+                sx={{
+                  color: "#8b5cf6",
+                  opacity: 0.05,
+                  fontSize: "5rem",
+                  position: "absolute",
+                  bottom: 80,
+                  left: 0,
+                }}
+              />
+              {data.story}
+            </Typography>
+            <Star
+              className="star-icon"
+              sx={{
+                position: "absolute",
+                bottom: 16,
+                right: 8,
+                color: "#e5c07b",
+                fontSize: "1.5rem",
+                transition: "transform 0.3s ease, color 0.3s ease",
+              }}
+            />
+          </>
+        ) : (
+          <Box
+            sx={{
+              border: ".5px solid rgba(139, 92, 246, 1)",
+            }}
+          >
+            <Typography
+              mt={1}
+              variant="h5"
+              sx={{
+                fontSize: "1rem",
+                color: theme.palette.primary.dark,
+              }}
+            >
+              {data.company}
+            </Typography>
+            <Typography
+              variant="h5"
+              sx={{
+                fontSize: "1rem",
+                color: "rgba(139, 92, 246, 1)",
+              }}
+            >
+              Development Stack
+            </Typography>
+            <ChipContainer>
+              {data.technologies.map((tech) => (
+                <Chip
+                  variant="outlined"
+                  key={tech}
+                  label={tech}
+                  sx={{
+                    mt: "3px",
+                    backgroundColor:
+                      theme.palette.mode === "dark" ? grey[700] : grey[300],
+                  }}
+                />
+              ))}
+            </ChipContainer>
+          </Box>
+        )}
+      </CardContent>
+    </FlipCard>
+  );
+};
+
+export const ResumeCards = () => {
+  const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
+
+  const handleFlip = (cardId: string) => {
+    setFlippedCards((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(cardId)) {
+        newSet.delete(cardId);
+      } else {
+        newSet.add(cardId);
+      }
+      return newSet;
+    });
+  };
+
+  return (
+    <Box
+      sx={{
+        display: "grid",
+        gap: 2,
+        justifyItems: "center",
+        my: 2,
+        gridTemplateColumns: {
+          xs: "320px",
+          sm: "320px 320px",
+          lg: "320px 320px 320px",
+        },
+      }}
+    >
+      {resumeData.map((cardData, index) => (
+        <FlipCardItem
+          key={cardData.id}
+          data={cardData}
+          index={index}
+          isFlipped={flippedCards.has(cardData.id)}
+          onFlip={() => handleFlip(cardData.id)}
+        />
+      ))}
+    </Box>
+  );
+};
+
 const FlipCard = styled(Card)({
-  minHeight: 270,
+  minHeight: 240,
   width: 320,
   cursor: "pointer",
-  flexShrink: 0,
-  position: "relative",
   overflow: "visible",
   opacity: 0.95,
-  background:
-    "linear-gradient(#fdfdfd, #fdfdfd) padding-box, linear-gradient(135deg, rgba(6, 182, 212, 0.5) 0%, rgba(139, 92, 246, 0.9) 50%) border-box",
-  border: "2px solid transparent",
+  border: "3px solid transparent",
   borderRadius: "8px",
+  boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
   transition:
     "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease",
   transformOrigin: "center",
@@ -41,11 +216,11 @@ const FlipCard = styled(Card)({
 
 const ChipContainer = styled(Stack)({
   flexDirection: "row",
-  gap: 10,
+  gap: 5,
   flexWrap: "wrap",
-  marginBottom: 15,
-  paddingTop: 20,
-  paddingBottom: 10,
+  marginBottom: 1,
+  paddingTop: 10,
+  paddingBottom: 15,
   width: "100%",
   justifyContent: "center",
 });
@@ -117,174 +292,3 @@ const resumeData: ResumeCardData[] = [
     ],
   },
 ];
-
-interface FlipCardItemProps {
-  data: ResumeCardData;
-  isFlipped: boolean;
-  onFlip: () => void;
-  index: number;
-}
-
-const FlipCardItem = ({
-  data,
-  isFlipped,
-  onFlip,
-  index,
-}: FlipCardItemProps) => {
-  const [showFireworks, setShowFireworks] = useState(false);
-
-  const handleFlip = () => {
-    if (!isFlipped) {
-      setShowFireworks(true);
-      // Hide after animation completes
-      setTimeout(() => setShowFireworks(false), 5000);
-    }
-    onFlip();
-  };
-
-  return (
-    <FlipCard
-      onClick={handleFlip}
-      sx={{
-        // On sm screens, span both columns and center
-        ...(index === 2 && {
-          gridColumn: { sm: "span 2", lg: "auto" },
-          justifySelf: { sm: "center", lg: "auto" },
-          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
-        }),
-      }}
-    >
-      <FireworkStars show={showFireworks} />
-      <CardContent sx={{ position: "relative", height: "90%" }}>
-        {!isFlipped ? (
-          <>
-            <Typography
-              mt="2"
-              variant="h4"
-              sx={{
-                fontSize: "1.5rem",
-                color: "#282c34",
-              }}
-            >
-              {data.title}
-            </Typography>
-            <Divider
-              sx={{ mb: 1, mx: 2, background: "rgba(6, 182, 212, 0.1)" }}
-            />
-            <Typography mt="2" color="rgba(139, 92, 246, 1)">
-              {data.company}
-            </Typography>
-            <Typography color="rgba(139, 92, 246, 1)">
-              {data.duration}
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{ mt: 1, mb: 1 }}
-              color="text.secondary"
-            >
-              <DoubleArrowIcon
-                sx={{
-                  color: "#8b5cf6",
-                  opacity: 0.05,
-                  fontSize: "5rem",
-                  position: "absolute",
-                  bottom: 120,
-                  left: 0,
-                }}
-              />
-              {data.story}
-            </Typography>
-            <Star
-              className="star-icon"
-              sx={{
-                position: "absolute",
-                bottom: 25,
-                right: 8,
-                color: "#e5c07b",
-                fontSize: "1.5rem",
-                transition: "transform 0.3s ease, color 0.3s ease",
-              }}
-            />
-          </>
-        ) : (
-          <Box sx={{ border: ".5px solid rgba(139, 92, 246, 1)" }}>
-            <Typography
-              mt={1}
-              variant="h5"
-              sx={{
-                fontSize: "1rem",
-                color: "#282c34",
-              }}
-            >
-              {data.company}
-            </Typography>
-            <Typography
-              variant="h5"
-              sx={{
-                fontSize: "1.25rem",
-                color: "#282c34",
-              }}
-            >
-              Development Stack
-            </Typography>
-            <ChipContainer>
-              {data.technologies.map((tech) => (
-                <Chip
-                  variant="outlined"
-                  key={tech}
-                  label={tech}
-                  sx={{
-                    mt: "3px",
-                    backgroundColor: "rgba(6, 182, 212, 0.2)",
-                  }}
-                />
-              ))}
-            </ChipContainer>
-          </Box>
-        )}
-      </CardContent>
-    </FlipCard>
-  );
-};
-
-export const ResumeCards = () => {
-  const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
-
-  const handleFlip = (cardId: string) => {
-    setFlippedCards((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(cardId)) {
-        newSet.delete(cardId);
-      } else {
-        newSet.add(cardId);
-      }
-      return newSet;
-    });
-  };
-
-  return (
-    <Box
-      sx={{
-        display: "grid",
-        gap: 2,
-        justifyItems: "center",
-        my: 2,
-        gridTemplateColumns: {
-          xs: "320px",
-          sm: "320px 320px",
-          lg: "320px 320px 320px",
-        },
-      }}
-    >
-      {resumeData.map((cardData, index) => (
-        <FlipCardItem
-          key={cardData.id}
-          data={cardData}
-          index={index}
-          isFlipped={flippedCards.has(cardData.id)}
-          onFlip={() => handleFlip(cardData.id)}
-        />
-      ))}
-    </Box>
-  );
-};
