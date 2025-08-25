@@ -9,8 +9,13 @@ interface ThemeToggleProps {
 export const ThemeToggle = ({ onToggle }: ThemeToggleProps) => {
   const theme = useTheme();
   return (
-    <StyledFab onClick={onToggle} aria-label="edit theme" variant="extended">
-      <Typography sx={{ fontSize: 24 }}>
+    <StyledFab
+      size="small"
+      onClick={onToggle}
+      aria-label="edit theme"
+      variant="extended"
+    >
+      <Typography sx={{ fontSize: 21 }}>
         {theme.palette.mode === "dark" ? "☀️" : "🌙"}
       </Typography>
     </StyledFab>
