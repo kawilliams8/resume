@@ -74,7 +74,7 @@ export const CodeBlock = ({ code, title, withTypewriter }: CodeBlockProps) => {
     }
   };
 
-  const handleKeyDown = (event: KeyboardEvent, dotColor: string) => {
+  const handleKeyDown = (event: React.KeyboardEvent, dotColor: string) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       handleDotClick(dotColor);
