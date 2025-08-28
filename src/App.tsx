@@ -1,31 +1,28 @@
-import { Typography, Stack, ThemeProvider, Box } from "@mui/material";
+import { Stack, ThemeProvider, Box } from "@mui/material";
 import { ShootingStars } from "./components/ShootingStars";
+import { HeroSection } from "./components/HeroSection";
+import { CodeDemoSection } from "./components/CodeDemoSection";
+import { ExperienceSection } from "./components/ExperienceSection";
+import { ProjectSection } from "./components/ProjectSection";
 import styled from "@emotion/styled";
 import CssBaseline from "@mui/material/CssBaseline";
-import { ButtonLinks } from "./components/ButtonLinks";
 import { ThemeToggle } from "./theme/ThemeToggle";
 import { createDarkTheme, createLightTheme } from "../src/theme/theme";
-import { useMemo, Suspense } from "react";
+import { useMemo, useEffect } from "react";
 import { useThemeMode } from "../src/theme/useThemeMode";
-import {
-  LazyComponent,
-  ComponentSkeleton,
-  LazyCodeBlock,
-  LazyResumeCards,
-  LazyBotExplainer,
-  ResumeCardsSkeleton,
-  BotExplainerSkeleton,
-  CodeBlockSkeleton,
-} from "./utils/LazyComponent";
 import { useComponentPreloader } from "./hooks/useComponentPreloader";
 import { usePerformanceMonitor } from "./hooks/usePerformanceMonitor";
 
 export default function App() {
   useComponentPreloader();
   usePerformanceMonitor();
-  console.log(
-    "⚡️ Thanks for checking under the hood! Let's build something amazing together. ⚡️"
-  );
+  
+  useEffect(() => {
+    console.log(
+      "⚡️ Thanks for checking under the hood! Let's build something amazing together. ⚡️"
+    );
+  }, []);
+  
   const { toggleMode, isDark } = useThemeMode();
 
   const theme = useMemo(
@@ -62,184 +59,10 @@ export default function App() {
               mt: 2,
             }}
           >
-            <Typography
-              variant="h1"
-              sx={{
-                fontWeight: 800,
-                mt: 1,
-                maxWidth: "80%",
-                wordBreak: "break-word",
-                whiteSpace: "normal",
-                fontSize: { xs: "2.25rem", sm: "2.5rem", md: "3.5rem" },
-                letterSpacing: 2,
-              }}
-            >
-              Katherine Williams
-            </Typography>
-            <Typography
-              variant="h2"
-              sx={{
-                mb: 1,
-                mx: 3,
-                fontWeight: 100,
-                fontSize: { xs: "1.1rem", sm: "1.5rem" },
-                letterSpacing: 3,
-                opacity: 0.7,
-              }}
-            >
-              Senior Frontend / Fullstack Software Engineer
-            </Typography>
-            <ButtonLinks />
-            <Stack direction="column" sx={{ mt: 2, maxWidth: "90%" }}>
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: 100,
-                  opacity: 0.85,
-                  mb: 1,
-                  fontSize: { xs: "1rem", sm: "1.25rem" },
-                }}
-              >
-                React | Vue | TypeScript | Redux | UI Libraries | Playwright
-              </Typography>
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: 100,
-                  opacity: 0.85,
-                  mb: 1,
-                  fontSize: { xs: ".9rem", sm: "1rem" },
-                }}
-              >
-                RESTful APIs | Laravel | Node | AWS | Docker | Cursor AI
-              </Typography>
-            </Stack>
-            <LazyComponent
-              height={200}
-              rootMargin="50px"
-              centered={true}
-              fallback={
-                <Stack direction={{ xs: "column", lg: "row" }} mt={2}>
-                  <CodeBlockSkeleton />
-                </Stack>
-              }
-            >
-              <Stack
-                direction={{ xs: "column", lg: "row" }}
-                mt={2}
-                alignItems="center"
-              >
-                <Suspense
-                  fallback={
-                    <ComponentSkeleton
-                      height={350}
-                      centered={true}
-                      lines={15}
-                    />
-                  }
-                >
-                  <LazyCodeBlock
-                    code={code1}
-                    title="top_applicant.ts"
-                    withTypewriter
-                  />
-                </Suspense>
-                <Suspense
-                  fallback={
-                    <ComponentSkeleton
-                      height={350}
-                      centered={true}
-                      lines={15}
-                    />
-                  }
-                >
-                  <LazyCodeBlock code={code2} title="types/index.ts" />
-                </Suspense>
-              </Stack>
-            </LazyComponent>
-            <LazyComponent
-              height={20}
-              centered={true}
-              rootMargin="100px"
-              fallback={
-                <ComponentSkeleton height={80} centered={true} lines={2} />
-              }
-            >
-              <Typography
-                variant="h4"
-                sx={{
-                  fontWeight: 100,
-                  mt: 4,
-                  fontSize: { xs: "1.5rem", sm: "1.75rem" },
-                  letterSpacing: 6,
-                  opacity: 0.7,
-                  maxWidth: "90%",
-                  wordBreak: "break-word",
-                  whiteSpace: "normal",
-                }}
-              >
-                PROFESSIONAL EXPERIENCE:
-              </Typography>
-            </LazyComponent>
-            <LazyComponent
-              height={100}
-              centered={true}
-              rootMargin="150px"
-              fallback={
-                <Stack
-                  direction={{ xs: "column", md: "row" }}
-                  sx={{ gap: 2, width: "100%", mt: 2 }}
-                >
-                  <ResumeCardsSkeleton />
-                </Stack>
-              }
-            >
-              <Suspense
-                fallback={
-                  <ComponentSkeleton height={600} centered={true} lines={12} />
-                }
-              >
-                <LazyResumeCards />
-              </Suspense>
-            </LazyComponent>
-            <LazyComponent
-              height={80}
-              centered={true}
-              rootMargin="200px"
-              fallback={
-                <ComponentSkeleton height={80} centered={true} lines={2} />
-              }
-            >
-              <Typography
-                variant="h4"
-                sx={{
-                  fontWeight: 100,
-                  mt: 4,
-                  fontSize: { xs: "1.5rem", sm: "1.75rem" },
-                  letterSpacing: 6,
-                  opacity: 0.7,
-                  maxWidth: "90%",
-                  wordBreak: "break-word",
-                  whiteSpace: "normal",
-                }}
-              >
-                PERSONAL PROJECT:
-              </Typography>
-            </LazyComponent>
-            <LazyComponent
-              height={500}
-              centered={true}
-              rootMargin="200px"
-              fallback={<BotExplainerSkeleton />}
-            >
-              <Suspense
-                fallback={
-                  <ComponentSkeleton height={500} centered={true} lines={10} />
-                }
-              >
-                <LazyBotExplainer />
-              </Suspense>
-            </LazyComponent>
+            <HeroSection />
+            <CodeDemoSection />
+            <ExperienceSection />
+            <ProjectSection />
           </Stack>
         </ForegroundLayer>
       </ThemeProvider>
@@ -273,51 +96,3 @@ const ForegroundLayer = styled.div`
   min-height: 100vh;
 `;
 
-const code1 = `
-  const top_applicant: Applicant = {
-  "candidate": "Katherine Williams",
-  "years_of_experience": 7,
-  "education": "Turing School of Software and Design - Frontend Engineering",
-  "work_environment" : "remote",
-  "interview": {
-    "technical": "passed",
-    "behavioral": "nailed it",
-    "team_fit": "excellent"
-  },
-  "offer": {
-    "position": "Senior Frontend Engineer",
-    "responsibilities": ["UI Development", "End-to-End Testing", "Mentorship" ],
-    "salary": "competitive",
-    "start_date": "ASAP"
-  },
-  "next_steps": [
-    "Sign offer letter ✍️",
-    "Celebrate 🎉",
-    "Clone the repo 🧑‍💻",
-    "Hit the ground running 🔥"
-  ]
-}`;
-
-const code2 = `
-type Position = 'Senior Frontend Engineer' | 'Frontend Engineer' | 'Junior Frontend Engineer';
-type WorkEnvironment = 'remote' | 'hybrid' | 'onsite';
-type InterviewStatus = 'passed' | 'failed' | 'pending';
-
-interface Applicant {
-  candidate: string;
-  years_of_experience: number;
-  education: string;
-  work_environment: WorkEnvironment;
-  interview: {
-    technical: InterviewStatus;
-    behavioral: string;
-    team_fit: 'excellent' | 'good' | 'fair' | 'poor';
-  };
-  offer: {
-    position: Position;
-    responsibilities: string[];
-    salary: string;
-    start_date: string;
-  };
-  next_steps: string[];
-}`;
