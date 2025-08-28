@@ -17,7 +17,6 @@ export const useThemeMode = (
 
   // Toggle between light and dark
   const toggleMode = useCallback(() => {
-    console.log("toggle");
     setModeState((prevMode) => (prevMode === "dark" ? "light" : "dark"));
   }, []);
 
