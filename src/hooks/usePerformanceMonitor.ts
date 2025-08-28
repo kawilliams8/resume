@@ -2,6 +2,11 @@ import { useEffect } from "react";
 
 export const usePerformanceMonitor = () => {
   useEffect(() => {
+    // Only run performance monitoring in development
+    if (process.env.NODE_ENV !== "development") {
+      return;
+    }
+
     // Monitor initial load performance
     const startTime = performance.now();
 
@@ -28,12 +33,16 @@ export const usePerformanceMonitor = () => {
   const trackComponentLoad = (componentName: string) => {
     const startTime = performance.now();
     return () => {
+      if (process.env.NODE_ENV !== "development") {
+        return;
+      }
+
       const endTime = performance.now();
       const loadTime = endTime - startTime;
       console.log(`📦 ${componentName} loaded in ${loadTime.toFixed(2)}ms`);
 
       // Flag slow components in development
-      if (process.env.NODE_ENV === "development" && loadTime > 500) {
+      if (loadTime > 500) {
         console.warn(
           `⚠️ Slow component: ${componentName} took ${loadTime.toFixed(2)}ms`
         );
