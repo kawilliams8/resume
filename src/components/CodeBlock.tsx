@@ -1,5 +1,5 @@
 import { Box, Stack, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { BlueScreenOfDeath } from "../components/BlueScreenOfDeath";
 import { EasterEggMessages } from "./EasterEggMessages";
 import { MinimizedWindow } from "./MinimizedWindow";
@@ -57,11 +57,7 @@ const DOT_ACTIONS = {
   },
 } as const;
 
-export const CodeBlock: React.FC<CodeBlockProps> = ({
-  code,
-  title,
-  withTypewriter,
-}) => {
+export const CodeBlock = ({ code, title, withTypewriter }: CodeBlockProps) => {
   const [windowState, setWindowState] = useState<WindowState>("normal");
   const [showMessage, setShowMessage] = useState(false);
 
@@ -78,7 +74,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
     }
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent, dotColor: string) => {
+  const handleKeyDown = (event: KeyboardEvent, dotColor: string) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       handleDotClick(dotColor);
@@ -102,7 +98,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
     <div role="group" aria-label="Window controls" style={{ display: "flex" }}>
       {Object.entries(COLORS.dots).map(([_, color]) => {
         const dotAction = DOT_ACTIONS[color];
-        const buttonRef = React.useRef<HTMLButtonElement>(null);
+        const buttonRef = useRef<HTMLButtonElement>(null);
 
         return (
           <Box

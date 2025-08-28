@@ -25,11 +25,7 @@ export const BotExplainer = () => {
   >([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const terminalBodyRef = useRef<HTMLDivElement>(null);
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  ).matches;
   const theme = useTheme();
-  const isDark = theme.palette.mode === "dark";
 
   // Set initial message
   useEffect(() => {
@@ -44,11 +40,7 @@ export const BotExplainer = () => {
         {
           id: "1",
           content: (
-            <TerminalLine
-              type="success"
-              isDark={isDark}
-              prefersReducedMotion={prefersReducedMotion}
-            >
+            <TerminalLine type="success">
               Welcome to Colorado History Photos - Bluesky Bot Terminal v1.0.0
             </TerminalLine>
           ),
@@ -56,11 +48,7 @@ export const BotExplainer = () => {
         {
           id: "2",
           content: (
-            <TerminalLine
-              type="info"
-              isDark={isDark}
-              prefersReducedMotion={prefersReducedMotion}
-            >
+            <TerminalLine type="info">
               Click a command button to explore how the Colorado History Photos
               bot works.
             </TerminalLine>
@@ -68,12 +56,7 @@ export const BotExplainer = () => {
         },
         {
           id: "3",
-          content: (
-            <TerminalLine
-              isDark={isDark}
-              prefersReducedMotion={prefersReducedMotion}
-            ></TerminalLine>
-          ),
+          content: <TerminalLine></TerminalLine>,
         },
       ]);
     };
@@ -96,11 +79,7 @@ export const BotExplainer = () => {
     const commandLine = {
       id: `cmd-${Date.now()}`,
       content: (
-        <TerminalLine
-          type="input"
-          isDark={isDark}
-          prefersReducedMotion={prefersReducedMotion}
-        >
+        <TerminalLine type="input">
           <Prompt>$</Prompt>
           <Command>{command}</Command>
         </TerminalLine>
@@ -115,11 +94,7 @@ export const BotExplainer = () => {
         {
           id: "0",
           content: (
-            <TerminalLine
-              type="info"
-              isDark={isDark}
-              prefersReducedMotion={prefersReducedMotion}
-            >
+            <TerminalLine type="info">
               <Prompt>$</Prompt>
               Select a command.
             </TerminalLine>
@@ -137,11 +112,7 @@ export const BotExplainer = () => {
       const outputLine = {
         id: `out-${Date.now()}-${Math.random()}`,
         content: (
-          <TerminalLine
-            type={output.type || "output"}
-            isDark={isDark}
-            prefersReducedMotion={prefersReducedMotion}
-          >
+          <TerminalLine type={output.type || "output"}>
             <span style={{ lineHeight: "30px" }}>&gt; {output.text}</span>
             {output.tech && (
               <Box sx={{ ml: 1 }}>
@@ -162,10 +133,7 @@ export const BotExplainer = () => {
       {
         id: `empty-${Date.now()}`,
         content: (
-          <TerminalLine
-            isDark={isDark}
-            prefersReducedMotion={prefersReducedMotion}
-          >
+          <TerminalLine>
             <Prompt>$</Prompt>
           </TerminalLine>
         ),
@@ -231,7 +199,6 @@ export const BotExplainer = () => {
                   tabIndex={0}
                   role="button"
                   aria-label="Check bot status"
-                  isDark={isDark}
                 >
                   <KeyboardDoubleArrowRightTwoTone
                     sx={{ mr: 0.5, color: "#3b82f6" }}
@@ -245,7 +212,6 @@ export const BotExplainer = () => {
                   tabIndex={0}
                   role="button"
                   aria-label="Run post sequence"
-                  isDark={isDark}
                 >
                   <KeyboardDoubleArrowRightTwoTone
                     sx={{ mr: 0.5, color: "#3b82f6" }}
@@ -259,7 +225,6 @@ export const BotExplainer = () => {
                   tabIndex={0}
                   role="button"
                   aria-label="Print tech stack"
-                  isDark={isDark}
                 >
                   <KeyboardDoubleArrowRightTwoTone
                     sx={{ mr: 0.5, color: "#3b82f6" }}
@@ -273,7 +238,6 @@ export const BotExplainer = () => {
                   tabIndex={0}
                   role="button"
                   aria-label="Clear terminal"
-                  isDark={isDark}
                 >
                   <KeyboardDoubleArrowRightTwoTone
                     sx={{ mr: 0.5, color: "#3b82f6" }}
@@ -347,7 +311,6 @@ export const BotExplainer = () => {
                   tabIndex={0}
                   role="button"
                   aria-label="Open Repository"
-                  isDark={isDark}
                 >
                   <OpenInNew sx={{ mr: 0.5, color: "#3b82f6" }} />
                   open repository
@@ -364,7 +327,6 @@ export const BotExplainer = () => {
                   tabIndex={0}
                   role="button"
                   aria-label="View live output"
-                  isDark={isDark}
                 >
                   <OpenInNew sx={{ mr: 0.5, color: "#3b82f6" }} />
                   view live output
@@ -429,42 +391,39 @@ const TerminalBody = styled(Box)({
   },
 });
 
-const getTerminalColor = (
-  type: "input" | "output" | "error" | "success" | "info",
-  isDark: boolean
-): string => {
-  const darkColors = {
-    input: "#06b6d4",
-    error: "#ef4444",
-    success: "#10b981",
-    info: "#8b5cf6",
-    output: "#94a3b8",
-  };
-
-  const lightColors = {
-    input: "#0891b2",
-    error: "#dc2626",
-    success: "#059669",
-    info: "#7c3aed",
-    output: "#475569",
-  };
-
-  return isDark ? darkColors[type] : lightColors[type];
-};
-
-const TerminalLine = styled(Box)<{
+const TerminalLine = styled(Box, {
+  shouldForwardProp: (prop) => prop !== "type",
+})<{
   type?: "input" | "output" | "error" | "success" | "info";
-  isDark: boolean;
-  prefersReducedMotion: boolean;
-}>(({ type = "output", isDark, prefersReducedMotion }) => ({
-  animation: prefersReducedMotion ? "none" : "fadeIn 0.3s ease-in",
+}>(({ theme, type = "output" }) => ({
+  animation: "fadeIn 0.3s ease-in",
   lineHeight: "28px",
   marginBottom: "0px",
-  color: getTerminalColor(type, isDark),
+  color:
+    theme.palette.mode === "dark"
+      ? // Dark mode colors
+        type === "input"
+        ? "#06b6d4"
+        : type === "error"
+          ? "#ef4444"
+          : type === "success"
+            ? "#10b981"
+            : type === "info"
+              ? "#8b5cf6"
+              : "#94a3b8"
+      : // Light mode colors
+        type === "input"
+        ? "#0891b2"
+        : type === "error"
+          ? "#dc2626"
+          : type === "success"
+            ? "#059669"
+            : type === "info"
+              ? "#7c3aed"
+              : "#475569",
   display: "flex",
   alignItems: "flex-start",
   fontFamily: "inherit",
-  fontWeight: 800,
   "@keyframes fadeIn": {
     from: { opacity: 0, transform: "translateY(5px)" },
     to: { opacity: 1, transform: "translateY(0)" },
@@ -481,9 +440,12 @@ const Command = styled("span")({
   color: "#06b6d4",
 });
 
-const CommandButton = styled(Button)<{ isDark: boolean }>(({ isDark }) => ({
-  background: isDark ? alpha("#0a0e27", 0.8) : alpha("#0a0e27", 0.1),
-  color: isDark ? alpha("#fff", 0.9) : "#000",
+const CommandButton = styled(Button)(({ theme }) => ({
+  background:
+    theme.palette.mode === "dark"
+      ? alpha("#0a0e27", 0.8)
+      : alpha("#0a0e27", 0.1),
+  color: theme.palette.mode === "dark" ? alpha("#fff", 0.9) : "#000",
   fontFamily: '"Courier New", monospace',
   fontSize: "12px",
   fontWeight: 600,
@@ -491,9 +453,12 @@ const CommandButton = styled(Button)<{ isDark: boolean }>(({ isDark }) => ({
   transition: "all 0.2s ease",
   minWidth: "200px",
   "&:hover": {
-    background: isDark ? alpha("#0a0e27", 0.5) : alpha("#0a0e27", 0.2),
+    background:
+      theme.palette.mode === "dark"
+        ? alpha("#0a0e27", 0.5)
+        : alpha("#0a0e27", 0.2),
     borderColor: "#3b82f6",
-    color: isDark ? alpha("#fff", 0.9) : "#000",
+    color: theme.palette.mode === "dark" ? alpha("#fff", 0.9) : "#000",
   },
   "&:disabled": {
     borderColor: "white",

@@ -28,7 +28,7 @@ export const BotInstructions = () => {
               color: theme.palette.primary.dark,
             }}
           >
-            🤖 What is the Colorado History Photos Bot?
+            What is the Colorado History Photos bot? 🤖
           </Typography>
         </AccordionSummary>
 

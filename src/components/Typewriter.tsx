@@ -9,32 +9,11 @@ export const Typewriter = () => {
   const [showCursor, setShowCursor] = React.useState(true);
   const [currentLine, setCurrentLine] = React.useState(1);
   const [isComplete, setIsComplete] = React.useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = React.useState(false);
-
-  // Check for reduced motion preference
-  React.useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setPrefersReducedMotion(mediaQuery.matches);
-
-    const handleChange = (e: MediaQueryListEvent) =>
-      setPrefersReducedMotion(e.matches);
-    mediaQuery.addEventListener("change", handleChange);
-
-    return () => mediaQuery.removeEventListener("change", handleChange);
-  }, []);
 
   React.useEffect(() => {
     const lines = text.split("\n");
     const firstLine = lines[0] || "";
     const secondLine = lines[1] || "";
-
-    // no typewriter effect
-    if (prefersReducedMotion) {
-      setLine1Text(firstLine);
-      setLine2Text(secondLine);
-      setIsComplete(true);
-      return;
-    }
 
     let currentIndex = 0;
 
@@ -66,7 +45,7 @@ export const Typewriter = () => {
       clearInterval(typeInterval);
       clearInterval(cursorInterval);
     };
-  }, [text, currentLine, prefersReducedMotion]);
+  }, [text, currentLine]);
 
   const fullText = text.replace("\n", " ");
 
@@ -89,7 +68,7 @@ export const Typewriter = () => {
       >
         <div>
           {line1Text}
-          {currentLine === 1 && !isComplete && !prefersReducedMotion && (
+          {currentLine === 1 && !isComplete && (
             <span
               style={{
                 opacity: showCursor ? 1 : 0,
@@ -104,7 +83,7 @@ export const Typewriter = () => {
 
         <div>
           {line2Text}
-          {currentLine === 2 && !isComplete && !prefersReducedMotion && (
+          {currentLine === 2 && !isComplete && (
             <span
               style={{
                 opacity: showCursor ? 1 : 0,
