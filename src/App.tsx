@@ -4,6 +4,7 @@ import { HeroSection } from "./components/HeroSection";
 import { CodeDemoSection } from "./components/CodeDemoSection";
 import { ExperienceSection } from "./components/ExperienceSection";
 import { ProjectSection } from "./components/ProjectSection";
+import { DragDropSection } from "./components/DragDropSection";
 import styled from "@emotion/styled";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeToggle } from "./theme/ThemeToggle";
@@ -16,13 +17,13 @@ import { usePerformanceMonitor } from "./hooks/usePerformanceMonitor";
 export default function App() {
   useComponentPreloader();
   usePerformanceMonitor();
-  
+
   useEffect(() => {
     console.log(
       "⚡️ Thanks for checking under the hood! Let's build something amazing together. ⚡️"
     );
   }, []);
-  
+
   const { toggleMode, isDark } = useThemeMode();
 
   const theme = useMemo(
@@ -63,6 +64,7 @@ export default function App() {
             <CodeDemoSection />
             <ExperienceSection />
             <ProjectSection />
+            <DragDropSection />
           </Stack>
         </ForegroundLayer>
       </ThemeProvider>
@@ -84,15 +86,11 @@ const ForegroundLayer = styled.div`
   position: relative;
   z-index: 1;
   color: white;
-  width: 100%;
-  max-width: 1000px;
-  margin: 0 auto 100px;
+  margin: 0 auto 50px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  max-width: 100%;
   width: 100%;
   overflow-wrap: break-word;
   min-height: 100vh;
 `;
-

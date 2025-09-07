@@ -56,7 +56,7 @@ export const ButtonLinks = () => {
   );
 };
 
-const StyledButton = styled(Button)(({}) => ({
+export const StyledButton = styled(Button)(({}) => ({
   target: "_blank",
   rel: "noopener",
   backgroundColor: "rgba(255, 255, 255, 0.1)",
