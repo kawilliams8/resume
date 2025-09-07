@@ -1,11 +1,12 @@
 import { Suspense } from "react";
-import { Typography, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import {
   LazyComponent,
   ComponentSkeleton,
   LazyResumeCards,
   ResumeCardsSkeleton,
 } from "../utils/LazyComponent";
+import { SectionTitle } from "./SectionTitle";
 
 export const ExperienceSection = () => {
   return (
@@ -18,21 +19,7 @@ export const ExperienceSection = () => {
           <ComponentSkeleton height={80} centered={true} lines={2} />
         }
       >
-        <Typography
-          variant="h4"
-          sx={{
-            fontWeight: 100,
-            mt: 4,
-            fontSize: { xs: "1.5rem", sm: "1.75rem" },
-            letterSpacing: 6,
-            opacity: 0.7,
-            maxWidth: "90%",
-            wordBreak: "break-word",
-            whiteSpace: "normal",
-          }}
-        >
-          PROFESSIONAL EXPERIENCE:
-        </Typography>
+        <SectionTitle>PROFESSIONAL EXPERIENCE:</SectionTitle>
       </LazyComponent>
       <LazyComponent
         height={100}
