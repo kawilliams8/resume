@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
+import { trackThemeToggle } from "@/utils/analytics";
 
 export type ThemeMode = "light" | "dark";
 
@@ -17,7 +18,11 @@ export const useThemeMode = (
 
   // Toggle between light and dark
   const toggleMode = useCallback(() => {
-    setModeState((prevMode) => (prevMode === "dark" ? "light" : "dark"));
+    setModeState((prevMode) => {
+      const newMode = prevMode === "dark" ? "light" : "dark";
+      trackThemeToggle(newMode);
+      return newMode;
+    });
   }, []);
 
   // Set specific mode

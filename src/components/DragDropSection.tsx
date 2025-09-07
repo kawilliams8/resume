@@ -10,6 +10,7 @@ export const DragDropSection = () => {
         height={20}
         centered={true}
         rootMargin="600px"
+        sectionName="skills-title"
         fallback={<ComponentSkeleton height={80} centered={true} lines={2} />}
       >
         <SectionTitle>TECHNICAL SKILLS:</SectionTitle>
@@ -18,6 +19,7 @@ export const DragDropSection = () => {
         height={400}
         centered={false}
         rootMargin="600px"
+        sectionName="skills-organizer"
         fallback={<ComponentSkeleton height={600} centered={true} lines={12} />}
       >
         <Suspense

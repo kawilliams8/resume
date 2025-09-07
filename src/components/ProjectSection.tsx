@@ -14,6 +14,7 @@ export const ProjectSection = () => {
         height={80}
         centered={true}
         rootMargin="200px"
+        sectionName="project-title"
         fallback={<ComponentSkeleton height={80} centered={true} lines={2} />}
       >
         <SectionTitle>PERSONAL PROJECT:</SectionTitle>
@@ -22,6 +23,7 @@ export const ProjectSection = () => {
         height={500}
         centered={true}
         rootMargin="200px"
+        sectionName="project-demo"
         fallback={<BotExplainerSkeleton />}
       >
         <Suspense

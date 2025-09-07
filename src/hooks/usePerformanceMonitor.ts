@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { trackPerformance } from "@/utils/analytics";
 
 export const usePerformanceMonitor = () => {
   useEffect(() => {
@@ -40,6 +41,8 @@ export const usePerformanceMonitor = () => {
       const endTime = performance.now();
       const loadTime = endTime - startTime;
       console.log(`📦 ${componentName} loaded in ${loadTime.toFixed(2)}ms`);
+
+      trackPerformance(componentName, loadTime);
 
       // Flag slow components in development
       if (loadTime > 500) {

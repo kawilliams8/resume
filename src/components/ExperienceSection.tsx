@@ -15,6 +15,7 @@ export const ExperienceSection = () => {
         height={20}
         centered={true}
         rootMargin="100px"
+        sectionName="experience-title"
         fallback={
           <ComponentSkeleton height={80} centered={true} lines={2} />
         }
@@ -25,6 +26,7 @@ export const ExperienceSection = () => {
         height={100}
         centered={true}
         rootMargin="150px"
+        sectionName="experience-cards"
         fallback={
           <Stack
             direction={{ xs: "column", md: "row" }}
