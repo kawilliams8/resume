@@ -62,6 +62,7 @@ export const CodeDemoSection = () => {
       height={200}
       rootMargin="50px"
       centered={true}
+      sectionName="code-demo"
       fallback={
         <Stack direction={{ xs: "column", lg: "row" }} mt={2}>
           <CodeBlockSkeleton />

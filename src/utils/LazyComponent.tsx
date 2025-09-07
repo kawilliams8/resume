@@ -2,6 +2,7 @@ import { Box, Skeleton, Stack } from "@mui/material";
 import { useState, useRef, useEffect, lazy } from "react";
 import { useTheme } from "@mui/material/styles";
 import { usePerformanceMonitor } from "@/hooks/usePerformanceMonitor";
+import { trackSectionView } from "@/utils/analytics";
 
 interface LazyComponentProps {
   children: React.ReactNode;
@@ -11,6 +12,7 @@ interface LazyComponentProps {
   rootMargin?: string;
   className?: string;
   centered?: boolean;
+  sectionName?: string; // For analytics purposes
 }
 
 export const LazyComponent = ({
@@ -21,6 +23,7 @@ export const LazyComponent = ({
   rootMargin = "100px",
   className,
   centered = true,
+  sectionName,
 }: LazyComponentProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const elementRef = useRef<HTMLDivElement>(null);
@@ -36,6 +39,9 @@ export const LazyComponent = ({
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
+          if (sectionName) {
+            trackSectionView(sectionName);
+          }
           observer.disconnect(); // Only load once
         }
       },
