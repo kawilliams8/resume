@@ -11,9 +11,6 @@ declare global {
 
 // Initialize Google Analytics
 export const initGA = () => {
-  console.log("GA init - Mode:", import.meta.env.MODE);
-  console.log("GA init - MID:", GA_MEASUREMENT_ID);
-
   // Only initialize in production
   if (import.meta.env.MODE !== "production") {
     console.log("GA skipped in development mode");
