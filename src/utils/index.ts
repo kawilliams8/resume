@@ -58,3 +58,7 @@ export const highlightSyntax = (code: string): React.ReactElement => {
 
   return React.createElement(React.Fragment, {}, ...elements);
 };
+
+export const pluralize = (word: string, count: number): string => {
+  return count === 1 ? `${count} ${word}` : `${count} ${word}s`;
+};

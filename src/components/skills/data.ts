@@ -17,16 +17,16 @@ export const skills: Skill[] = [
   },
   {
     id: "vue",
-    name: "Vue.js",
+    name: "Vue 3",
     category: "frontend",
     years: 2,
-    context: "Component architecture",
+    context: "Component UI/UX",
   },
   {
     id: "nodejs",
     name: "Node.js",
     category: "backend",
-    years: 3,
+    years: 7,
     context: "Server-side development",
   },
   {
@@ -38,10 +38,10 @@ export const skills: Skill[] = [
   },
   {
     id: "git",
-    name: "GitHub",
+    name: "GitHub & GitLab",
     category: "tools",
     years: 7,
-    context: "Version control and Actions",
+    context: "Version control and PRs",
   },
   {
     id: "docker",
@@ -61,7 +61,7 @@ export const skills: Skill[] = [
     id: "css",
     name: "UI Libraries",
     category: "frontend",
-    years: 6,
+    years: 7,
     context: "Styling and animations",
   },
   {
@@ -93,31 +93,38 @@ export const skills: Skill[] = [
     context: "AI-assisted dev environment",
   },
   {
-    id: "clause",
+    id: "claude",
     name: "Claude Code",
     category: "tools",
     years: 1,
     context: "CLI-based AI editor and assistant",
+  },
+  {
+    id: "redux",
+    name: "Redux/RTK",
+    category: "frontend",
+    years: 7,
+    context: "State management",
   },
 ];
 
 export const categories: Category[] = [
   {
     id: "frontend",
-    name: "Frontend Expertise",
-    description: "UI/UX Development",
+    name: "Frontend Development",
+    description: "UI/UX & interfaces",
     color: "#8b5cf6",
   },
   {
     id: "backend",
     name: "Backend Development",
-    description: "Server-side technologies",
+    description: "Server-side tasks and data",
     color: "#06b6d4",
   },
   {
     id: "tools",
     name: "Tools and DevOps",
-    description: "Development workflow",
+    description: "Workflow and reliability",
     color: "#3b82f6",
   },
 ];

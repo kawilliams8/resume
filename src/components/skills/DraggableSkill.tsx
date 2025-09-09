@@ -4,6 +4,7 @@ import { useDrag } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import { SkillCard } from "./SkillCard";
 import { Skill, ItemType } from "./types";
+import { pluralize } from "@/utils";
 
 interface DraggableSkillProps {
   skill: Skill;
@@ -70,7 +71,7 @@ export const DraggableSkill = ({
               textAlign: "center",
             }}
           >
-            {skill.years} yrs • {skill.context}
+            {pluralize("year", skill.years)} • {skill.context}
           </Typography>
         </Box>
       </SkillCard>
