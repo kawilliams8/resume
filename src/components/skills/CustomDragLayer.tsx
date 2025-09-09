@@ -1,3 +1,4 @@
+import { pluralize } from "@/utils";
 import { Box, Typography, Paper, useTheme } from "@mui/material";
 import { useDragLayer } from "react-dnd";
 
@@ -66,7 +67,7 @@ export const CustomDragLayer = () => {
               mt: 0.5,
             }}
           >
-            {skill.years} yrs • {skill.context}
+            {pluralize("year", skill.years)} • {skill.context}
           </Typography>
         </Box>
       </Paper>

@@ -87,7 +87,7 @@ const SkillsOrganizerInternal = () => {
 
   return (
     <Box sx={{ maxWidth: "100%", mx: "auto" }}>
-      <Box sx={{ textAlign: "center", mb: 2 }}>
+      <Box sx={{ textAlign: "center", mt: 1, mb: 2 }}>
         <Typography
           variant="body2"
           sx={{
@@ -95,7 +95,7 @@ const SkillsOrganizerInternal = () => {
             fontSize: { xs: "0.8rem", sm: "1.1rem" },
           }}
         >
-          Organize my skills into the correct area of expertise
+          Organize my skills into the correct area of expertise:
         </Typography>
       </Box>
 
@@ -208,7 +208,7 @@ const SkillsOrganizerInternal = () => {
                         sm: "0 1 calc(50% - 8px)",
                         md: "1 1 100%",
                       },
-                      minHeight: { xs: "40px", sm: "64px" },
+                      minHeight: { xs: "30px", sm: "35px" },
                     }}
                   >
                     <Stack sx={{ width: "100%" }}>
@@ -223,18 +223,6 @@ const SkillsOrganizerInternal = () => {
                         }}
                       >
                         {skill.name} 🌟
-                      </Typography>
-                      <Typography
-                        variant="caption"
-                        sx={{
-                          color: "rgba(255,255,255,0.7)",
-                          fontSize: { xs: "0.6rem", sm: "0.75rem" },
-                          display: { xs: "none", sm: "block" },
-                          wordWrap: "break-word",
-                          textAlign: "center",
-                        }}
-                      >
-                        {skill.years} yrs • {skill.context}
                       </Typography>
                     </Stack>
                   </Paper>
@@ -300,7 +288,7 @@ const SkillsOrganizerInternal = () => {
               🚀
             </Box>
           </Typography>
-          <Box sx={{ mt: 3, display: "flex", justifyContent: "center" }}>
+          <Box sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
             <StyledButton
               href="mailto:kawilliams8@gmail.com?subject=Hey,%20Katie!%20I%20completed%20your%20resume%20skills%20game!"
               variant="contained"
