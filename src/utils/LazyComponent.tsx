@@ -222,7 +222,7 @@ export const ResumeCardsSkeleton = () => (
     direction={{ xs: "column", md: "row" }}
     sx={{ gap: 2, width: "100%", mt: 2 }}
   >
-    {[1, 2, 3].map((i) => (
+    {[1, 2, 3, 4].map((i) => (
       <Box
         key={i}
         sx={{

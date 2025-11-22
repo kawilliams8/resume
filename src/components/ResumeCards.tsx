@@ -19,15 +19,9 @@ interface FlipCardItemProps {
   data: ResumeCardData;
   isFlipped: boolean;
   onFlip: () => void;
-  index: number;
 }
 
-const FlipCardItem = ({
-  data,
-  isFlipped,
-  onFlip,
-  index,
-}: FlipCardItemProps) => {
+const FlipCardItem = ({ data, isFlipped, onFlip }: FlipCardItemProps) => {
   const [showFireworks, setShowFireworks] = useState(false);
   const theme = useTheme();
 
@@ -41,16 +35,7 @@ const FlipCardItem = ({
   };
 
   return (
-    <FlipCard
-      onClick={handleFlip}
-      sx={{
-        // On sm screens, span both columns and center
-        ...(index === 2 && {
-          gridColumn: { sm: "span 2", lg: "auto" },
-          justifySelf: { sm: "center", lg: "auto" },
-        }),
-      }}
-    >
+    <FlipCard onClick={handleFlip}>
       <FireworkStars show={showFireworks} />
       <CardContent sx={{ position: "relative", height: "100%" }}>
         {!isFlipped ? (
@@ -173,16 +158,17 @@ export const ResumeCards = () => {
         my: 2,
         gridTemplateColumns: {
           xs: "320px",
-          sm: "320px 320px",
-          lg: "320px 320px 320px",
+          sm: "repeat(2, 320px)",
+          md: "repeat(2, 320px)",
+          lg: "repeat(4, 320px)",
+          xl: "repeat(4, 320px)",
         },
       }}
     >
-      {resumeData.map((cardData, index) => (
+      {resumeData.map((cardData) => (
         <FlipCardItem
           key={cardData.id}
           data={cardData}
-          index={index}
           isFlipped={flippedCards.has(cardData.id)}
           onFlip={() => handleFlip(cardData.id)}
         />
@@ -237,9 +223,26 @@ interface ResumeCardData {
 const resumeData: ResumeCardData[] = [
   {
     id: "card1",
+    title: "Customer Success Engineer",
+    company: "Fluint.io",
+    duration: "2025 - Present",
+    story:
+      "Sales Pipeline Management meets cutting edge AI, with focus on app integrations, customer support and feature development.",
+    technologies: [
+      "Integration APIs",
+      "Claude Code",
+      "React",
+      "TypeScript",
+      "Vitest",
+      "Tailwind CSS",
+      "Node.js",
+    ],
+  },
+  {
+    id: "card2",
     title: "Fullstack Developer",
     company: "ultraPacer",
-    duration: "2025 - Present",
+    duration: "2025 Contractor",
     story:
       "Building tools for ultramarathon runners to plan and achieve their dreams, one aid station at a time. Real-time tracking meets mapping and data visualizations.",
     technologies: [
@@ -254,7 +257,7 @@ const resumeData: ResumeCardData[] = [
     ],
   },
   {
-    id: "card2",
+    id: "card3",
     title: "Fullstack Developer",
     company: "Array",
     duration: "2021 - 2024",
@@ -273,7 +276,7 @@ const resumeData: ResumeCardData[] = [
     ],
   },
   {
-    id: "card3",
+    id: "card4",
     title: "Fullstack Developer",
     company: "National Renewable Energy Lab",
     duration: "2019 - 2021",
