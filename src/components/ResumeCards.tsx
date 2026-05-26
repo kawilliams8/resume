@@ -223,19 +223,21 @@ interface ResumeCardData {
 const resumeData: ResumeCardData[] = [
   {
     id: "card1",
-    title: "Customer Success Engineer",
+    title: "CS Engineer",
     company: "Fluint.io",
-    duration: "2025 - Present",
+    duration: "2025 - 2026",
     story:
-      "Sales Pipeline Management meets cutting edge AI, with focus on app integrations, customer support and feature development.",
+      "Built a greenfield AI slide-deck generator (Gemini + Claude Haiku) and the observability dashboards the support team lived in. ~80% hands-on engineering.",
     technologies: [
-      "Integration APIs",
-      "Claude Code",
       "React",
       "TypeScript",
-      "Vitest",
-      "Tailwind CSS",
       "Node.js",
+      "NestJS",
+      "TanStack",
+      "Playwright",
+      "Sentry",
+      "Datadog",
+      "Grafana/Loki",
     ],
   },
   {
