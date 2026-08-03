@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Katherine Williams — Senior Frontend Engineer</title>
+<meta name="description" content="Senior frontend engineer. React and TypeScript, design systems, accessibility. Leadville, Colorado.">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#FDFDFB">
+<link rel="canonical" href="https://katherinewilliams.co/">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="%2316161A"/><text x="16" y="21.5" text-anchor="middle" font-family="Menlo,Consolas,monospace" font-size="13" font-weight="600" fill="%23FDFDFB">KW</text></svg>'>
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://katherinewilliams.co/">
+<meta property="og:title" content="Katherine Williams — Senior Frontend Engineer">
+<meta property="og:description" content="React and TypeScript, design systems, accessibility. Read the résumé as a parser, an engineer, a designer, or a hiring manager.">
+<meta property="og:image" content="https://katherinewilliams.co/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Katherine Williams",
+  "jobTitle": "Senior Frontend Engineer",
+  "url": "https://katherinewilliams.co",
+  "email": "mailto:kawilliams8@gmail.com",
+  "address": { "@type": "PostalAddress", "addressLocality": "Leadville", "addressRegion": "CO", "addressCountry": "US" },
+  "sameAs": [
+    "https://linkedin.com/in/kawilliamsco",
+    "https://github.com/kawilliams8",
+    "https://racerandpacer.com"
+  ]
+}
+</script>
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   TOKENS
+   Everything visual resolves from here. Port this block as-is;
+   in the Vite app it becomes tokens.css imported once at the root.
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+  /* colour */
+  --bg:#FDFDFB;
+  --surface:#FFFFFF;
+  --ink:#16161A;          /* headings, emphasis            */
+  --ink-2:#42424C;        /* body copy, 9.75:1 on --bg     */
+  --ink-3:#6E6E78;        /* labels, meta, 5.4:1 on --bg   */
+  --rule:#E2E2DC;
+  --rule-2:#EFEFEA;
+  --accent:#1F4FD8;       /* links, status, measured figures */
+  --accent-wash:rgba(31,79,216,.09);
+  --note-accent:var(--accent);
+  --note-wash:var(--accent-wash);
+
+  /* type */
+  --font-sans: -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;
+  --font-display: var(--font-sans);   /* headings — swappable in the designer lens */
+  --font-body: var(--font-sans);      /* prose */
+  --font-mono: ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  --font-hand: "Bradley Hand","Noteworthy","Marker Felt","Chalkboard SE","Segoe Print",cursive;
+  /* scale — every prose size derives from one base and one ratio.
+     drag the ratio in the designer lens and the whole page re-proportions. */
+  --base:16px;
+  --ratio:1.25;
+  --step-0:var(--base);
+  --step-1:calc(var(--base) * var(--ratio));
+  --step-2:clamp(28px, 6vw, calc(var(--base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio)));
+  --measure:66ch;
+
+  /* space — 4px base, doubled between sections */
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:20px; --s-5:32px; --s-6:52px;
+
+  /* motion */
+  --dur:240ms; --ease:cubic-bezier(.22,1,.36,1);
+}
+@media (prefers-reduced-motion: reduce){ :root{ --dur:1ms } }
+
+/* The layer takes the page's accent. One hue on the page, always — which is
+   what the colour note claims, so the layer had better not contradict it. */
+
+/* ═══════════════════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════════════════ */
+*{box-sizing:border-box}
+@media (prefers-reduced-motion: no-preference){ html{scroll-behavior:smooth} }
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--font-body);font-size:var(--step-0);line-height:1.62;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+a{color:var(--accent)}
+:where(button,a):focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT · notes control
+   Part of the page, not browser chrome. It's the second-most
+   important thing above the fold, so it's sized like it.
+   ═══════════════════════════════════════════════════════════════ */
+.notes-control{margin:var(--s-5) 0 0;padding:var(--s-3) var(--s-4);
+  border:1px solid var(--rule);border-left:3px solid var(--note-accent);border-radius:3px;
+  background:var(--surface);transition:border-color var(--dur) var(--ease)}
+.notes-control__label{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:var(--s-3);
+  display:flex;align-items:center;gap:var(--s-3);flex-wrap:wrap}
+.lenses{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-2);margin-bottom:var(--s-3)}
+.lens{display:inline-flex;align-items:baseline;gap:var(--s-2);cursor:pointer;
+  font-family:var(--font-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+  padding:var(--s-2) var(--s-3);border-radius:3px;
+  border:1.5px solid var(--rule);background:var(--surface);color:var(--ink-3);
+  transition:background var(--dur) var(--ease),color var(--dur) var(--ease),border-color var(--dur) var(--ease)}
+.lens:hover{color:var(--ink);border-color:var(--ink-3)}
+.lens[aria-pressed="true"]{background:var(--note-accent);border-color:var(--note-accent);color:var(--surface)}
+/* the plain state is a choice in the picker, not an absence */
+.lens--plain[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+/* ═══════════════════════════════════════════════════════════════
+   LAYOUT
+   One measure. The annotation layer overlays — it never occupies
+   layout space, so turning it off costs nothing.
+   ═══════════════════════════════════════════════════════════════ */
+.page{max-width:1400px;margin:0 auto;padding:var(--s-6) var(--s-5) 120px;position:relative}
+/* the column holds the same position in every state — nothing reflows when a
+   lens opens, so the entrance animation has a still page to land on */
+main{max-width:760px;margin:0 auto}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT · site nav
+   ═══════════════════════════════════════════════════════════════ */
+.sitenav{display:flex;justify-content:space-between;align-items:center;gap:var(--s-4);flex-wrap:wrap;
+  padding-bottom:var(--s-3);border-bottom:1px solid var(--ink);margin-bottom:var(--s-6)}
+/* sits under the nav rule, and only once something has been changed */
+.reset-row{display:none;justify-content:flex-end;margin:calc(var(--s-6) * -1) 0 var(--s-5)}
+body.is-overridden .reset-row{display:flex}
+.reset-row .reset{margin-top:var(--s-3)}
+.sitenav .wordmark{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.18em;font-weight:600}
+.sitenav ul{list-style:none;display:flex;gap:var(--s-4);margin:0;padding:0}
+.sitenav a{font-family:var(--font-mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-3);text-decoration:none;white-space:nowrap}
+.sitenav a:hover{color:var(--ink)}
+/* single page — nav is in-page wayfinding, and says so */
+.sitenav a::before{content:"↓ " / "";opacity:.5}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT · résumé header
+   ═══════════════════════════════════════════════════════════════ */
+h1{font-family:var(--font-display);font-size:var(--step-2);line-height:1.02;letter-spacing:-.032em;font-weight:600;margin:0 0 var(--s-2)}
+.role{font-family:var(--font-display);font-size:var(--step-1);color:var(--ink-2);margin-bottom:var(--s-3)}
+.contact{display:flex;flex-wrap:wrap;gap:var(--s-1) var(--s-4);
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;color:var(--ink-3);
+  padding-bottom:var(--s-4);border-bottom:1px solid var(--rule)}
+.contact a{color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--rule)}
+.contact a:hover{border-bottom-color:var(--accent);color:var(--accent)}
+.status{color:var(--accent);font-weight:600}
+.lede{font-size:var(--step-1);line-height:1.58;color:var(--ink-2);max-width:var(--measure);margin:var(--s-5) 0 0}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT · section heading
+   ═══════════════════════════════════════════════════════════════ */
+h2{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:500;margin:var(--s-6) 0 2px;
+  padding-bottom:var(--s-2);border-bottom:1px solid var(--rule)}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT · role entry
+   ═══════════════════════════════════════════════════════════════ */
+.role-entry{padding:var(--s-4) 0 var(--s-2);border-bottom:1px solid var(--rule-2)}
+.role-entry:last-of-type{border-bottom:0}
+.role-head{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s-4)}
+.role-title{font-family:var(--font-display);font-size:var(--step-1);font-weight:600;letter-spacing:-.016em;margin:0}
+.role-org{font-size:14px;color:var(--ink-3);margin-top:2px}
+.role-org a{color:var(--ink-3);text-decoration:none;border-bottom:1px solid var(--rule)}
+.role-note{font-weight:400;font-size:15px;color:var(--ink-3)}
+.placeholder{color:var(--ink-3);font-style:italic}
+.role-dates{font-family:var(--font-mono);font-size:12.5px;color:var(--ink-2);white-space:nowrap;
+  font-variant-numeric:tabular-nums lining-nums}
+.bullets{list-style:none;margin:var(--s-3) 0 0;padding:0;max-width:var(--measure)}
+.bullets li{font-size:var(--step-0);line-height:1.6;color:var(--ink-2);
+  padding-left:18px;position:relative;margin-bottom:var(--s-2)}
+.bullets li::before{content:"—";position:absolute;left:0;color:var(--ink-3)}
+/* measured figures — see the colour note */
+.bullets b,.measured{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;
+  box-shadow:inset 0 -6px 0 var(--accent-wash)}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT · key/value list
+   ═══════════════════════════════════════════════════════════════ */
+.kv{display:grid;grid-template-columns:132px minmax(0,1fr);gap:2px var(--s-5);margin:var(--s-4) 0 0}
+.kv dt{font-family:var(--font-mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--ink-3);padding-top:6px}
+.kv dd{margin:0 0 var(--s-3);font-size:var(--step-0);color:var(--ink-2)}
+
+.colophon{display:flex;justify-content:space-between;gap:var(--s-4);flex-wrap:wrap;
+  margin-top:var(--s-6);padding-top:var(--s-4);border-top:1px solid var(--rule);
+  font-family:var(--font-mono);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT · annotation layer
+   Overlay only. Absolutely positioned against .page, z-index above
+   content, display:none when off — zero layout cost.
+   ═══════════════════════════════════════════════════════════════ */
+#annotations{position:absolute;inset:0;pointer-events:none;z-index:40;display:none}
+body:not([data-notes="off"]) #annotations{display:block}
+#leaders{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+#leaders path{fill:none;stroke:var(--note-accent);stroke-width:1.4;opacity:.55;stroke-linecap:round}
+#leaders circle{fill:var(--note-accent);opacity:.85}
+#leaders .is-lit{opacity:1;stroke-width:2.1}
+
+.note[hidden]{display:none}
+/* no room in the margins — the card falls into the flow under its subject */
+.note--inline{position:static!important;width:auto!important;--tilt:0deg;
+  margin:var(--s-3) 0 var(--s-4);box-shadow:none;max-width:var(--measure);
+  background:var(--note-wash);border-color:transparent;padding:var(--s-2) var(--s-3)}
+.note--inline .note__principle{font-size:13px;padding-bottom:var(--s-1);margin-bottom:var(--s-1)}
+.note--inline .note__body{font-size:13.5px}
+.note--inline .note__proof{margin-top:var(--s-2)}
+.note--inline .note__index{position:static;display:inline-flex;margin:0 var(--s-2) var(--s-2) 0;vertical-align:middle}
+.note{--tilt:-.4deg;transform:rotate(var(--tilt));transform-origin:left top;
+  position:absolute;width:236px;pointer-events:auto;outline:none;
+  background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--note-accent);
+  border-radius:2px;box-shadow:0 6px 20px -10px rgba(22,22,26,.35);
+  padding:var(--s-2) var(--s-3) var(--s-3);
+  transition:box-shadow 140ms,background 140ms}
+.note:nth-of-type(even){--tilt:.35deg}
+/* left-hand notes mirror: rule and index flip to the inside edge */
+.note.is-left{border-left:1px solid var(--rule);border-right:3px solid var(--note-accent)}
+.note.is-left .note__index{left:auto;right:-11px}
+.note__index{position:absolute;left:-11px;top:-10px;display:inline-flex;align-items:center;justify-content:center;
+  width:19px;height:19px;border-radius:50%;border:1px solid var(--note-accent);background:var(--bg);
+  font-family:var(--font-mono);font-size:9.5px;font-weight:600;color:var(--note-accent);
+  transition:background 140ms,color 140ms}
+.note__discipline{display:inline-block;font-family:var(--font-mono);font-size:8.5px;letter-spacing:.16em;
+  text-transform:uppercase;font-weight:600;color:var(--surface);background:var(--note-accent);
+  padding:2px 6px;border-radius:2px;margin-bottom:var(--s-2)}
+.note__principle{display:block;font-family:var(--font-sans);font-size:14px;letter-spacing:-.005em;
+  font-weight:600;color:var(--ink);padding-bottom:var(--s-2);margin-bottom:var(--s-2);
+  border-bottom:1px solid var(--rule)}
+.note__proof-label b.verb{font-family:var(--font-mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--note-accent);font-weight:600}
+.note__body{display:block;font-family:var(--font-hand);font-size:14.5px;line-height:1.34;color:var(--ink-2)}
+.note__body em{font-style:normal;text-decoration:underline;text-underline-offset:2px}
+
+/* ── proofs: a control inside the note that makes the claim ── */
+.note__proof{display:block;margin-top:var(--s-3);padding-top:var(--s-2);border-top:1px solid var(--rule)}
+.note__proof-label{display:flex;justify-content:space-between;gap:var(--s-2);align-items:baseline;
+  font-family:var(--font-mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3)}
+.note__proof-label b{font-family:var(--font-mono);font-size:10px;letter-spacing:.04em;color:var(--note-accent);font-weight:600}
+.note__proof input[type=range]{width:100%;margin:var(--s-2) 0 0;accent-color:var(--note-accent);height:18px}
+.swatches{display:flex;gap:6px;margin:var(--s-2) 0 var(--s-2)}
+.swatch{width:26px;height:26px;border-radius:3px;cursor:pointer;padding:0;
+  border:1.5px solid var(--rule);transition:transform 120ms,border-color 120ms}
+.swatch[aria-pressed="true"]{border-color:var(--ink);transform:scale(1.08)}
+.swatch:focus-visible{outline:2px solid var(--note-accent);outline-offset:2px}
+.pairs{display:flex;flex-wrap:wrap;gap:5px;margin:var(--s-2) 0}
+.pairbtn{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;
+  padding:5px 7px;border-radius:3px;border:1.5px solid var(--rule);background:var(--surface);
+  color:var(--ink-2);font-size:15px;line-height:1;transition:border-color 120ms,background 120ms}
+.pairbtn i{font-family:var(--font-mono);font-style:normal;font-size:7px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-3)}
+.pairbtn[aria-pressed="true"]{border-color:var(--ink);background:var(--accent-wash)}
+.pairbtn[aria-pressed="true"] i{color:var(--ink)}
+.pairbtn:focus-visible{outline:2px solid var(--note-accent);outline-offset:2px}
+.swatch-why{font-family:var(--font-sans);font-size:11px;line-height:1.4;color:var(--ink-3);min-height:2.6em}
+.ratio-out{font-family:var(--font-mono);font-size:10.5px;color:var(--ink-2)}
+.ratio-out.is-fail{color:#C0392B;font-weight:600}
+.rule-note{display:block;font-family:var(--font-sans);font-size:10.5px;line-height:1.4;
+  color:var(--ink-3);margin-bottom:var(--s-2);padding-left:var(--s-2);border-left:2px solid var(--rule)}
+.rule-note.is-fail{color:#C0392B;border-left-color:#C0392B}
+.proof-btn{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  cursor:pointer;padding:var(--s-2) var(--s-3);border-radius:3px;width:100%;
+  border:1.5px solid var(--note-accent);background:var(--surface);color:var(--note-accent);font-weight:600;
+  transition:background 140ms,color 140ms}
+.proof-btn[aria-pressed="true"]{background:var(--note-accent);color:var(--surface)}
+
+/* ── reset — always findable, never persisted ── */
+.reset{display:none;align-items:center;gap:var(--s-2);
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+  cursor:pointer;background:var(--note-accent);border:1.5px solid var(--note-accent);color:var(--surface);
+  padding:var(--s-2) var(--s-4);border-radius:3px}
+body.is-overridden .reset{display:inline-flex}
+.reset:hover{filter:brightness(1.12)}
+.short-contact{display:none;margin:var(--s-5) 0 0;padding-top:var(--s-4);border-top:1px solid var(--rule);
+  font-size:var(--step-1);color:var(--ink-2)}
+.reset-foot{display:none;margin:var(--s-6) 0 calc(var(--s-4) * -1);
+  align-items:center;gap:var(--s-4);flex-wrap:wrap}
+body.is-overridden .reset-foot{display:flex}
+.reset-foot p{margin:0;font-size:13px;color:var(--ink-3);max-width:46ch}
+
+/* ── the 30-second version ── */
+body.condensed .bullets{display:none}
+body.condensed .role-head > div{display:flex;align-items:baseline;gap:var(--s-2);flex-wrap:wrap}
+body.condensed .role-title{font-size:var(--step-0);font-weight:600}
+body.condensed .role-org{margin-top:0;font-size:14px}
+body.condensed .role-org::before{content:"· "}
+body.condensed .role-entry{padding:var(--s-2) 0;border-bottom:0}
+body.condensed h2{margin-top:var(--s-5)}
+body.condensed section[aria-labelledby="h-education"],
+body.condensed section[aria-labelledby="h-contact"]{display:none}
+body.condensed .short-contact{display:block}
+.short-only{display:none}
+body.condensed .short-only{display:block}
+body.condensed .colophon{display:none}
+body.condensed .kv .secondary,body.condensed .lede .secondary{display:none}
+body.condensed .note:not([data-control="condense"]){display:none!important}
+body.condensed #leaders{display:none}
+body.condensed .lenses{display:none}
+body.condensed .reset,body.condensed .reset-foot{display:none!important}
+body.condensed .pin{display:none!important}
+body.condensed{--s-6:26px;--s-5:18px}
+body.condensed .role-entry{padding:var(--s-3) 0 var(--s-2)}
+body.condensed main{max-width:640px}
+.condensed-flag{display:none;font-family:var(--font-mono);font-size:9px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--note-accent);border:1px solid var(--note-accent);
+  border-radius:3px;padding:2px 8px;margin-left:var(--s-3)}
+body.condensed .condensed-flag{display:inline-block}
+.note:hover,.note:focus-visible,.note.is-lit{background:var(--surface);box-shadow:0 10px 26px -10px rgba(22,22,26,.45)}
+.note:focus-visible{box-shadow:0 0 0 2px var(--note-accent)}
+.note.is-lit .note__index{background:var(--note-accent);color:var(--surface)}
+
+/* pin dropped onto the annotated element — the pairing that survives every width */
+.pin{display:none;align-items:center;justify-content:center;width:15px;height:15px;line-height:1;
+  border:1px solid var(--note-accent);border-radius:50%;background:var(--bg);color:var(--note-accent);
+  font-family:var(--font-mono);font-size:8.5px;font-weight:600;vertical-align:super;margin-left:5px;
+  transition:background 140ms,color 140ms}
+body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
+.pin.is-lit{background:var(--note-accent);color:var(--surface)}
+.is-annotated{box-shadow:inset 0 0 0 1px var(--note-accent);background:var(--note-wash);border-radius:2px}
+
+/* narrow: cards stack down the right of the page, leaders drop, pins carry the pairing */
+@media (max-width:900px){
+  .page{padding:var(--s-5) var(--s-4) 80px}
+  .kv{grid-template-columns:1fr}
+  .kv dt{padding-top:var(--s-3)}
+  .role-head{flex-direction:column;gap:var(--s-1)}
+}
+
+@media print{
+  .notes-control,#annotations,.pin,.note,
+  .sitenav,.reset-row,.reset-foot,.short-contact,.condensed-flag{display:none!important}
+  body{background:#fff;font-size:11pt}
+  .page{max-width:none;padding:0}
+  main{max-width:none}
+  a{color:inherit;text-decoration:none}
+}
+</style>
+<noscript><style>.notes-control{display:none}</style></noscript>
+</head>
+<body data-notes="off">
+
+<div class="page" id="page">
+
+  <nav class="sitenav" aria-label="Primary">
+    <span class="wordmark">KATHERINE WILLIAMS</span>
+    <ul>
+      <li><a href="#h-experience">Experience</a></li>
+      <li><a href="#h-projects">Projects</a></li>
+      <li><a href="#h-fit">Skills</a></li>
+      <li><a href="#h-contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="reset-row"><button class="reset" id="resetBtn" type="button">↺ Reset the page</button></div>
+
+  <main>
+    <header>
+      <h1 data-note="type-scale">Katherine Williams</h1>
+      <p class="role" data-note="role-type">Senior Frontend Engineer</p>
+      <div class="contact">
+        <span>Leadville, CO</span>
+        <a href="mailto:kawilliams8@gmail.com">kawilliams8@gmail.com</a>
+        <a href="https://katherinewilliams.co">katherinewilliams.co</a>
+        <a href="https://linkedin.com/in/kawilliamsco">linkedin.com/in/kawilliamsco</a>
+        <span class="status" data-note="status">Open to senior frontend roles</span>
+      </div>
+
+      <div class="notes-control" data-note="the-toggle">
+        <div class="notes-control__label">Read this résumé as <span class="condensed-flag">30-second version</span></div>
+        <div class="lenses" role="group" aria-label="Annotation lens">
+          <button type="button" class="lens lens--plain" data-lens="off" aria-pressed="true" aria-controls="annotations">A parser</button>
+          <button type="button" class="lens" data-lens="engineering" aria-pressed="false" aria-controls="annotations">An engineer</button>
+          <button type="button" class="lens" data-lens="design" aria-pressed="false" aria-controls="annotations">A designer</button>
+          <button type="button" class="lens" data-lens="hiring" aria-pressed="false" aria-controls="annotations">A hiring manager</button>
+        </div>
+      </div>
+
+      <p class="lede" data-note="measure">Frontend engineer with <b>seven years</b> building component-driven applications in TypeScript and React.<span class="secondary"> Polished interfaces, owned end to end — with a focus on interaction detail, web performance, and product instincts that hold up under real users. Equal parts builder and communicator.</span> <span data-note="ai-claim">AI-native in daily practice, with <b>Claude Code</b> and LLM features shipped in production.</span></p>
+    </header>
+
+    <section aria-labelledby="h-experience">
+      <h2 id="h-experience" data-note="proximity">Experience</h2>
+
+      <article class="role-entry">
+        <div class="role-head">
+          <div>
+            <h3 class="role-title">Customer Success Engineer</h3>
+            <p class="role-org">Fluint</p>
+          </div>
+          <p class="role-dates" data-note="figures">Oct 2025 — May 2026</p>
+        </div>
+        <ul class="bullets" data-note="serial-position">
+          <li>Owned features end to end on a <b>multi-tenant AI product</b> — task schedulers, tiered organization configuration, and the React/TypeScript surfaces customers used most, plus the UX and product decisions behind them.</li>
+          <li>Built the chat output surface for an AI tool generating sales documents <b>across multiple models</b>, so people could verify and rework whatever the model wrote.</li>
+          <li>Built and maintained the shared React component patterns the team relied on to ship consistent UI quickly.</li>
+          <li>Worked directly with the founders to turn customer insight into product decisions and shipped features, closing the loop between feedback and release.</li>
+          <li>Integrated frontend applications with CRM APIs (<b>Salesforce, HubSpot</b>).</li>
+        </ul>
+      </article>
+
+      <article class="role-entry">
+        <div class="role-head">
+          <div>
+            <h3 class="role-title">Full Stack Developer <span class="role-note">(Contract)</span></h3>
+            <p class="role-org">ultraPacer</p>
+          </div>
+          <p class="role-dates">Apr 2025 — Oct 2025</p>
+        </div>
+        <ul class="bullets">
+          <li>Owned the front end on a small team, building responsive consumer-facing interfaces for an endurance-running tool in <b>Vue and TypeScript</b>.</li>
+          <li>Translated Figma layouts into pixel-accurate interfaces, and picked up Vue on the job while <b>shipping from week one</b>.</li>
+          <li>Implemented shared Storybook components for buttons and typography to keep the UI consistent.</li>
+        </ul>
+      </article>
+
+      <article class="role-entry">
+        <div class="role-head">
+          <div>
+            <h3 class="role-title">Full Stack Developer</h3>
+            <p class="role-org">Array</p>
+          </div>
+          <p class="role-dates">Nov 2021 — Jun 2024</p>
+        </div>
+        <ul class="bullets">
+          <li>Built the front end of a real-time consumer-facing audience platform used <b>live at large events</b>, in React and TypeScript, with WebSocket interaction that stayed fast under load.</li>
+          <li>Built an in-app configuration suite for customizing presentations, making complex authoring feel simple for non-technical users.</li>
+          <li>Partnered with product and design to turn Figma into responsive, pixel-accurate, reusable Material UI components, keeping the interface consistent as the product grew.</li>
+        </ul>
+      </article>
+
+      <article class="role-entry">
+        <div class="role-head">
+          <div>
+            <h3 class="role-title">Full Stack Developer</h3>
+            <p class="role-org">National Renewable Energy Laboratory</p>
+          </div>
+          <p class="role-dates">Dec 2019 — Nov 2021</p>
+        </div>
+        <ul class="bullets">
+          <li>Built internal web applications across many languages in an agency-style delivery model.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section aria-labelledby="h-projects">
+      <h2 id="h-projects">Projects</h2>
+      <article class="role-entry">
+        <div class="role-head">
+          <div>
+            <h3 class="role-title">Racer &amp; Pacer</h3>
+            <p class="role-org">Founder, solo developer · <a href="https://racerandpacer.com">racerandpacer.com</a></p>
+          </div>
+          <p class="role-dates">2026 — Present</p>
+        </div>
+        <ul class="bullets" data-note="project">
+          <li>Race-planning app for the ultrarunning community: <b>React 18, TypeScript, Vite</b>, with a custom design token system over Chakra UI, bespoke color scales, an RP-prefixed reusable component library, and self-hosted variable typography.</li>
+          <li>Interactive UI craft: Mapbox GL race map with custom markers, drag-and-drop crew planner (dnd-kit), Framer Motion animation, and a cache-first TanStack Query data layer.</li>
+          <li>Production-grade: Clerk auth, Stripe payments, Express and MongoDB backend, Sentry monitoring; tested with Vitest, Testing Library and Playwright; deployed on AWS Amplify and Railway.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section aria-labelledby="h-fit">
+      <h2 id="h-fit">Skills</h2>
+      <dl class="kv" data-note="skills">
+        <dt class="short-only">Core</dt><dd class="short-only">TypeScript · React · Vue · design systems · accessibility · Node</dd>
+        <dt class="secondary">Frontend</dt><dd class="secondary">TypeScript · JavaScript (ES6+) · React · React Hooks · Vue · component-driven architecture · SPAs · state management (Redux) · semantic HTML · CSS animations · responsive design · performance optimization · cross-browser compatibility</dd>
+        <dt class="secondary">UI &amp; design</dt><dd class="secondary">UI/UX design · Figma · design systems · Storybook · Tailwind CSS · shadcn/ui · Material UI · web accessibility (WCAG)</dd>
+        <dt class="secondary">AI-assisted</dt><dd class="secondary">Claude Code (custom agents · MCP connectors) · LLM integration</dd>
+        <dt class="secondary">Full-stack &amp; tooling</dt><dd class="secondary">Node.js · Express · Redis · REST APIs · WebSockets · webhooks · API integration · CRM integration (Salesforce · HubSpot) · AWS · Docker · CI/CD (GitHub Actions) · Webpack · Vite · Jest · Vitest · React Testing Library · Playwright</dd>
+        <dt class="secondary">Database &amp; ORM</dt><dd class="secondary">MySQL · MongoDB · Mongoose · SQLite · Eloquent ORM (Laravel)</dd>
+        <dt class="secondary">Practice</dt><dd class="secondary">Git · Agile/Scrum · unit, integration &amp; E2E testing · code review · mentorship · live presentations &amp; demos · async &amp; cross-functional collaboration · Jira · Linear</dd>
+        <dt data-note="not-yet">Not yet</dt><dd>Angular in production · native mobile · roles that are mostly infrastructure. I work full-stack, but the front of the stack is where I'm senior — if the job lives elsewhere, we'd both be settling.</dd>
+      </dl>
+    </section>
+
+    <section aria-labelledby="h-education">
+      <h2 id="h-education">Education &amp; certifications</h2>
+      <dl class="kv">
+        <dt>Turing School</dt><dd>Front-End Engineering Certificate</dd>
+        <dt>Colorado Mountain College</dt><dd>Graphic Technologies Certificate</dd>
+        <dt>Western Michigan</dt><dd>BA, Media Studies &amp; French</dd>
+      </dl>
+    </section>
+
+    <section aria-labelledby="h-contact">
+      <h2 id="h-contact">Contact</h2>
+      <p class="lede" data-note="contact">The fastest route is <a href="mailto:kawilliams8@gmail.com">kawilliams8@gmail.com</a>. I answer within a day, and I'll tell you straight if I don't think I'm right for the role.</p>
+    </section>
+
+    <p class="short-contact">Full page for the detail, or <a href="mailto:kawilliams8@gmail.com">kawilliams8@gmail.com</a> to skip it.</p>
+
+    <div class="reset-foot">
+      <button class="reset" id="resetBtnFoot" type="button">↺ Reset the page</button>
+      <p>You've changed the type or the colour. Neither persists: a reload puts both back the way I built them.</p>
+    </div>
+
+    <div class="colophon">
+      <span>Katherine Williams · Senior Frontend Engineer</span>
+      <span>Hand-built, single file, no framework</span>
+      <span>Updated August 2026</span>
+    </div>
+  </main>
+
+  <!-- ══ annotation layer — overlay, no layout cost ══ -->
+  <aside id="annotations" aria-label="Design notes">
+    <svg id="leaders" aria-hidden="true"></svg>
+  </aside>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   ANNOTATION DATA
+   One page, three vocabularies. `set` selects the lens; '*' shows
+   in all of them. `target` is a data-note token on the element, so
+   markup can be refactored without breaking an anchor.
+   In the Vite app this is notes.ts.
+   ═══════════════════════════════════════════════════════════════ */
+const LENSES = { design:1, engineering:1, hiring:1 };
+
+const NOTES = [
+  /* ── designer ─────────────────────────────────────────────── */
+  { set:'design', target:'type-scale', discipline:'Typography', principle:'Type scale, one ratio',
+    control:'ratio',
+    body:'Prose sizes derive from one base and one ratio. Drag it and the relationships between them hold, which is the only reason to have a scale rather than a list of sizes.' },
+  { set:'design', target:'role-type', discipline:'Typography', principle:'Pairing is a voice',
+    control:'pair',
+    body:'Same words, five personalities. Type is the loudest thing on a page before anyone reads it, so the pairing makes a claim about who I am before the summary gets a chance.' },
+  { set:'design', target:'status', discipline:'Colour', principle:'One accent, earned',
+    control:'accent',
+    body:'One hue for links, availability and these notes. Change it and the whole page moves together, which is the only way to know a colour actually works. One option fails the contrast floor, and the readout says so instead of letting it pass.' },
+  { set:'design', target:'proximity', discipline:'Layout', principle:'Law of Proximity',
+    body:'Space between sections is twice the space within them. Proximity does the grouping, so the rules can stay hairline instead of shouting.' },
+  { set:'design', target:'figures', discipline:'Typography', principle:'Tabular figures',
+    body:'Tabular numerals: every digit the same width, so the date column aligns. Tenure scans <em>vertically</em>, without reading a single role title.' },
+  { set:'design', target:'serial-position', discipline:'Hierarchy', principle:'Serial position effect',
+    body:'Strongest bullet first. The first and last positions survive a scan; the middle evaporates, so nothing load-bearing goes there.' },
+  { set:'design', target:'skills', discipline:'Content', principle:'Chunking',
+    body:'Labelled groups, not one long list. Everyone cites 7±2 here and everyone is wrong: that is about recall. This is about scanning.' },
+  { set:'design', target:'contact', discipline:'Hierarchy', principle:'Peak-end rule',
+    body:'The last thing read is weighted like the best thing read, so the page ends on a promise I can keep. <a href="https://lawsofux.com/" target="_blank" rel="noopener">lawsofux.com</a>' },
+
+  /* ── engineer ─────────────────────────────────────────────── */
+  { set:'engineering', target:'type-scale', discipline:'Architecture', principle:'One token block',
+    control:'ratio',
+    body:'The slider writes one custom property and CSS does the rest: no sizes recalculated in JS, no components re-rendered. Watch --ratio in devtools while you drag.' },
+  { set:'engineering', target:'role-type', discipline:'Performance', principle:'System stacks, zero bytes',
+    control:'pair',
+    body:'No webfonts, no network request, no FOUT. Switching pairs writes two custom properties. A hosted pairing would cost about 80kb and a flash of unstyled text: worth it on a product, not here.' },
+  { set:'engineering', target:'status', discipline:'Instrumentation', principle:'Measured, not typed',
+    control:'accent',
+    body:'The ratio is computed from <em>getComputedStyle</em> against the live background on every change, so a bad choice gets caught rather than shipped quietly.' },
+  { set:'engineering', target:'proximity', discipline:'Machine readers', principle:'The whole résumé, first response',
+    body:'No JavaScript required to read a word of this. An ATS, a crawler or an LLM gets the complete document in the initial HTML, and the layer builds on top afterwards. Rendering that needs a runtime is rendering half the audience cannot see.' },
+  { set:'engineering', target:'serial-position', discipline:'Performance', principle:'Read pass, then write pass',
+    body:'Positions are computed from a single batch of measurements: every rect and card height is read before any card is moved, so the placement pass never interleaves reads and writes.' },
+  { set:'engineering', target:'project', discipline:'Stack', principle:'What I reach for unsupervised',
+    body:'Racer &amp; Pacer is the honest sample; nobody reviewed those choices. Tokens over Chakra, cache-first TanStack Query, dnd-kit, Playwright.' },
+  { set:'engineering', target:'contact', discipline:'Accessibility', principle:'Both ends reachable',
+    body:'Cards are focusable, pins mirror their state, and the control is wired with <em>aria-pressed</em> and <em>aria-controls</em>. It works from the keyboard.' },
+
+  /* ── hiring manager ───────────────────────────────────────── */
+  { set:'hiring', target:'the-toggle', discipline:'If you have 30 seconds', principle:'The short version',
+    control:'condense',
+    body:'Roles, dates, stack, and what I do not do. No bullets: if the shape does not fit, the detail will not change your mind, and you have the rest of the pile to get through.' },
+  { set:'hiring', target:'type-scale', discipline:'Level', principle:'Scope, not tenure',
+    body:'Senior here means scope owned: features end to end, the shared component patterns a team ships on, the front end of a live product.' },
+  { set:'hiring', target:'ai-claim', discipline:'Where to push', principle:'Interrogate this line',
+    body:'AI-native is the easiest claim on any résumé to make and the hardest to back. Ask what shipped, who used it, what it got wrong, and what I did about the wrongness.' },
+  { set:'hiring', target:'figures', discipline:'Dates', principle:'Role dates, not a claim',
+    body:'Not an assertion of continuous employment. There is a gap in 2024 to 2025, and this role ended in May. Ask directly; it is a shorter conversation than you think.' },
+  { set:'hiring', target:'project', discipline:'Unsupervised work', principle:'The best evidence here',
+    body:'The only thing on this page nobody assigned me. If you want to know what I do when the constraints are mine, start here rather than with the roles.' },
+  { set:'hiring', target:'not-yet', discipline:'Disqualify fast', principle:'Start here',
+    body:'The quickest way to rule me out lives in this row. Better in the first minute than the third interview.' },
+];
+
+(function(){
+  const body = document.body,
+        page = document.getElementById('page'),
+        layer = document.getElementById('annotations'),
+        leaders = document.getElementById('leaders'),
+        NS = 'http://www.w3.org/2000/svg',
+        reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const inLens = (n, lens) => n.set === '*' || n.set === lens;
+
+  /* ── overrides: live on :root, never persisted, so a shared link cannot
+        open in someone else's experiment. (The chosen lens does persist.) ── */
+  const DEFAULTS = { ratio:'1.25', accent:'#1F4FD8', pair:'system' };
+  const state = { ...DEFAULTS };
+  const ACCENTS = [
+    { hex:'#1F4FD8', name:'Institutional blue', why:'Reads as infrastructure. Trusted, slightly cold, and the one nobody argues with.' },
+    { hex:'#16161A', name:'Ink',                why:'No accent at all. Maximum restraint, and links stop announcing themselves, which is a real cost.' },
+    { hex:'#0B5D51', name:'Deep teal',          why:'Considered and calm. Warmer than blue without tipping into product-startup green.' },
+    { hex:'#8C2F39', name:'Oxblood',            why:'Editorial and serious. Closer to a masthead than a product, and it dates the least.' },
+    { hex:'#5B3A9E', name:'Violet',             why:'Craft-forward. Signals design attention, and risks reading decorative on an engineering résumé.' },
+    { hex:'#C79A12', name:'Amber',              why:'Fine at display size, fails at body size. This is the one the readout catches before it ships.' },
+  ];
+  const PAIRS = [
+    { id:'system',    name:'System',    display:'var(--font-sans)',
+      body:'var(--font-sans)',
+      why:'Invisible and fast. The reader never thinks about the type, which is usually the point.' },
+    { id:'editorial', name:'Editorial', display:'"Iowan Old Style",Georgia,"Times New Roman",serif',
+      body:'var(--font-sans)',
+      why:'Serif headline over sans body. Reads considered and print-adjacent, the most common way to look thoughtful without looking fussy.' },
+    { id:'technical', name:'Technical', display:'var(--font-mono)',
+      body:'var(--font-sans)',
+      why:'Mono display says "engineer" before a word is read. Confident, and one step from looking like a terminal.' },
+    { id:'humanist',  name:'Humanist',  display:'"Avenir Next","Segoe UI",var(--font-sans)',
+      body:'"Iowan Old Style",Georgia,serif',
+      why:'Sans headline over serif body. Warmer and slower: better for reading, worse for scanning, which is the wrong trade on a résumé.' },
+    { id:'classic',   name:'Classic',   display:'"Baskerville",Georgia,serif',
+      body:'"Baskerville",Georgia,serif',
+      why:'All serif. The most traditional and the least distinctive: safe, and indistinguishable from every other résumé that chose safe.' },
+  ];
+  const lum = c => { const a = c.map(v => (v/=255) <= .03928 ? v/12.92 : Math.pow((v+.055)/1.055, 2.4));
+                     return .2126*a[0] + .7152*a[1] + .0722*a[2]; };
+  const rgb = t => t.match(/\d+/g).slice(0,3).map(Number);
+  const ratio = (a, b) => (Math.max(a,b)+.05) / (Math.min(a,b)+.05);
+  const hexLum = hex => { const n = parseInt(hex.slice(1),16);
+    return lum([n>>16 & 255, n>>8 & 255, n & 255]); };
+  /* two ratios matter: the accent as text on the page, and surface-coloured text
+     sitting on the accent (chips, pins, the pressed button). report the worse. */
+  function contrastOf(hex){
+    const a = hexLum(hex);
+    return Math.min(ratio(a, lum(rgb(getComputedStyle(body).backgroundColor))),
+                    ratio(a, hexLum('#FFFFFF')));
+  }
+  function applyOverrides(){
+    const root = document.documentElement.style;
+    root.setProperty('--ratio', state.ratio);
+    root.setProperty('--accent', state.accent);
+    root.setProperty('--accent-wash', state.accent + '17');
+    const pair = PAIRS.find(p => p.id === state.pair) || PAIRS[0];
+    root.setProperty('--font-display', pair.display);
+    root.setProperty('--font-body', pair.body);
+    const dirty = state.ratio !== DEFAULTS.ratio || state.accent !== DEFAULTS.accent || state.pair !== DEFAULTS.pair;
+    body.classList.toggle('is-overridden', dirty);   /* condensed has its own toggle; not an override */
+    document.querySelectorAll('[data-sync]').forEach(sync);
+    layout();
+  }
+  function sync(el){
+    const kind = el.dataset.sync;
+    if (kind === 'ratio'){
+      el.querySelector('input').value = state.ratio;
+      el.querySelectorAll('b')[1].textContent = state.ratio;
+    }
+    if (kind === 'accent'){
+      const r = contrastOf(state.accent), out = el.querySelector('.ratio-out');
+      const pass = r >= 4.5;
+      out.textContent = r.toFixed(2) + ':1 ' + (pass ? '· passes' : '· fails');
+      out.classList.toggle('is-fail', !pass);
+      const rule = el.querySelector('.rule-note');
+      rule.textContent = pass
+        ? 'WCAG AA asks for 4.5:1 between text and background. This clears it.'
+        : 'Under 4.5:1, the WCAG AA minimum for body text. Fine on my screen, gone in sunlight or on a cheap monitor.';
+      rule.classList.toggle('is-fail', !pass);
+      el.querySelectorAll('.swatch').forEach(b => b.setAttribute('aria-pressed', b.dataset.hex === state.accent));
+      const hit = ACCENTS.find(a => a.hex === state.accent);
+      el.querySelector('.swatch-why').textContent = hit ? hit.name + ' — ' + hit.why : '';
+    }
+    if (kind === 'pair'){
+      const p = PAIRS.find(x => x.id === state.pair) || PAIRS[0];
+      el.querySelectorAll('.pairbtn').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === state.pair));
+      el.querySelector('.swatch-why').textContent = p.name + ' — ' + p.why;
+    }
+    if (kind === 'condense'){
+      const on = body.classList.contains('condensed');
+      el.querySelector('button').setAttribute('aria-pressed', on);
+      el.querySelector('button').textContent = on ? '← Back to the plain résumé' : 'Show the 30-second version';
+    }
+  }
+  function buildControl(kind){
+    const wrap = document.createElement('span');
+    wrap.className = 'note__proof';
+    wrap.dataset.sync = kind;
+    if (kind === 'ratio'){
+      wrap.innerHTML = '<span class="note__proof-label"><b class="verb">Drag the ratio</b> <b></b></span>' +
+        '<input type="range" min="1.10" max="1.45" step="0.01" aria-label="Type scale ratio">';
+      wrap.querySelector('input').addEventListener('input', e => { state.ratio = e.target.value; applyOverrides(); });
+    }
+    if (kind === 'accent'){
+      wrap.innerHTML = '<span class="note__proof-label"><b class="verb">Pick an accent</b> <span class="ratio-out"></span></span>' +
+        '<span class="swatches">' + ACCENTS.map(a =>
+          `<button class="swatch" data-hex="${a.hex}" style="background:${a.hex}" aria-pressed="false" aria-label="${a.name}" title="${a.name}"></button>`).join('') +
+        '</span><span class="rule-note"></span><span class="swatch-why"></span>';
+      wrap.querySelectorAll('.swatch').forEach(b =>
+        b.addEventListener('click', () => { state.accent = b.dataset.hex; applyOverrides(); }));
+    }
+    if (kind === 'pair'){
+      wrap.innerHTML = '<span class="note__proof-label"><b class="verb">Try a pairing</b></span>' +
+        '<span class="pairs">' + PAIRS.map(p =>
+          `<button class="pairbtn" data-id="${p.id}" aria-pressed="false" style="font-family:${p.display}">Aa<i>${p.name}</i></button>`).join('') +
+        '</span><span class="swatch-why"></span>';
+      wrap.querySelectorAll('.pairbtn').forEach(b =>
+        b.addEventListener('click', () => { state.pair = b.dataset.id; applyOverrides(); }));
+    }
+    if (kind === 'condense'){
+      wrap.innerHTML = '<button class="proof-btn" type="button" aria-pressed="false"></button>';
+      wrap.querySelector('button').addEventListener('click', () => {
+        if (body.classList.contains('condensed')){
+          /* leaving the short view returns to the plain résumé, not to an annotated one */
+          body.classList.remove('condensed');
+          setLens('off');
+        } else {
+          body.classList.add('condensed');
+        }
+        applyOverrides();
+      });
+    }
+    return wrap;
+  }
+
+  /* ── build every card and pin once; visibility is per lens ── */
+  const entries = NOTES.map(n => {
+    const el = document.querySelector(`[data-note="${n.target}"]`);
+    if (!el) return null;
+
+    const card = document.createElement('div');
+    card.className = 'note';
+    card.tabIndex = 0;
+    card.setAttribute('role', 'note');
+    card.setAttribute('aria-label', `Design note: ${n.discipline}, ${n.principle}`);
+    card.hidden = true;
+    card.innerHTML =
+      `<span class="note__index"></span>` +
+      `<span class="note__discipline">${n.discipline}</span>` +
+      `<span class="note__principle">${n.principle}</span>` +
+      `<span class="note__body">${n.body}</span>`;
+    if (n.control){ card.dataset.control = n.control; card.append(buildControl(n.control)); }
+    layer.append(card);
+
+    const pin = document.createElement('span');
+    pin.className = 'pin';
+    pin.hidden = true;
+    pin.setAttribute('aria-hidden','true');
+    /* the pin has to ride an element that may contain a span; <dl> may not */
+    const host = el.tagName === 'UL'  ? el.querySelector('li:last-child')
+               : el.tagName === 'DL'  ? el.querySelector('dd:last-of-type')
+               : el.tagName === 'DIV' ? (el.querySelector('h3') || el.querySelector('.notes-control__label') || el)
+               : el;
+    host.append(pin);
+
+    return { note:n, el, card, pin };
+  }).filter(Boolean);
+
+  /* ── seeded jitter: pen-like, and stable across re-renders ── */
+  const seeded = s => () => (s = (s*1664525 + 1013904223) % 4294967296) / 4294967296;
+  const jit = (r,a) => (r()*2 - 1) * a;
+  const bow = (x1,y1,x2,y2,r,a) => {
+    const dx = x2-x1, dy = y2-y1;
+    return `${x1+jit(r,a)} ${y1+jit(r,a)} C ${x1+dx*.35+jit(r,a*2)} ${y1+dy*.35+jit(r,a*2)}, `
+         + `${x1+dx*.65+jit(r,a*2)} ${y1+dy*.65+jit(r,a*2)}, ${x2+jit(r,a)} ${y2+jit(r,a)}`;
+  };
+
+  /* ── layout: one read pass, then one write pass ───────────── */
+  function layout(opts){
+    const animate = opts && opts.animate && !reduce;
+    const lens = body.dataset.notes;
+    if (lens === 'off'){ leaders.innerHTML = ''; return; }
+
+    const short = body.classList.contains('condensed');
+    const active = entries.filter(e => inLens(e.note, lens) && (!short || e.note.control === 'condense'));
+    const pb = page.getBoundingClientRect();
+    leaders.setAttribute('viewBox', `0 0 ${pb.width} ${pb.height}`);
+    leaders.innerHTML = '';
+
+    const GAP = 24;
+    const mb = document.querySelector('main').getBoundingClientRect();
+    const mainL = mb.left - pb.left, mainR = mb.right - pb.left;
+    const gutL = mainL, gutR = pb.width - mainR;
+    const bothSides = gutL >= 260 && gutR >= 260;
+    const W = bothSides ? 236 : Math.min(236, Math.max(0, gutR - 14));
+    const rightOnly = !bothSides && W >= 200;
+    const inFlow = !bothSides && !rightOnly;
+    const xRight = bothSides ? mainR + GAP : (rightOnly ? mainR + 12 : Math.max(12, pb.width - 236 - 12));
+    const xLeft  = mainL - W - GAP;
+    const cardW  = Math.min(W, pb.width - 24);
+
+    /* narrow: put each card in the document flow, directly after the block it
+       annotates. wide: it belongs to the overlay. */
+    if (inFlow){
+      const blockOf = el => {                     /* climb to the landmark's own child */
+        let n = el;
+        while (n.parentElement && !['SECTION','HEADER','MAIN'].includes(n.parentElement.tagName)) n = n.parentElement;
+        return n;
+      };
+      const cursor = new Map();
+      active.forEach((e,i) => {
+        const block = blockOf(e.el);
+        const after = cursor.get(block) || block;   /* stack, don't leapfrog */
+        if (e.card.previousElementSibling !== after) after.after(e.card);
+        cursor.set(block, e.card);
+        e.card.classList.add('note--inline');
+        e.card.classList.remove('is-left');
+        e.card.style.left = e.card.style.top = e.card.style.width = '';
+        e.card.querySelector('.note__index').textContent = i + 1;
+        e.pin.textContent = i + 1;
+      });
+      if (animate && typeof Element.prototype.animate === 'function'){
+        active.forEach((e,i) => {
+          e.card.getAnimations().forEach(a => a.cancel());
+          e.card.animate([{ opacity:0, translate:'0 6px' }, { opacity:1, translate:'0 0' }],
+            { duration:300, delay:i * 30, easing:'cubic-bezier(.2,.7,.3,1)', fill:'backwards' });
+        });
+      }
+      return;
+    }
+    active.forEach(e => {
+      if (e.card.parentElement !== layer) layer.append(e.card);
+      e.card.classList.remove('note--inline');
+    });
+
+    /* READ — every rect gathered before anything is written */
+    const measured = active
+      .map(e => ({ e, box: e.el.getBoundingClientRect() }))
+      .sort((a,b) => a.box.top - b.box.top);
+    measured.forEach(m => { m.e.card.style.width = cardW + 'px'; });
+    measured.forEach(m => { m.h = m.e.card.offsetHeight; });   /* heights, still no writes to top/left */
+
+    /* WRITE — positions only */
+    let floorL = 8, floorR = 8;
+    const rand = seeded(60613);
+    measured.forEach((m,i) => {
+      const left = bothSides && i % 2 === 0;
+      const want = m.box.top - pb.top;
+      const top  = Math.max(want, left ? floorL : floorR);
+      m.left = left; m.top = top;
+      m.e.card.classList.toggle('is-left', left);
+      m.e.card.style.left = (left ? xLeft : xRight) + 'px';
+      m.e.card.style.top  = top + 'px';
+      if (left) floorL = top + m.h + 14; else floorR = top + m.h + 14;
+      m.e.card.querySelector('.note__index').textContent = i + 1;
+      m.e.pin.textContent = i + 1;
+      m.i = i;
+    });
+
+    if (!bothSides && !rightOnly) return;
+    measured.forEach(m => {
+      const y1 = m.box.bottom - pb.top + 3;   /* exit under the line, not through it */
+      const y2 = m.top + 16;
+      let x1, gutter, land;
+      if (m.left){ gutter = xLeft + W + 16;  x1 = Math.max(m.box.left - pb.left - 3, gutter + 12); land = xLeft + W + 6; }
+      else       { gutter = xRight - 16;     x1 = Math.min(m.box.right - pb.left + 3, gutter - 12); land = xRight - 6; }
+      /* a long sweep across the column costs more legibility than the link is
+         worth; past that distance the numbered pin carries the pairing alone */
+      const far = Math.abs(y2 - y1) > 110;
+      const path = document.createElementNS(NS,'path');
+      path.setAttribute('d', far
+        ? `M ${bow(x1, y1, m.left ? gutter + 26 : gutter - 26, y1, rand, .8)}`
+        : `M ${bow(x1,y1,gutter,y1,rand,1)} C ${bow(gutter,y1,land,y2,rand,1.4).split(' C ')[1]}`);
+      const dot = document.createElementNS(NS,'circle');
+      dot.setAttribute('cx',x1); dot.setAttribute('cy',y1); dot.setAttribute('r',2.5);
+      leaders.append(path, dot);
+      m.e.path = path;
+      if (animate){
+        const len = path.getTotalLength();
+        path.style.strokeDasharray = len;
+        path.style.strokeDashoffset = len;
+        dot.style.opacity = '0';
+        const at = m.i * 40 + 90;
+        requestAnimationFrame(() => {
+          path.style.transition = 'stroke-dashoffset 300ms var(--ease) ' + at + 'ms';
+          path.style.strokeDashoffset = '0';
+          dot.style.transition = 'opacity 120ms ' + at + 'ms';
+          dot.style.opacity = '';
+        });
+      }
+    });
+
+    if (animate && typeof Element.prototype.animate === 'function'){
+      measured.forEach(m => {
+        const c = m.e.card;
+        c.getAnimations().forEach(a => a.cancel());
+        c.animate(
+          [{ opacity:0, translate:'0 6px' },
+           { opacity:1, translate:'0 0' }],
+          { duration:320, delay:m.i * 40, easing:'cubic-bezier(.2,.7,.3,1)', fill:'backwards' });
+      });
+    }
+
+    measured.forEach(m => {
+      const e = m.e;
+      const on  = () => { e.card.classList.add('is-lit'); e.pin.classList.add('is-lit');
+                          e.el.classList.add('is-annotated'); e.path && e.path.classList.add('is-lit'); };
+      const off = () => { e.card.classList.remove('is-lit'); e.pin.classList.remove('is-lit');
+                          e.el.classList.remove('is-annotated'); e.path && e.path.classList.remove('is-lit'); };
+      /* focusin/focusout bubble, so moving focus into the card's own slider
+         keeps the pairing lit instead of dropping it mid-drag */
+      e.card.onmouseenter = e.card.onfocusin  = on;
+      e.card.onmouseleave = e.card.onfocusout = off;
+      e.pin.onmouseenter = on;
+      e.pin.onmouseleave = off;
+    });
+  }
+
+  /* ── lens switching ───────────────────────────────────────── */
+  const buttons = [...document.querySelectorAll('.lens[data-lens]')];
+  function setLens(lens){
+    const swap = () => {
+      body.dataset.notes = lens;
+      buttons.forEach(b => b.setAttribute('aria-pressed', b.dataset.lens === lens));
+      entries.forEach(e => {
+        const on = lens !== 'off' && inLens(e.note, lens);
+        e.card.hidden = !on;
+        e.pin.hidden = !on;
+      });
+    };
+    swap();
+    try { localStorage.setItem('kw:lens', lens); } catch(e){}
+    /* the cards and leaders animate themselves in — a page-wide view transition
+       would just cross-fade over the top of it */
+    requestAnimationFrame(() => { layout({ animate:true }); });
+  }
+  buttons.forEach(b => b.addEventListener('click', () =>
+    setLens(body.dataset.notes === b.dataset.lens ? 'off' : b.dataset.lens)));
+
+  const doReset = () => { Object.assign(state, DEFAULTS); body.classList.remove('condensed'); applyOverrides(); };
+  document.getElementById('resetBtn').addEventListener('click', doReset);
+  document.getElementById('resetBtnFoot').addEventListener('click', doReset);
+
+  let start = 'off';
+  try { const saved = localStorage.getItem('kw:lens'); if (saved && (saved === 'off' || LENSES[saved])) start = saved; } catch(e){}
+  applyOverrides();
+  setLens(start);
+  setTimeout(layout, 200);
+  /* one relayout per frame at most, instead of one per resize event */
+  let rAF = 0;
+  addEventListener('resize', () => {
+    cancelAnimationFrame(rAF);
+    rAF = requestAnimationFrame(() => layout());
+  });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => layout());
+})();
+</script>
+</body>
+</html>
