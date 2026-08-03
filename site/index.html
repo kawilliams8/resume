@@ -3,15 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Katherine Williams — Senior Frontend Engineer</title>
-<meta name="description" content="Senior frontend engineer. React and TypeScript, design systems, accessibility. Leadville, Colorado.">
-<meta name="color-scheme" content="light">
-<meta name="theme-color" content="#FDFDFB">
+<title>Katherine Williams — Senior Software Engineer</title>
+<meta name="description" content="Senior software engineer. React and TypeScript, design systems, accessibility. Colorado, remote.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FDFDFB" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#32312B" media="(prefers-color-scheme: dark)">
+<script>
+/* resolve the scheme before first paint: a saved choice wins, else the system's */
+(function(){try{var t=localStorage.getItem('kw:theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=t}catch(e){}})();
+</script>
 <link rel="canonical" href="https://katherinewilliams.co/">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="%2316161A"/><text x="16" y="21.5" text-anchor="middle" font-family="Menlo,Consolas,monospace" font-size="13" font-weight="600" fill="%23FDFDFB">KW</text></svg>'>
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://katherinewilliams.co/">
-<meta property="og:title" content="Katherine Williams — Senior Frontend Engineer">
+<meta property="og:title" content="Katherine Williams — Senior Software Engineer">
 <meta property="og:description" content="React and TypeScript, design systems, accessibility. Read the résumé as a parser, an engineer, a designer, or a hiring manager.">
 <meta property="og:image" content="https://katherinewilliams.co/og.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -20,10 +25,10 @@
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "Katherine Williams",
-  "jobTitle": "Senior Frontend Engineer",
+  "jobTitle": ["Senior Software Engineer", "Senior Frontend Engineer", "Full-Stack Engineer", "Product Engineer", "UI Engineer"],
   "url": "https://katherinewilliams.co",
   "email": "mailto:kawilliams8@gmail.com",
-  "address": { "@type": "PostalAddress", "addressLocality": "Leadville", "addressRegion": "CO", "addressCountry": "US" },
+  "address": { "@type": "PostalAddress", "addressRegion": "CO", "addressCountry": "US" },
   "sameAs": [
     "https://linkedin.com/in/kawilliamsco",
     "https://github.com/kawilliams8",
@@ -50,6 +55,10 @@
   --accent-wash:rgba(31,79,216,.09);
   --note-accent:var(--accent);
   --note-wash:var(--accent-wash);
+  --shadow:0 6px 20px -10px rgba(22,22,26,.35);
+  --shadow-lift:0 10px 26px -10px rgba(22,22,26,.45);
+  --fail:#C0392B;
+  color-scheme:light;
 
   /* type */
   --font-sans: -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;
@@ -72,6 +81,24 @@
   /* motion */
   --dur:240ms; --ease:cubic-bezier(.22,1,.36,1);
 }
+/* the same tokens, resolved for reading in the dark. still one accent —
+   and the contrast readout re-judges every colour against this background live */
+:root[data-theme="dark"]{
+  --bg:#32312B;
+  --surface:#3A3932;
+  --ink:#F2F1EA;
+  --ink-2:#CCCBC1;
+  --ink-3:#A09F95;
+  --rule:#525148;
+  --rule-2:#424138;
+  --accent:#8FA9FF;
+  --accent-wash:rgba(143,169,255,.16);
+  --shadow:0 8px 22px -10px rgba(0,0,0,.7);
+  --shadow-lift:0 12px 28px -10px rgba(0,0,0,.8);
+  --fail:#FF7A66;
+  color-scheme:dark;
+}
+
 @media (prefers-reduced-motion: reduce){ :root{ --dur:1ms } }
 
 /* The layer takes the page's accent. One hue on the page, always — which is
@@ -96,8 +123,16 @@ a{color:var(--accent)}
    important thing above the fold, so it's sized like it.
    ═══════════════════════════════════════════════════════════════ */
 .notes-control{margin:var(--s-5) 0 0;padding:var(--s-3) var(--s-4);
-  border:1px solid var(--rule);border-left:3px solid var(--note-accent);border-radius:3px;
+  border:1px solid var(--rule);border-radius:3px;
   background:var(--surface);transition:border-color var(--dur) var(--ease)}
+/* wide screens: the picker vacates the column and holds the left gutter — it
+   scrolls with the page, then pins below the sticky nav. annotation cards go
+   right-only at these widths (see layout()) so the two never share a gutter. */
+.picker-rail{display:contents}
+@media (min-width:1360px){
+  .picker-rail{display:block;position:absolute;top:150px;bottom:0;left:32px;width:236px}
+  .notes-control{position:sticky;top:68px;margin:0}
+}
 .notes-control__label{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:var(--s-3);
   display:flex;align-items:center;gap:var(--s-3);flex-wrap:wrap}
 .lenses{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-2);margin-bottom:var(--s-3)}
@@ -106,10 +141,54 @@ a{color:var(--accent)}
   padding:var(--s-2) var(--s-3);border-radius:3px;
   border:1.5px solid var(--rule);background:var(--surface);color:var(--ink-3);
   transition:background var(--dur) var(--ease),color var(--dur) var(--ease),border-color var(--dur) var(--ease)}
-.lens:hover{color:var(--ink);border-color:var(--ink-3)}
+.lens:hover{color:var(--note-accent);border-color:var(--note-accent)}
+/* the version buttons press to ink, so they preview ink — not accent */
+.lens--plain:hover,.lens--short:hover{color:var(--ink);border-color:var(--ink-3)}
 .lens[aria-pressed="true"]{background:var(--note-accent);border-color:var(--note-accent);color:var(--surface)}
-/* the plain state is a choice in the picker, not an absence */
-.lens--plain[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+/* two versions of one document, side by side so the relationship is legible.
+   the full résumé doubles as home: always visible, always the way back. */
+.versions{display:flex;gap:var(--s-2);flex-wrap:wrap;margin-bottom:var(--s-3)}
+.lens--plain[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.lens--short{border-style:dashed}
+.lens--short[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg);border-style:solid}
+@media (min-width:1360px){
+  .versions{flex-direction:column;align-items:stretch}
+  .versions .lens{justify-content:center}
+}
+/* scheme always; reset joins it only once something has been changed */
+.picker-foot{display:flex;justify-content:flex-end;gap:var(--s-2);flex-wrap:wrap;
+  border-top:1px solid var(--rule-2);margin-top:var(--s-3);padding-top:var(--s-3)}
+@media (min-width:1360px){
+  .picker-foot .scheme{max-width:none;margin-left:0}
+  .picker-foot .reset{width:100%;justify-content:center}
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT · parser view
+   The fourth audience gets a real lens: the résumé body swaps for
+   what a machine extracts — text from the live DOM, then JSON-LD.
+   Header and picker stay visible so the way back is obvious.
+   ═══════════════════════════════════════════════════════════════ */
+#parserView{display:none;margin:var(--s-5) 0 0}
+body[data-notes="parser"] #parserView{display:block}
+body[data-notes="parser"] main > :not(#parserView):not(header){display:none}
+/* the machine view IS the page in this lens — the visible header would only
+   duplicate what the text layer already carries. the picker stays. */
+body[data-notes="parser"] header > :not(.picker-rail){display:none}
+.machine-block{margin:0 0 var(--s-4)}
+#parserView .machine-cap{font-family:var(--font-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
+  margin:0;padding:var(--s-2) var(--s-3);background:var(--rule-2);
+  border:1px solid var(--rule);border-bottom:0;border-radius:3px 3px 0 0}
+#parserView pre{font-family:var(--font-mono);font-size:12px;line-height:1.55;color:var(--ink-2);
+  background:var(--surface);border:1px solid var(--rule);border-radius:0 0 3px 3px;
+  padding:var(--s-3) var(--s-3) var(--s-4);margin:0;white-space:pre-wrap;word-break:break-word}
+#parserText{counter-reset:ln}
+#parserText i{display:block;font-style:normal;counter-increment:ln}
+#parserText i::before{content:counter(ln,decimal-leading-zero);display:inline-block;width:3ch;
+  margin-right:var(--s-3);color:var(--ink-3);opacity:.5;text-align:right;user-select:none}
+#parserJson b,#parserMeta b{color:var(--accent);font-weight:500}
+#parserView .machine-foot{font-family:var(--font-mono);font-size:11px;line-height:1.6;color:var(--ink-3);
+  margin:var(--s-4) 0 0;padding:0 var(--s-3)}   /* spans the blocks, text aligns with theirs */
 /* ═══════════════════════════════════════════════════════════════
    LAYOUT
    One measure. The annotation layer overlays — it never occupies
@@ -124,29 +203,44 @@ main{max-width:760px;margin:0 auto}
    COMPONENT · site nav
    ═══════════════════════════════════════════════════════════════ */
 .sitenav{display:flex;justify-content:space-between;align-items:center;gap:var(--s-4);flex-wrap:wrap;
-  padding-bottom:var(--s-3);border-bottom:1px solid var(--ink);margin-bottom:var(--s-6)}
-/* sits under the nav rule, and only once something has been changed */
-.reset-row{display:none;justify-content:flex-end;margin:calc(var(--s-6) * -1) 0 var(--s-5)}
-body.is-overridden .reset-row{display:flex}
-.reset-row .reset{margin-top:var(--s-3)}
-.sitenav .wordmark{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.18em;font-weight:600}
+  position:sticky;top:0;z-index:60;background:var(--bg);
+  padding:var(--s-3) 0;border-bottom:1px solid var(--ink);margin-bottom:var(--s-6);
+  transition:background-color var(--dur) var(--ease)}
+.sitenav .wordmark{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.18em;font-weight:600;
+  color:var(--ink);text-decoration:none}
+.sitenav .wordmark:hover{color:var(--accent)}
 .sitenav ul{list-style:none;display:flex;gap:var(--s-4);margin:0;padding:0}
 .sitenav a{font-family:var(--font-mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;
   color:var(--ink-3);text-decoration:none;white-space:nowrap}
 .sitenav a:hover{color:var(--ink)}
-/* single page — nav is in-page wayfinding, and says so */
-.sitenav a::before{content:"↓ " / "";opacity:.5}
+/* the scheme control names both states and marks the one you're in */
+.scheme{display:flex;flex:1;max-width:220px;margin-left:auto}
+.scheme-opt{flex:1;font-family:var(--font-mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;font-weight:600;
+  cursor:pointer;color:var(--ink-3);background:none;border:1.5px solid var(--rule);padding:5px 0;text-align:center;
+  transition:color var(--dur) var(--ease),background var(--dur) var(--ease),border-color var(--dur) var(--ease)}
+.scheme-opt:first-child{border-radius:3px 0 0 3px;border-right:0}
+.scheme-opt:last-child{border-radius:0 3px 3px 0}
+.scheme-opt:hover{color:var(--ink)}
+.scheme-opt[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 
 /* ═══════════════════════════════════════════════════════════════
    COMPONENT · résumé header
    ═══════════════════════════════════════════════════════════════ */
 h1{font-family:var(--font-display);font-size:var(--step-2);line-height:1.02;letter-spacing:-.032em;font-weight:600;margin:0 0 var(--s-2)}
 .role{font-family:var(--font-display);font-size:var(--step-1);color:var(--ink-2);margin-bottom:var(--s-3)}
-.contact{display:flex;flex-wrap:wrap;gap:var(--s-1) var(--s-4);
-  font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;color:var(--ink-3);
+/* three registers, one voice: location as a quiet label, links a step up,
+   the status line in accent. separators live in the pseudo layer — punctuation
+   for people, invisible to innerText, so the machine copy stays a clean list */
+.contact{font-family:var(--font-mono);color:var(--ink-3);
   padding-bottom:var(--s-4);border-bottom:1px solid var(--rule)}
-.contact a{color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--rule)}
-.contact a:hover{border-bottom-color:var(--accent);color:var(--accent)}
+.contact__row{display:flex;flex-wrap:wrap;gap:var(--s-1) var(--s-3)}
+.contact__row > *:not(:last-child)::after{content:"·";display:inline-block;color:var(--ink-3);margin-left:var(--s-3)}
+.contact__where{font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+.contact__links{font-size:11px;letter-spacing:.02em;margin-top:var(--s-2)}
+.contact .status{margin:var(--s-3) 0 0;font-size:12.5px;letter-spacing:.05em}
+@media (max-width:640px){ .contact__row > *:not(:last-child)::after{content:none} }
+.contact a{color:var(--ink-2);text-decoration:underline;text-decoration-color:var(--rule);text-underline-offset:3px}
+.contact a:hover{text-decoration-color:var(--accent);color:var(--accent)}
 .status{color:var(--accent);font-weight:600}
 .lede{font-size:var(--step-1);line-height:1.58;color:var(--ink-2);max-width:var(--measure);margin:var(--s-5) 0 0}
 
@@ -155,7 +249,8 @@ h1{font-family:var(--font-display);font-size:var(--step-2);line-height:1.02;lett
    ═══════════════════════════════════════════════════════════════ */
 h2{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
   color:var(--ink-3);font-weight:500;margin:var(--s-6) 0 2px;
-  padding-bottom:var(--s-2);border-bottom:1px solid var(--rule)}
+  padding-bottom:var(--s-2);border-bottom:1px solid var(--rule);
+  scroll-margin-top:72px}   /* anchored headings land below the sticky nav */
 
 /* ═══════════════════════════════════════════════════════════════
    COMPONENT · role entry
@@ -181,14 +276,21 @@ h2{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transfor
 /* ═══════════════════════════════════════════════════════════════
    COMPONENT · key/value list
    ═══════════════════════════════════════════════════════════════ */
-.kv{display:grid;grid-template-columns:132px minmax(0,1fr);gap:2px var(--s-5);margin:var(--s-4) 0 0}
+.kv{display:grid;grid-template-columns:fit-content(300px) minmax(0,1fr);gap:2px var(--s-5);margin:var(--s-4) 0 0}
+/* school names read as one line — the column has the room */
+section[aria-labelledby="h-education"] .kv dt{white-space:nowrap}
+@media (max-width:900px){ section[aria-labelledby="h-education"] .kv dt{white-space:normal} }
 .kv dt{font-family:var(--font-mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;
   color:var(--ink-3);padding-top:6px}
 .kv dd{margin:0 0 var(--s-3);font-size:var(--step-0);color:var(--ink-2)}
 
-.colophon{display:flex;justify-content:space-between;gap:var(--s-4);flex-wrap:wrap;
-  margin-top:var(--s-6);padding-top:var(--s-4);border-top:1px solid var(--rule);
+/* two lines, two registers: the mono-caps claim, then the detail in quiet
+   sentence-case sans */
+.colophon{margin-top:var(--s-6);padding-top:var(--s-4);border-top:1px solid var(--rule);
   font-family:var(--font-mono);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
+.colophon p{margin:0}
+.colophon .colo-sub{font-family:var(--font-sans);text-transform:none;letter-spacing:.02em;
+  font-size:10.5px;margin-top:4px}
 
 /* ═══════════════════════════════════════════════════════════════
    COMPONENT · annotation layer
@@ -213,13 +315,12 @@ body:not([data-notes="off"]) #annotations{display:block}
 .note--inline .note__index{position:static;display:inline-flex;margin:0 var(--s-2) var(--s-2) 0;vertical-align:middle}
 .note{--tilt:-.4deg;transform:rotate(var(--tilt));transform-origin:left top;
   position:absolute;width:236px;pointer-events:auto;outline:none;
-  background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--note-accent);
-  border-radius:2px;box-shadow:0 6px 20px -10px rgba(22,22,26,.35);
+  background:var(--surface);border:1px solid var(--rule);
+  border-radius:2px;box-shadow:var(--shadow);
   padding:var(--s-2) var(--s-3) var(--s-3);
   transition:box-shadow 140ms,background 140ms}
 .note:nth-of-type(even){--tilt:.35deg}
-/* left-hand notes mirror: rule and index flip to the inside edge */
-.note.is-left{border-left:1px solid var(--rule);border-right:3px solid var(--note-accent)}
+/* left-hand notes mirror: the index chip flips to the inside edge */
 .note.is-left .note__index{left:auto;right:-11px}
 .note__index{position:absolute;left:-11px;top:-10px;display:inline-flex;align-items:center;justify-content:center;
   width:19px;height:19px;border-radius:50%;border:1px solid var(--note-accent);background:var(--bg);
@@ -258,10 +359,10 @@ body:not([data-notes="off"]) #annotations{display:block}
 .pairbtn:focus-visible{outline:2px solid var(--note-accent);outline-offset:2px}
 .swatch-why{font-family:var(--font-sans);font-size:11px;line-height:1.4;color:var(--ink-3);min-height:2.6em}
 .ratio-out{font-family:var(--font-mono);font-size:10.5px;color:var(--ink-2)}
-.ratio-out.is-fail{color:#C0392B;font-weight:600}
+.ratio-out.is-fail{color:var(--fail);font-weight:600}
 .rule-note{display:block;font-family:var(--font-sans);font-size:10.5px;line-height:1.4;
   color:var(--ink-3);margin-bottom:var(--s-2);padding-left:var(--s-2);border-left:2px solid var(--rule)}
-.rule-note.is-fail{color:#C0392B;border-left-color:#C0392B}
+.rule-note.is-fail{color:var(--fail);border-left-color:var(--fail)}
 .proof-btn{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
   cursor:pointer;padding:var(--s-2) var(--s-3);border-radius:3px;width:100%;
   border:1.5px solid var(--note-accent);background:var(--surface);color:var(--note-accent);font-weight:600;
@@ -302,14 +403,9 @@ body.condensed #leaders{display:none}
 body.condensed .lenses{display:none}
 body.condensed .reset,body.condensed .reset-foot{display:none!important}
 body.condensed .pin{display:none!important}
-body.condensed{--s-6:26px;--s-5:18px}
 body.condensed .role-entry{padding:var(--s-3) 0 var(--s-2)}
-body.condensed main{max-width:640px}
-.condensed-flag{display:none;font-family:var(--font-mono);font-size:9px;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--note-accent);border:1px solid var(--note-accent);
-  border-radius:3px;padding:2px 8px;margin-left:var(--s-3)}
-body.condensed .condensed-flag{display:inline-block}
-.note:hover,.note:focus-visible,.note.is-lit{background:var(--surface);box-shadow:0 10px 26px -10px rgba(22,22,26,.45)}
+body.condensed .notes-control__label{display:none}
+.note:hover,.note:focus-visible,.note.is-lit{background:var(--surface);box-shadow:var(--shadow-lift)}
 .note:focus-visible{box-shadow:0 0 0 2px var(--note-accent)}
 .note.is-lit .note__index{background:var(--note-accent);color:var(--surface)}
 
@@ -317,7 +413,7 @@ body.condensed .condensed-flag{display:inline-block}
 .pin{display:none;align-items:center;justify-content:center;width:15px;height:15px;line-height:1;
   border:1px solid var(--note-accent);border-radius:50%;background:var(--bg);color:var(--note-accent);
   font-family:var(--font-mono);font-size:8.5px;font-weight:600;vertical-align:super;margin-left:5px;
-  transition:background 140ms,color 140ms}
+  padding:0;cursor:pointer;transition:background 140ms,color 140ms}
 body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
 .pin.is-lit{background:var(--note-accent);color:var(--surface)}
 .is-annotated{box-shadow:inset 0 0 0 1px var(--note-accent);background:var(--note-wash);border-radius:2px}
@@ -331,8 +427,14 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
 }
 
 @media print{
+  /* paper is always the light scheme */
+  :root[data-theme="dark"]{--bg:#fff;--surface:#fff;--ink:#16161A;--ink-2:#42424C;--ink-3:#6E6E78;
+    --rule:#E2E2DC;--rule-2:#EFEFEA;--accent:#1F4FD8;--fail:#C0392B;color-scheme:light}
   .notes-control,#annotations,.pin,.note,
-  .sitenav,.reset-row,.reset-foot,.short-contact,.condensed-flag{display:none!important}
+  .sitenav,.reset-row,.reset-foot,.short-contact{display:none!important}
+  body[data-notes="parser"] main > :not(#parserView){display:revert!important}
+  body[data-notes="parser"] header > :not(.picker-rail){display:revert!important}
+  #parserView{display:none!important}
   body{background:#fff;font-size:11pt}
   .page{max-width:none;padding:0}
   main{max-width:none}
@@ -346,7 +448,7 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
 <div class="page" id="page">
 
   <nav class="sitenav" aria-label="Primary">
-    <span class="wordmark">KATHERINE WILLIAMS</span>
+    <a href="/" class="wordmark">KATHERINE WILLIAMS</a>
     <ul>
       <li><a href="#h-experience">Experience</a></li>
       <li><a href="#h-projects">Projects</a></li>
@@ -354,32 +456,67 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
       <li><a href="#h-contact">Contact</a></li>
     </ul>
   </nav>
-  <div class="reset-row"><button class="reset" id="resetBtn" type="button">↺ Reset the page</button></div>
 
   <main>
     <header>
       <h1 data-note="type-scale">Katherine Williams</h1>
-      <p class="role" data-note="role-type">Senior Frontend Engineer</p>
+      <p class="role" data-note="role-type">Senior Software Engineer</p>
       <div class="contact">
-        <span>Leadville, CO</span>
-        <a href="mailto:kawilliams8@gmail.com">kawilliams8@gmail.com</a>
-        <a href="https://katherinewilliams.co">katherinewilliams.co</a>
-        <a href="https://linkedin.com/in/kawilliamsco">linkedin.com/in/kawilliamsco</a>
-        <span class="status" data-note="status">Open to senior frontend roles</span>
+        <div class="contact__row contact__where">
+          <span>Colorado</span>
+          <span>Remote</span>
+        </div>
+        <div class="contact__row contact__links">
+          <a href="mailto:kawilliams8@gmail.com">kawilliams8@gmail.com</a>
+          <a href="https://katherinewilliams.co">katherinewilliams.co</a>
+          <a href="https://linkedin.com/in/kawilliamsco">linkedin.com/in/kawilliamsco</a>
+          <a href="https://github.com/kawilliams8">github.com/kawilliams8</a>
+        </div>
+        <p class="status" data-note="status">Next role: senior, product-minded, frontend-leaning, AI-forward</p>
       </div>
 
+      <div class="picker-rail">
       <div class="notes-control" data-note="the-toggle">
-        <div class="notes-control__label">Read this résumé as <span class="condensed-flag">30-second version</span></div>
+        <div class="versions" role="group" aria-label="Version">
+          <button type="button" class="lens lens--plain" data-lens="off" aria-pressed="true">The full résumé</button>
+          <button type="button" class="lens lens--short" id="shortBtn" aria-pressed="false">30-second version</button>
+        </div>
+        <div class="notes-control__label">Read this résumé as</div>
         <div class="lenses" role="group" aria-label="Annotation lens">
-          <button type="button" class="lens lens--plain" data-lens="off" aria-pressed="true" aria-controls="annotations">A parser</button>
+          <button type="button" class="lens" data-lens="hiring" aria-pressed="false" aria-controls="annotations">A hiring manager</button>
           <button type="button" class="lens" data-lens="engineering" aria-pressed="false" aria-controls="annotations">An engineer</button>
           <button type="button" class="lens" data-lens="design" aria-pressed="false" aria-controls="annotations">A designer</button>
-          <button type="button" class="lens" data-lens="hiring" aria-pressed="false" aria-controls="annotations">A hiring manager</button>
+          <button type="button" class="lens" data-lens="parser" aria-pressed="false" aria-controls="parserView">An ATS parser</button>
+        </div>
+        <div class="picker-foot">
+          <button class="reset" id="resetBtn" type="button">↺ Reset the page</button>
+          <div class="scheme" role="group" aria-label="Colour scheme">
+            <button type="button" class="scheme-opt" data-scheme="light" aria-pressed="false">Light</button>
+            <button type="button" class="scheme-opt" data-scheme="dark" aria-pressed="false">Dark</button>
+          </div>
         </div>
       </div>
+      </div>
 
-      <p class="lede" data-note="measure">Frontend engineer with <b>seven years</b> building component-driven applications in TypeScript and React.<span class="secondary"> Polished interfaces, owned end to end — with a focus on interaction detail, web performance, and product instincts that hold up under real users. Equal parts builder and communicator.</span> <span data-note="ai-claim">AI-native in daily practice, with <b>Claude Code</b> and LLM features shipped in production.</span></p>
+      <p class="lede" data-note="measure">Frontend engineer with <b>seven years</b> building component-driven applications in TypeScript and React.<span class="secondary"> Polished interfaces, owned end to end — with a focus on interaction detail, web performance, and product instincts that hold up under real users. Equal parts builder and communicator.</span> <span data-note="ai-claim">I build with <b>Claude Code</b> daily, and shipped LLM features to production at Fluint.</span></p>
     </header>
+
+    <!-- ══ the machine's copy — filled from the live DOM when the parser lens opens ══ -->
+    <div id="parserView" aria-label="Machine-readable view">
+      <div class="machine-block">
+        <p class="machine-cap">01 · text layer — main.innerText</p>
+        <pre id="parserText"></pre>
+      </div>
+      <div class="machine-block">
+        <p class="machine-cap">02 · structured layer — application/ld+json</p>
+        <pre id="parserJson"></pre>
+      </div>
+      <div class="machine-block">
+        <p class="machine-cap">03 · meta layer — what a crawler reads first</p>
+        <pre id="parserMeta"></pre>
+      </div>
+      <p class="machine-foot">Extracted live from this page's DOM — nothing here is hand-maintained, so it cannot drift from the résumé it describes. The whole document ships in the initial HTML: an ATS, a crawler, or an LLM gets all of it without executing a line of JavaScript.</p>
+    </div>
 
     <section aria-labelledby="h-experience">
       <h2 id="h-experience" data-note="proximity">Experience</h2>
@@ -473,16 +610,16 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
         <dt class="secondary">Full-stack &amp; tooling</dt><dd class="secondary">Node.js · Express · Redis · REST APIs · WebSockets · webhooks · API integration · CRM integration (Salesforce · HubSpot) · AWS · Docker · CI/CD (GitHub Actions) · Webpack · Vite · Jest · Vitest · React Testing Library · Playwright</dd>
         <dt class="secondary">Database &amp; ORM</dt><dd class="secondary">MySQL · MongoDB · Mongoose · SQLite · Eloquent ORM (Laravel)</dd>
         <dt class="secondary">Practice</dt><dd class="secondary">Git · Agile/Scrum · unit, integration &amp; E2E testing · code review · mentorship · live presentations &amp; demos · async &amp; cross-functional collaboration · Jira · Linear</dd>
-        <dt data-note="not-yet">Not yet</dt><dd>Angular in production · native mobile · roles that are mostly infrastructure. I work full-stack, but the front of the stack is where I'm senior — if the job lives elsewhere, we'd both be settling.</dd>
+        <dt data-note="looking-for">Looking for</dt><dd>Senior scope on a product team that ships — UI craft valued, a design system to own, and users close enough to watch using the thing. Colorado remote.</dd>
       </dl>
     </section>
 
     <section aria-labelledby="h-education">
       <h2 id="h-education">Education &amp; certifications</h2>
       <dl class="kv">
-        <dt>Turing School</dt><dd>Front-End Engineering Certificate</dd>
+        <dt>Turing School of Software and Design</dt><dd>Front-End Engineering Certificate</dd>
         <dt>Colorado Mountain College</dt><dd>Graphic Technologies Certificate</dd>
-        <dt>Western Michigan</dt><dd>BA, Media Studies &amp; French</dd>
+        <dt>Western Michigan University</dt><dd>BA, Media Studies &amp; French</dd>
       </dl>
     </section>
 
@@ -499,9 +636,8 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
     </div>
 
     <div class="colophon">
-      <span>Katherine Williams · Senior Frontend Engineer</span>
-      <span>Hand-built, single file, no framework</span>
-      <span>Updated August 2026</span>
+      <p class="colo-line">Katherine Williams · Senior Software Engineer</p>
+      <p class="colo-sub">This site runs on one file of good old HTML, CSS and vanilla JavaScript. Built with Claude Code. Updated August, 2026.</p>
     </div>
   </main>
 
@@ -531,9 +667,9 @@ const NOTES = [
     body:'Same words, five personalities. Type is the loudest thing on a page before anyone reads it, so the pairing makes a claim about who I am before the summary gets a chance.' },
   { set:'design', target:'status', discipline:'Colour', principle:'One accent, earned',
     control:'accent',
-    body:'One hue for links, availability and these notes. Change it and the whole page moves together, which is the only way to know a colour actually works. One option fails the contrast floor, and the readout says so instead of letting it pass.' },
+    body:'One hue for links, availability and these notes. Change it and the whole page moves together, which is the only way to know a colour actually works. Which option fails the floor depends on the scheme — flip it and watch the verdict move.' },
   { set:'design', target:'proximity', discipline:'Layout', principle:'Law of Proximity',
-    body:'Space between sections is twice the space within them. Proximity does the grouping, so the rules can stay hairline instead of shouting.' },
+    body:'Sections sit more than twice as far apart as the items inside them. Proximity does the grouping, so the rules can stay hairline instead of shouting.' },
   { set:'design', target:'figures', discipline:'Typography', principle:'Tabular figures',
     body:'Tabular numerals: every digit the same width, so the date column aligns. Tenure scans <em>vertically</em>, without reading a single role title.' },
   { set:'design', target:'serial-position', discipline:'Hierarchy', principle:'Serial position effect',
@@ -560,22 +696,22 @@ const NOTES = [
   { set:'engineering', target:'project', discipline:'Stack', principle:'What I reach for unsupervised',
     body:'Racer &amp; Pacer is the honest sample; nobody reviewed those choices. Tokens over Chakra, cache-first TanStack Query, dnd-kit, Playwright.' },
   { set:'engineering', target:'contact', discipline:'Accessibility', principle:'Both ends reachable',
-    body:'Cards are focusable, pins mirror their state, and the control is wired with <em>aria-pressed</em> and <em>aria-controls</em>. It works from the keyboard.' },
+    body:'Cards take focus, pins are real buttons that hand it to them, and the lens control is wired with <em>aria-pressed</em>. Both ends of every pairing work from the keyboard.' },
 
   /* ── hiring manager ───────────────────────────────────────── */
-  { set:'hiring', target:'the-toggle', discipline:'If you have 30 seconds', principle:'The short version',
+  { set:'hiring', target:'measure', discipline:'If you have 30 seconds', principle:'The short version',
     control:'condense',
     body:'Roles, dates, stack, and what I do not do. No bullets: if the shape does not fit, the detail will not change your mind, and you have the rest of the pile to get through.' },
   { set:'hiring', target:'type-scale', discipline:'Level', principle:'Scope, not tenure',
     body:'Senior here means scope owned: features end to end, the shared component patterns a team ships on, the front end of a live product.' },
   { set:'hiring', target:'ai-claim', discipline:'Where to push', principle:'Interrogate this line',
-    body:'AI-native is the easiest claim on any résumé to make and the hardest to back. Ask what shipped, who used it, what it got wrong, and what I did about the wrongness.' },
+    body:'"Uses AI daily" is the easiest claim on any résumé and the hardest to back. Ask what shipped, who used it, what it got wrong, and what I did about the wrongness.' },
   { set:'hiring', target:'figures', discipline:'Dates', principle:'Role dates, not a claim',
-    body:'Not an assertion of continuous employment. There is a gap in 2024 to 2025, and this role ended in May. Ask directly; it is a shorter conversation than you think.' },
+    body:'Not an assertion of continuous employment. There is a gap in 2024 to 2025, and the latest role has an end date. Ask directly; it is a shorter conversation than you think.' },
   { set:'hiring', target:'project', discipline:'Unsupervised work', principle:'The best evidence here',
     body:'The only thing on this page nobody assigned me. If you want to know what I do when the constraints are mine, start here rather than with the roles.' },
-  { set:'hiring', target:'not-yet', discipline:'Disqualify fast', principle:'Start here',
-    body:'The quickest way to rule me out lives in this row. Better in the first minute than the third interview.' },
+  { set:'hiring', target:'looking-for', discipline:'Fit check', principle:'Start here',
+    body:'If the role doesn\'t rhyme with this row, we can save each other a phone screen. And if it does, that\'s worth knowing in the first minute too.' },
 ];
 
 (function(){
@@ -585,6 +721,15 @@ const NOTES = [
         leaders = document.getElementById('leaders'),
         NS = 'http://www.w3.org/2000/svg',
         reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const shortBtn = document.getElementById('shortBtn');
+  const plainBtn = document.querySelector('.lens--plain');
+  /* the version pair is a two-state radio: exactly one pressed unless a lens
+     or the machine view has the floor */
+  function syncVersion(){
+    const shortOn = body.classList.contains('condensed');
+    shortBtn.setAttribute('aria-pressed', shortOn);
+    plainBtn.setAttribute('aria-pressed', body.dataset.notes === 'off' && !shortOn);
+  }
 
   const inLens = (n, lens) => n.set === '*' || n.set === lens;
 
@@ -617,30 +762,52 @@ const NOTES = [
       body:'"Baskerville",Georgia,serif',
       why:'All serif. The most traditional and the least distinctive: safe, and indistinguishable from every other résumé that chose safe.' },
   ];
+  /* "no accent" means the text colour — which is light in the dark scheme.
+     the Ink swatch follows the theme, and so does a reader who picked it. */
+  const INKS = { light:'#16161A', dark:'#F2F1EA' };
+  function updateInkSwatch(){
+    const t = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+    const entry = ACCENTS.find(a => a.name === 'Ink');
+    const prev = entry.hex, next = INKS[t];
+    if (prev === next) return;
+    entry.hex = next;
+    document.querySelectorAll(`.swatch[data-hex="${prev}"]`).forEach(b => {
+      b.dataset.hex = next; b.style.background = next;
+    });
+    if (state.accent === prev){ state.accent = next; applyOverrides(); }
+  }
   const lum = c => { const a = c.map(v => (v/=255) <= .03928 ? v/12.92 : Math.pow((v+.055)/1.055, 2.4));
                      return .2126*a[0] + .7152*a[1] + .0722*a[2]; };
   const rgb = t => t.match(/\d+/g).slice(0,3).map(Number);
   const ratio = (a, b) => (Math.max(a,b)+.05) / (Math.min(a,b)+.05);
   const hexLum = hex => { const n = parseInt(hex.slice(1),16);
     return lum([n>>16 & 255, n>>8 & 255, n & 255]); };
+  const tokenHex = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   /* two ratios matter: the accent as text on the page, and surface-coloured text
-     sitting on the accent (chips, pins, the pressed button). report the worse. */
+     sitting on the accent (chips, pins, the pressed button). report the worse —
+     both read live, so a scheme flip re-judges everything. */
   function contrastOf(hex){
     const a = hexLum(hex);
     return Math.min(ratio(a, lum(rgb(getComputedStyle(body).backgroundColor))),
-                    ratio(a, hexLum('#FFFFFF')));
+                    ratio(a, hexLum(tokenHex('--surface'))));
   }
   function applyOverrides(){
     const root = document.documentElement.style;
     root.setProperty('--ratio', state.ratio);
-    root.setProperty('--accent', state.accent);
-    root.setProperty('--accent-wash', state.accent + '17');
+    if (state.accent === DEFAULTS.accent){
+      /* untouched: each scheme keeps its own default accent */
+      root.removeProperty('--accent'); root.removeProperty('--accent-wash');
+    } else {
+      root.setProperty('--accent', state.accent);
+      root.setProperty('--accent-wash', state.accent + '17');
+    }
     const pair = PAIRS.find(p => p.id === state.pair) || PAIRS[0];
     root.setProperty('--font-display', pair.display);
     root.setProperty('--font-body', pair.body);
     const dirty = state.ratio !== DEFAULTS.ratio || state.accent !== DEFAULTS.accent || state.pair !== DEFAULTS.pair;
     body.classList.toggle('is-overridden', dirty);   /* condensed has its own toggle; not an override */
     document.querySelectorAll('[data-sync]').forEach(sync);
+    syncVersion();
     layout();
   }
   function sync(el){
@@ -650,7 +817,10 @@ const NOTES = [
       el.querySelectorAll('b')[1].textContent = state.ratio;
     }
     if (kind === 'accent'){
-      const r = contrastOf(state.accent), out = el.querySelector('.ratio-out');
+      /* judge the accent actually painting the page: the scheme default when
+         untouched, the picked swatch once one is chosen */
+      const live = state.accent === DEFAULTS.accent ? tokenHex('--accent') : state.accent;
+      const r = contrastOf(live), out = el.querySelector('.ratio-out');
       const pass = r >= 4.5;
       out.textContent = r.toFixed(2) + ':1 ' + (pass ? '· passes' : '· fails');
       out.classList.toggle('is-fail', !pass);
@@ -687,9 +857,11 @@ const NOTES = [
       wrap.innerHTML = '<span class="note__proof-label"><b class="verb">Pick an accent</b> <span class="ratio-out"></span></span>' +
         '<span class="swatches">' + ACCENTS.map(a =>
           `<button class="swatch" data-hex="${a.hex}" style="background:${a.hex}" aria-pressed="false" aria-label="${a.name}" title="${a.name}"></button>`).join('') +
-        '</span><span class="rule-note"></span><span class="swatch-why"></span>';
+        '</span><span class="rule-note"></span><span class="swatch-why"></span>' +
+        '<button class="proof-btn" type="button" data-flip>Flip the scheme — re-judge</button>';
       wrap.querySelectorAll('.swatch').forEach(b =>
         b.addEventListener('click', () => { state.accent = b.dataset.hex; applyOverrides(); }));
+      wrap.querySelector('[data-flip]').addEventListener('click', () => flipTheme());
     }
     if (kind === 'pair'){
       wrap.innerHTML = '<span class="note__proof-label"><b class="verb">Try a pairing</b></span>' +
@@ -734,10 +906,14 @@ const NOTES = [
     if (n.control){ card.dataset.control = n.control; card.append(buildControl(n.control)); }
     layer.append(card);
 
-    const pin = document.createElement('span');
+    const pin = document.createElement('button');
+    pin.type = 'button';
     pin.className = 'pin';
     pin.hidden = true;
-    pin.setAttribute('aria-hidden','true');
+    pin.setAttribute('aria-label', `Jump to design note: ${n.principle}`);
+    /* the pin is the reachable end of the pairing: click or Enter hands focus
+       to its card, which lights both ends via the focusin wiring below */
+    pin.addEventListener('click', () => card.focus());
     /* the pin has to ride an element that may contain a span; <dl> may not */
     const host = el.tagName === 'UL'  ? el.querySelector('li:last-child')
                : el.tagName === 'DL'  ? el.querySelector('dd:last-of-type')
@@ -745,7 +921,19 @@ const NOTES = [
                : el;
     host.append(pin);
 
-    return { note:n, el, card, pin };
+    const entry = { note:n, el, card, pin };
+    entry.on  = () => { card.classList.add('is-lit'); pin.classList.add('is-lit');
+                        el.classList.add('is-annotated'); entry.path && entry.path.classList.add('is-lit'); };
+    entry.off = () => { card.classList.remove('is-lit'); pin.classList.remove('is-lit');
+                        el.classList.remove('is-annotated'); entry.path && entry.path.classList.remove('is-lit'); };
+    /* focusin/focusout have no IDL attribute — wire them once, here, not in the
+       layout pass. focusin bubbles, so focus moving into the card's own slider
+       keeps the pairing lit instead of dropping it mid-drag. */
+    card.addEventListener('focusin', entry.on);
+    card.addEventListener('focusout', entry.off);
+    pin.addEventListener('focus', entry.on);
+    pin.addEventListener('blur', entry.off);
+    return entry;
   }).filter(Boolean);
 
   /* ── seeded jitter: pen-like, and stable across re-renders ── */
@@ -761,7 +949,7 @@ const NOTES = [
   function layout(opts){
     const animate = opts && opts.animate && !reduce;
     const lens = body.dataset.notes;
-    if (lens === 'off'){ leaders.innerHTML = ''; return; }
+    if (lens === 'off' || lens === 'parser'){ leaders.innerHTML = ''; return; }
 
     const short = body.classList.contains('condensed');
     const active = entries.filter(e => inLens(e.note, lens) && (!short || e.note.control === 'condense'));
@@ -773,7 +961,8 @@ const NOTES = [
     const mb = document.querySelector('main').getBoundingClientRect();
     const mainL = mb.left - pb.left, mainR = mb.right - pb.left;
     const gutL = mainL, gutR = pb.width - mainR;
-    const bothSides = gutL >= 260 && gutR >= 260;
+    const sidebarUp = matchMedia('(min-width:1360px)').matches;   /* picker owns the left gutter */
+    const bothSides = !sidebarUp && gutL >= 260 && gutR >= 260;
     const W = bothSides ? 236 : Math.min(236, Math.max(0, gutR - 14));
     const rightOnly = !bothSides && W >= 200;
     const inFlow = !bothSides && !rightOnly;
@@ -885,25 +1074,45 @@ const NOTES = [
 
     measured.forEach(m => {
       const e = m.e;
-      const on  = () => { e.card.classList.add('is-lit'); e.pin.classList.add('is-lit');
-                          e.el.classList.add('is-annotated'); e.path && e.path.classList.add('is-lit'); };
-      const off = () => { e.card.classList.remove('is-lit'); e.pin.classList.remove('is-lit');
-                          e.el.classList.remove('is-annotated'); e.path && e.path.classList.remove('is-lit'); };
-      /* focusin/focusout bubble, so moving focus into the card's own slider
-         keeps the pairing lit instead of dropping it mid-drag */
-      e.card.onmouseenter = e.card.onfocusin  = on;
-      e.card.onmouseleave = e.card.onfocusout = off;
-      e.pin.onmouseenter = on;
-      e.pin.onmouseleave = off;
+      e.card.onmouseenter = e.on;
+      e.card.onmouseleave = e.off;
+      e.pin.onmouseenter  = e.on;
+      e.pin.onmouseleave  = e.off;
     });
+  }
+
+  /* ── the machine's copy: captured once from the plain DOM, so the
+        parser view can never disagree with the page it lives on. the picker
+        is chrome, not résumé — hide it for the read. ── */
+  const nc = document.querySelector('.notes-control');
+  nc.style.display = 'none';
+  const machineText = document.querySelector('main').innerText.replace(/\n{3,}/g, '\n\n').trim();
+  nc.style.display = '';
+  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  function fillParserView(){
+    document.getElementById('parserText').innerHTML =
+      machineText.split('\n').map(l => `<i>${esc(l) || ' '}</i>`).join('');
+    const ld = document.querySelector('script[type="application/ld+json"]');
+    if (ld) document.getElementById('parserJson').innerHTML =
+      esc(JSON.stringify(JSON.parse(ld.textContent), null, 2)).replace(/"([^"]+)":/g, '<b>"$1"</b>:');
+    const metas = [['title', document.title]]
+      .concat([...document.querySelectorAll('meta[name],meta[property]')]
+        .map(m => [m.getAttribute('name') || m.getAttribute('property'), m.content])
+        .filter(([k]) => k !== 'viewport'))
+      .concat([['canonical', (document.querySelector('link[rel=canonical]') || {}).href || '']])
+      .filter(([, v]) => v);
+    document.getElementById('parserMeta').innerHTML =
+      metas.map(([k, v]) => `<b>${esc(k)}</b>  ${esc(v)}`).join('\n');
   }
 
   /* ── lens switching ───────────────────────────────────────── */
   const buttons = [...document.querySelectorAll('.lens[data-lens]')];
   function setLens(lens){
+    if (lens === 'parser') fillParserView();
     const swap = () => {
       body.dataset.notes = lens;
       buttons.forEach(b => b.setAttribute('aria-pressed', b.dataset.lens === lens));
+      syncVersion();
       entries.forEach(e => {
         const on = lens !== 'off' && inLens(e.note, lens);
         e.card.hidden = !on;
@@ -918,13 +1127,69 @@ const NOTES = [
   }
   buttons.forEach(b => b.addEventListener('click', () =>
     setLens(body.dataset.notes === b.dataset.lens ? 'off' : b.dataset.lens)));
+  /* home means home: the plain button also walks back out of the short view */
+  document.querySelector('.lens--plain').addEventListener('click', () => {
+    if (body.classList.contains('condensed')){ body.classList.remove('condensed'); applyOverrides(); }
+  });
+  /* nav promises the document — if the target section is hidden by the current
+     view (machine view, or contact in the short view), return to the full
+     résumé first. scrolls by hand so the URL never grows a hash. */
+  document.querySelectorAll('.sitenav a[href^="#"]').forEach(a =>
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const t = document.querySelector(a.getAttribute('href'));
+      if (!t) return;
+      if (t.offsetParent === null){
+        if (body.dataset.notes === 'parser') setLens('off');
+        if (body.classList.contains('condensed')){ body.classList.remove('condensed'); applyOverrides(); }
+      }
+      t.scrollIntoView();
+    }));
+  /* the wordmark is the way home: plain résumé, top of page */
+  document.querySelector('.wordmark').addEventListener('click', e => {
+    e.preventDefault();
+    if (body.classList.contains('condensed')){ body.classList.remove('condensed'); applyOverrides(); }
+    if (body.dataset.notes !== 'off') setLens('off');
+    window.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'});
+  });
 
   const doReset = () => { Object.assign(state, DEFAULTS); body.classList.remove('condensed'); applyOverrides(); };
   document.getElementById('resetBtn').addEventListener('click', doReset);
   document.getElementById('resetBtnFoot').addEventListener('click', doReset);
 
+  /* ── scheme: a reader preference, not an experiment — persists, never resets ── */
+  const schemeBtns = [...document.querySelectorAll('.scheme-opt')];
+  const syncScheme = () => schemeBtns.forEach(b =>
+    b.setAttribute('aria-pressed', b.dataset.scheme === document.documentElement.dataset.theme));
+  function setTheme(t, save){
+    document.documentElement.dataset.theme = t;
+    if (save !== false) try { localStorage.setItem('kw:theme', t); } catch(e){}
+    updateInkSwatch();
+    syncScheme();
+    document.querySelectorAll('[data-sync]').forEach(sync);   /* the readout re-judges */
+  }
+  function flipTheme(){ setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'); }
+  schemeBtns.forEach(b => b.addEventListener('click', () => setTheme(b.dataset.scheme)));
+  syncScheme();
+  /* the top-level way into the short view — same rules as the note's button:
+     leaving it returns to the plain résumé, not to an annotated one */
+  shortBtn.addEventListener('click', () => {
+    if (body.classList.contains('condensed')){
+      body.classList.remove('condensed');
+      setLens('off');
+    } else {
+      body.classList.add('condensed');
+    }
+    applyOverrides();
+  });
+  /* follow the system until the reader states a preference */
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    try { if (!localStorage.getItem('kw:theme')) setTheme(e.matches ? 'dark' : 'light', false); } catch(err){}
+  });
+
   let start = 'off';
-  try { const saved = localStorage.getItem('kw:lens'); if (saved && (saved === 'off' || LENSES[saved])) start = saved; } catch(e){}
+  try { const saved = localStorage.getItem('kw:lens'); if (saved && (saved === 'off' || saved === 'parser' || LENSES[saved])) start = saved; } catch(e){}
+  updateInkSwatch();
   applyOverrides();
   setLens(start);
   setTimeout(layout, 200);
