@@ -51,10 +51,8 @@
   --ink-3:#6E6E78;        /* labels, meta, 5.4:1 on --bg   */
   --rule:#E2E2DC;
   --rule-2:#EFEFEA;
-  --accent:#1F4FD8;       /* links, status, measured figures */
+  --accent:#1F4FD8;       /* links, status, notes, measured figures */
   --accent-wash:rgba(31,79,216,.09);
-  --note-accent:var(--accent);
-  --note-wash:var(--accent-wash);
   --shadow:0 6px 20px -10px rgba(22,22,26,.35);
   --shadow-lift:0 10px 26px -10px rgba(22,22,26,.45);
   --fail:#C0392B;
@@ -77,6 +75,10 @@
 
   /* space — 4px base, doubled between sections */
   --s-1:4px; --s-2:8px; --s-3:12px; --s-4:20px; --s-5:32px; --s-6:52px;
+
+  /* sticky geometry — the nav parks at 0, everything else parks under it */
+  --stick:68px;        /* top offset for anything sticky below the nav */
+  --rail-top:150px;    /* where the picker rail starts, level with the name */
 
   /* motion */
   --dur:240ms; --ease:cubic-bezier(.22,1,.36,1);
@@ -129,36 +131,32 @@ a{color:var(--accent)}
    scrolls with the page, then pins below the sticky nav. annotation cards go
    right-only at these widths (see layout()) so the two never share a gutter. */
 .picker-rail{display:contents}
-@media (min-width:1360px){
-  .picker-rail{display:block;position:absolute;top:150px;bottom:0;left:32px;width:236px}
-  .notes-control{position:sticky;top:68px;margin:0}
-}
 .notes-control__label{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:var(--s-3);
   display:flex;align-items:center;gap:var(--s-3);flex-wrap:wrap}
-.lenses{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-2);margin-bottom:var(--s-3)}
-.lens{display:inline-flex;align-items:baseline;gap:var(--s-2);cursor:pointer;
+/* one chip, two families: versions of the document press to ink, lenses onto
+   it press to accent. hover always previews the press. */
+.chip{display:inline-flex;align-items:baseline;justify-content:center;gap:var(--s-2);cursor:pointer;
   font-family:var(--font-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;
   padding:var(--s-2) var(--s-3);border-radius:3px;
   border:1.5px solid var(--rule);background:var(--surface);color:var(--ink-3);
   transition:background var(--dur) var(--ease),color var(--dur) var(--ease),border-color var(--dur) var(--ease)}
-.lens:hover{color:var(--note-accent);border-color:var(--note-accent)}
-/* the version buttons press to ink, so they preview ink — not accent */
-.lens--plain:hover,.lens--short:hover{color:var(--ink);border-color:var(--ink-3)}
-.lens[aria-pressed="true"]{background:var(--note-accent);border-color:var(--note-accent);color:var(--surface)}
+.chip:hover{color:var(--ink);border-color:var(--ink-3)}
+.chip--version[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.chip--short{border-style:dashed}
+.chip--short[aria-pressed="true"]{border-style:solid}
+.chip--lens:hover{color:var(--accent);border-color:var(--accent)}
+.chip--lens[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
 /* two versions of one document, side by side so the relationship is legible.
    the full résumé doubles as home: always visible, always the way back. */
 .versions{display:flex;gap:var(--s-2);flex-wrap:wrap;margin-bottom:var(--s-3)}
-.lens--plain[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
-.lens--short{border-style:dashed}
-.lens--short[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg);border-style:solid}
-@media (min-width:1360px){
-  .versions{flex-direction:column;align-items:stretch}
-  .versions .lens{justify-content:center}
-}
+.lenses{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-2);margin-bottom:var(--s-3)}
 /* scheme always; reset joins it only once something has been changed */
 .picker-foot{display:flex;justify-content:flex-end;gap:var(--s-2);flex-wrap:wrap;
   border-top:1px solid var(--rule-2);margin-top:var(--s-3);padding-top:var(--s-3)}
 @media (min-width:1360px){
+  .picker-rail{display:block;position:absolute;top:var(--rail-top);bottom:0;left:32px;width:236px}
+  .notes-control{position:sticky;top:var(--stick);margin:0}
+  .versions{flex-direction:column;align-items:stretch}
   .picker-foot .scheme{max-width:none;margin-left:0}
   .picker-foot .reset{width:100%;justify-content:center}
 }
@@ -237,11 +235,11 @@ h1{font-family:var(--font-display);font-size:var(--step-2);line-height:1.02;lett
 .contact__row > *:not(:last-child)::after{content:"·";display:inline-block;color:var(--ink-3);margin-left:var(--s-3)}
 .contact__where{font-size:10px;letter-spacing:.16em;text-transform:uppercase}
 .contact__links{font-size:11px;letter-spacing:.02em;margin-top:var(--s-2)}
-.contact .status{margin:var(--s-3) 0 0;font-size:12.5px;letter-spacing:.05em}
+.contact .status{margin:var(--s-3) 0 0;font-size:12.5px;letter-spacing:.05em;
+  color:var(--accent);font-weight:600}
 @media (max-width:640px){ .contact__row > *:not(:last-child)::after{content:none} }
 .contact a{color:var(--ink-2);text-decoration:underline;text-decoration-color:var(--rule);text-underline-offset:3px}
 .contact a:hover{text-decoration-color:var(--accent);color:var(--accent)}
-.status{color:var(--accent);font-weight:600}
 .lede{font-size:var(--step-1);line-height:1.58;color:var(--ink-2);max-width:var(--measure);margin:var(--s-5) 0 0}
 
 /* ═══════════════════════════════════════════════════════════════
@@ -250,7 +248,7 @@ h1{font-family:var(--font-display);font-size:var(--step-2);line-height:1.02;lett
 h2{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
   color:var(--ink-3);font-weight:500;margin:var(--s-6) 0 2px;
   padding-bottom:var(--s-2);border-bottom:1px solid var(--rule);
-  scroll-margin-top:72px}   /* anchored headings land below the sticky nav */
+  scroll-margin-top:calc(var(--stick) + var(--s-1))}   /* land below the sticky nav */
 
 /* ═══════════════════════════════════════════════════════════════
    COMPONENT · role entry
@@ -262,7 +260,6 @@ h2{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transfor
 .role-org{font-size:14px;color:var(--ink-3);margin-top:2px}
 .role-org a{color:var(--ink-3);text-decoration:none;border-bottom:1px solid var(--rule)}
 .role-note{font-weight:400;font-size:15px;color:var(--ink-3)}
-.placeholder{color:var(--ink-3);font-style:italic}
 .role-dates{font-family:var(--font-mono);font-size:12.5px;color:var(--ink-2);white-space:nowrap;
   font-variant-numeric:tabular-nums lining-nums}
 .bullets{list-style:none;margin:var(--s-3) 0 0;padding:0;max-width:var(--measure)}
@@ -270,7 +267,7 @@ h2{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transfor
   padding-left:18px;position:relative;margin-bottom:var(--s-2)}
 .bullets li::before{content:"—";position:absolute;left:0;color:var(--ink-3)}
 /* measured figures — see the colour note */
-.bullets b,.measured{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;
+.bullets b{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;
   box-shadow:inset 0 -6px 0 var(--accent-wash)}
 
 /* ═══════════════════════════════════════════════════════════════
@@ -300,11 +297,10 @@ section[aria-labelledby="h-education"] .kv dt{white-space:nowrap}
 #annotations{position:absolute;inset:0;pointer-events:none;z-index:40;display:none}
 body:not([data-notes="off"]) #annotations{display:block}
 
-.note[hidden]{display:none}
 /* no room in the margins — the card falls into the flow under its subject */
 .note--inline{position:static!important;width:auto!important;--tilt:0deg;
   margin:var(--s-3) 0 var(--s-4);box-shadow:none;max-width:var(--measure);
-  background:var(--note-wash);border-color:transparent;padding:var(--s-2) var(--s-3)}
+  background:var(--accent-wash);border-color:transparent;padding:var(--s-2) var(--s-3)}
 .note--inline .note__principle{font-size:13px;padding-bottom:var(--s-1);margin-bottom:var(--s-1)}
 .note--inline .note__body{font-size:13.5px}
 .note--inline .note__proof{margin-top:var(--s-2)}
@@ -319,17 +315,17 @@ body:not([data-notes="off"]) #annotations{display:block}
 /* left-hand notes mirror: the index chip flips to the inside edge */
 .note.is-left .note__index{left:auto;right:-11px}
 .note__index{position:absolute;left:-11px;top:-10px;display:inline-flex;align-items:center;justify-content:center;
-  width:19px;height:19px;border-radius:50%;border:1px solid var(--note-accent);background:var(--bg);
-  font-family:var(--font-mono);font-size:9.5px;font-weight:600;color:var(--note-accent);
+  width:19px;height:19px;border-radius:50%;border:1px solid var(--accent);background:var(--bg);
+  font-family:var(--font-mono);font-size:9.5px;font-weight:600;color:var(--accent);
   transition:background 140ms,color 140ms}
 .note__discipline{display:inline-block;font-family:var(--font-mono);font-size:8.5px;letter-spacing:.16em;
-  text-transform:uppercase;font-weight:600;color:var(--surface);background:var(--note-accent);
+  text-transform:uppercase;font-weight:600;color:var(--surface);background:var(--accent);
   padding:2px 6px;border-radius:2px;margin-bottom:var(--s-2)}
 .note__principle{display:block;font-family:var(--font-sans);font-size:14px;letter-spacing:-.005em;
   font-weight:600;color:var(--ink);padding-bottom:var(--s-2);margin-bottom:var(--s-2);
   border-bottom:1px solid var(--rule)}
 .note__proof-label b.verb{font-family:var(--font-mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--note-accent);font-weight:600}
+  color:var(--accent);font-weight:600}
 .note__body{display:block;font-family:var(--font-hand);font-size:14.5px;line-height:1.34;color:var(--ink-2)}
 .note__body em{font-style:normal;text-decoration:underline;text-underline-offset:2px}
 
@@ -337,13 +333,13 @@ body:not([data-notes="off"]) #annotations{display:block}
 .note__proof{display:block;margin-top:var(--s-3);padding-top:var(--s-2);border-top:1px solid var(--rule)}
 .note__proof-label{display:flex;justify-content:space-between;gap:var(--s-2);align-items:baseline;
   font-family:var(--font-mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3)}
-.note__proof-label b{font-family:var(--font-mono);font-size:10px;letter-spacing:.04em;color:var(--note-accent);font-weight:600}
-.note__proof input[type=range]{width:100%;margin:var(--s-2) 0 0;accent-color:var(--note-accent);height:18px}
+.note__proof-label b{font-family:var(--font-mono);font-size:10px;letter-spacing:.04em;color:var(--accent);font-weight:600}
+.note__proof input[type=range]{width:100%;margin:var(--s-2) 0 0;accent-color:var(--accent);height:18px}
 .swatches{display:flex;gap:6px;margin:var(--s-2) 0 var(--s-2)}
 .swatch{width:26px;height:26px;border-radius:3px;cursor:pointer;padding:0;
   border:1.5px solid var(--rule);transition:transform 120ms,border-color 120ms}
 .swatch[aria-pressed="true"]{border-color:var(--ink);transform:scale(1.08)}
-.swatch:focus-visible{outline:2px solid var(--note-accent);outline-offset:2px}
+.swatch:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .pairs{display:flex;flex-wrap:wrap;gap:5px;margin:var(--s-2) 0}
 .pairbtn{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;
   padding:5px 7px;border-radius:3px;border:1.5px solid var(--rule);background:var(--surface);
@@ -352,7 +348,7 @@ body:not([data-notes="off"]) #annotations{display:block}
   text-transform:uppercase;color:var(--ink-3)}
 .pairbtn[aria-pressed="true"]{border-color:var(--ink);background:var(--accent-wash)}
 .pairbtn[aria-pressed="true"] i{color:var(--ink)}
-.pairbtn:focus-visible{outline:2px solid var(--note-accent);outline-offset:2px}
+.pairbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .swatch-why{font-family:var(--font-sans);font-size:11px;line-height:1.4;color:var(--ink-3);min-height:2.6em}
 .ratio-out{font-family:var(--font-mono);font-size:10.5px;color:var(--ink-2)}
 .ratio-out.is-fail{color:var(--fail);font-weight:600}
@@ -361,14 +357,14 @@ body:not([data-notes="off"]) #annotations{display:block}
 .rule-note.is-fail{color:var(--fail);border-left-color:var(--fail)}
 .proof-btn{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
   cursor:pointer;padding:var(--s-2) var(--s-3);border-radius:3px;width:100%;
-  border:1.5px solid var(--note-accent);background:var(--surface);color:var(--note-accent);font-weight:600;
+  border:1.5px solid var(--accent);background:var(--surface);color:var(--accent);font-weight:600;
   transition:background 140ms,color 140ms}
-.proof-btn[aria-pressed="true"]{background:var(--note-accent);color:var(--surface)}
+.proof-btn[aria-pressed="true"]{background:var(--accent);color:var(--surface)}
 
 /* ── reset — always findable, never persisted ── */
 .reset{display:none;align-items:center;gap:var(--s-2);
   font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;
-  cursor:pointer;background:var(--note-accent);border:1.5px solid var(--note-accent);color:var(--surface);
+  cursor:pointer;background:var(--accent);border:1.5px solid var(--accent);color:var(--surface);
   padding:var(--s-2) var(--s-4);border-radius:3px}
 body.is-overridden .reset{display:inline-flex}
 .reset:hover{filter:brightness(1.12)}
@@ -378,44 +374,38 @@ body.is-overridden .reset{display:inline-flex}
 .as-link{font:inherit;color:var(--accent);background:none;border:0;padding:0;cursor:pointer;
   text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--rule)}
 .as-link:hover{text-decoration-color:var(--accent)}
-.reset-foot{display:none;margin:var(--s-6) 0 calc(var(--s-4) * -1);
-  align-items:center;gap:var(--s-4);flex-wrap:wrap}
-body.is-overridden .reset-foot{display:flex}
-.reset-foot p{margin:0;font-size:13px;color:var(--ink-3);max-width:46ch}
 
-/* ── the 30-second version ── */
-body.condensed .bullets{display:none}
+/* ── the 30-second version: same header, no bullets, no notes ── */
+.short-only{display:none}
+body.condensed .bullets,
+body.condensed .secondary,
+body.condensed .colophon,
+body.condensed .lenses,
+body.condensed .notes-control__label,
+body.condensed .reset,
+body.condensed section[aria-labelledby="h-education"],
+body.condensed section[aria-labelledby="h-contact"]{display:none}
+body.condensed .note,body.condensed .pin{display:none!important}
+body.condensed .short-only{display:block}
+body.condensed .short-contact{display:block}
 body.condensed .role-head > div{display:flex;align-items:baseline;gap:var(--s-2);flex-wrap:wrap}
 body.condensed .role-title{font-size:var(--step-0);font-weight:600}
 body.condensed .role-org{margin-top:0;font-size:14px}
 body.condensed .role-org::before{content:"· "}
-body.condensed .role-entry{padding:var(--s-2) 0;border-bottom:0}
+body.condensed .role-entry{padding:var(--s-3) 0 var(--s-2);border-bottom:0}
 body.condensed h2{margin-top:var(--s-5)}
-body.condensed section[aria-labelledby="h-education"],
-body.condensed section[aria-labelledby="h-contact"]{display:none}
-body.condensed .short-contact{display:block}
-.short-only{display:none}
-body.condensed .short-only{display:block}
-body.condensed .colophon{display:none}
-body.condensed .kv .secondary,body.condensed .lede .secondary{display:none}
-body.condensed .note{display:none!important}
-body.condensed .lenses{display:none}
-body.condensed .reset,body.condensed .reset-foot{display:none!important}
-body.condensed .pin{display:none!important}
-body.condensed .role-entry{padding:var(--s-3) 0 var(--s-2)}
-body.condensed .notes-control__label{display:none}
 .note:hover,.note:focus-visible,.note.is-lit{background:var(--surface);box-shadow:var(--shadow-lift)}
-.note:focus-visible{box-shadow:0 0 0 2px var(--note-accent)}
-.note.is-lit .note__index{background:var(--note-accent);color:var(--surface)}
+.note:focus-visible{box-shadow:0 0 0 2px var(--accent)}
+.note.is-lit .note__index{background:var(--accent);color:var(--surface)}
 
 /* pin dropped onto the annotated element — the pairing that survives every width */
 .pin{display:none;align-items:center;justify-content:center;width:15px;height:15px;line-height:1;
-  border:1px solid var(--note-accent);border-radius:50%;background:var(--bg);color:var(--note-accent);
+  border:1px solid var(--accent);border-radius:50%;background:var(--bg);color:var(--accent);
   font-family:var(--font-mono);font-size:8.5px;font-weight:600;vertical-align:super;margin-left:5px;
   padding:0;cursor:pointer;transition:background 140ms,color 140ms}
 body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
-.pin.is-lit{background:var(--note-accent);color:var(--surface)}
-.is-annotated{box-shadow:inset 0 0 0 1px var(--note-accent);background:var(--note-wash);border-radius:2px}
+.pin.is-lit{background:var(--accent);color:var(--surface)}
+.is-annotated{box-shadow:inset 0 0 0 1px var(--accent);background:var(--accent-wash);border-radius:2px}
 
 /* narrow: cards fall into the flow under their subjects, pins carry the pairing */
 @media (max-width:900px){
@@ -430,7 +420,7 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
   :root[data-theme="dark"]{--bg:#fff;--surface:#fff;--ink:#16161A;--ink-2:#42424C;--ink-3:#6E6E78;
     --rule:#E2E2DC;--rule-2:#EFEFEA;--accent:#1F4FD8;--fail:#C0392B;color-scheme:light}
   .notes-control,#annotations,.pin,.note,
-  .sitenav,.reset-row,.reset-foot,.short-contact{display:none!important}
+  .sitenav,.short-contact{display:none!important}
   body[data-notes="parser"] main > :not(#parserView){display:revert!important}
   body[data-notes="parser"] header > :not(.picker-rail){display:revert!important}
   #parserView{display:none!important}
@@ -475,26 +465,26 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
       </div>
 
       <div class="picker-rail">
-      <div class="notes-control" data-note="the-toggle">
-        <div class="versions" role="group" aria-label="Version">
-          <button type="button" class="lens lens--plain" data-lens="off" aria-pressed="true">The full résumé</button>
-          <button type="button" class="lens lens--short" id="shortBtn" aria-pressed="false">30-second version</button>
-        </div>
-        <div class="notes-control__label">Read this résumé as</div>
-        <div class="lenses" role="group" aria-label="Annotation lens">
-          <button type="button" class="lens" data-lens="hiring" aria-pressed="false" aria-controls="annotations">A hiring manager</button>
-          <button type="button" class="lens" data-lens="engineering" aria-pressed="false" aria-controls="annotations">An engineer</button>
-          <button type="button" class="lens" data-lens="design" aria-pressed="false" aria-controls="annotations">A designer</button>
-          <button type="button" class="lens" data-lens="parser" aria-pressed="false" aria-controls="parserView">An ATS parser</button>
-        </div>
-        <div class="picker-foot">
-          <button class="reset" id="resetBtn" type="button">↺ Reset the page</button>
-          <div class="scheme" role="group" aria-label="Colour scheme">
-            <button type="button" class="scheme-opt" data-scheme="light" aria-pressed="false">Light</button>
-            <button type="button" class="scheme-opt" data-scheme="dark" aria-pressed="false">Dark</button>
+        <div class="notes-control">
+          <div class="versions" role="group" aria-label="Version">
+            <button type="button" class="chip chip--version" id="fullBtn" data-lens="off" aria-pressed="true">The full résumé</button>
+            <button type="button" class="chip chip--version chip--short" id="shortBtn" aria-pressed="false">30-second version</button>
+          </div>
+          <div class="notes-control__label">Read this résumé as</div>
+          <div class="lenses" role="group" aria-label="Annotation lens">
+            <button type="button" class="chip chip--lens" data-lens="hiring" aria-pressed="false" aria-controls="annotations">A hiring manager</button>
+            <button type="button" class="chip chip--lens" data-lens="engineering" aria-pressed="false" aria-controls="annotations">An engineer</button>
+            <button type="button" class="chip chip--lens" data-lens="design" aria-pressed="false" aria-controls="annotations">A designer</button>
+            <button type="button" class="chip chip--lens" data-lens="parser" aria-pressed="false" aria-controls="parserView">An ATS parser</button>
+          </div>
+          <div class="picker-foot">
+            <button class="reset" id="resetBtn" type="button">↺ Reset the page</button>
+            <div class="scheme" role="group" aria-label="Colour scheme">
+              <button type="button" class="scheme-opt" data-scheme="light" aria-pressed="false">Light</button>
+              <button type="button" class="scheme-opt" data-scheme="dark" aria-pressed="false">Dark</button>
+            </div>
           </div>
         </div>
-      </div>
       </div>
 
       <p class="lede" data-note="measure">Frontend engineer with <b>seven years</b> building component-driven applications in TypeScript and React.<span class="secondary"> Polished interfaces, owned end to end — with a focus on interaction detail, web performance, and product instincts that hold up under real users. Equal parts builder and communicator.</span> <span data-note="ai-claim">I build with <b>Claude Code</b> daily, and shipped LLM features to production at Fluint.</span></p>
@@ -629,11 +619,6 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
 
     <p class="short-contact"><button type="button" class="as-link" id="shortToFull">Full page</button> for the detail, or <a href="mailto:kawilliams8@gmail.com">kawilliams8@gmail.com</a> to skip it.</p>
 
-    <div class="reset-foot">
-      <button class="reset" id="resetBtnFoot" type="button">↺ Reset the page</button>
-      <p>You've changed the type or the colour. Neither persists: a reload puts both back the way I built them.</p>
-    </div>
-
     <div class="colophon">
       <p class="colo-line">Katherine Williams · Senior Software Engineer</p>
       <p class="colo-sub">This site runs on one file of good old HTML, CSS and vanilla JavaScript. Built with Claude Code. Updated August, 2026.</p>
@@ -716,29 +701,42 @@ const NOTES = [
         layer = document.getElementById('annotations'),
         reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const shortBtn = document.getElementById('shortBtn');
-  const plainBtn = document.querySelector('.lens--plain');
+  const fullBtn = document.getElementById('fullBtn');
+  const isShort = () => body.classList.contains('condensed');
   /* the version pair is a two-state radio: exactly one pressed unless a lens
      or the machine view has the floor */
   function syncVersion(){
-    const shortOn = body.classList.contains('condensed');
-    shortBtn.setAttribute('aria-pressed', shortOn);
-    plainBtn.setAttribute('aria-pressed', body.dataset.notes === 'off' && !shortOn);
+    shortBtn.setAttribute('aria-pressed', isShort());
+    fullBtn.setAttribute('aria-pressed', body.dataset.notes === 'off' && !isShort());
+  }
+  /* every way back to the detail runs through here */
+  function exitShort(){
+    if (!isShort()) return;
+    body.classList.remove('condensed');
+    applyOverrides();
   }
 
-  const inLens = (n, lens) => n.set === '*' || n.set === lens;
+  const inLens = (n, lens) => n.set === lens;
 
   /* ── overrides: live on :root, never persisted, so a shared link cannot
         open in someone else's experiment. (The chosen lens does persist.) ── */
-  const DEFAULTS = { ratio:'1.25', accent:'#1F4FD8', pair:'system' };
+  const DEFAULTS = { ratio:'1.25', accent:'blue', pair:'system' };
   const state = { ...DEFAULTS };
+  /* two swatches mean a relationship rather than a colour — the page's own
+     accent and "no accent at all" — so each scheme resolves them differently */
   const ACCENTS = [
-    { hex:'#1F4FD8', name:'Institutional blue', why:'Reads as infrastructure. Trusted, slightly cold, and the one nobody argues with.' },
-    { hex:'#16161A', name:'Ink',                why:'No accent at all. Maximum restraint, and links stop announcing themselves, which is a real cost.' },
-    { hex:'#0B5D51', name:'Deep teal',          why:'Considered and calm. Warmer than blue without tipping into product-startup green.' },
-    { hex:'#8C2F39', name:'Oxblood',            why:'Editorial and serious. Closer to a masthead than a product, and it dates the least.' },
-    { hex:'#5B3A9E', name:'Violet',             why:'Craft-forward. Signals design attention, and risks reading decorative on an engineering résumé.' },
-    { hex:'#C79A12', name:'Amber',              why:'Fine at display size, fails at body size. This is the one the readout catches before it ships.' },
+    { key:'blue',    hex:{ light:'#1F4FD8', dark:'#8FA9FF' }, name:'Institutional blue', why:'Reads as infrastructure. Trusted, slightly cold, and the one nobody argues with.' },
+    { key:'ink',     hex:{ light:'#16161A', dark:'#F2F1EA' }, name:'Ink',                why:'No accent at all. Maximum restraint, and links stop announcing themselves, which is a real cost.' },
+    { key:'teal',    hex:'#0B5D51',                           name:'Deep teal',          why:'Considered and calm. Warmer than blue without tipping into product-startup green.' },
+    { key:'oxblood', hex:'#8C2F39',                           name:'Oxblood',            why:'Editorial and serious. Closer to a masthead than a product, and it dates the least.' },
+    { key:'violet',  hex:'#5B3A9E',                           name:'Violet',             why:'Craft-forward. Signals design attention, and risks reading decorative on an engineering résumé.' },
+    { key:'amber',   hex:'#C79A12',                           name:'Amber',              why:'Fine at display size, fails at body size. This is the one the readout catches before it ships.' },
   ];
+  const accentOf = key => {
+    const a = ACCENTS.find(x => x.key === key) || ACCENTS[0];
+    return typeof a.hex === 'string' ? a.hex
+         : a.hex[document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light'];
+  };
   const PAIRS = [
     { id:'system',    name:'System',    display:'var(--font-sans)',
       body:'var(--font-sans)',
@@ -756,20 +754,6 @@ const NOTES = [
       body:'"Baskerville",Georgia,serif',
       why:'All serif. The most traditional and the least distinctive: safe, and indistinguishable from every other résumé that chose safe.' },
   ];
-  /* "no accent" means the text colour — which is light in the dark scheme.
-     the Ink swatch follows the theme, and so does a reader who picked it. */
-  const INKS = { light:'#16161A', dark:'#F2F1EA' };
-  function updateInkSwatch(){
-    const t = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
-    const entry = ACCENTS.find(a => a.name === 'Ink');
-    const prev = entry.hex, next = INKS[t];
-    if (prev === next) return;
-    entry.hex = next;
-    document.querySelectorAll(`.swatch[data-hex="${prev}"]`).forEach(b => {
-      b.dataset.hex = next; b.style.background = next;
-    });
-    if (state.accent === prev){ state.accent = next; applyOverrides(); }
-  }
   const lum = c => { const a = c.map(v => (v/=255) <= .03928 ? v/12.92 : Math.pow((v+.055)/1.055, 2.4));
                      return .2126*a[0] + .7152*a[1] + .0722*a[2]; };
   const rgb = t => t.match(/\d+/g).slice(0,3).map(Number);
@@ -789,11 +773,11 @@ const NOTES = [
     const root = document.documentElement.style;
     root.setProperty('--ratio', state.ratio);
     if (state.accent === DEFAULTS.accent){
-      /* untouched: each scheme keeps its own default accent */
+      /* untouched: let each scheme's own token paint */
       root.removeProperty('--accent'); root.removeProperty('--accent-wash');
     } else {
-      root.setProperty('--accent', state.accent);
-      root.setProperty('--accent-wash', state.accent + '17');
+      root.setProperty('--accent', accentOf(state.accent));
+      root.setProperty('--accent-wash', accentOf(state.accent) + '17');
     }
     const pair = PAIRS.find(p => p.id === state.pair) || PAIRS[0];
     root.setProperty('--font-display', pair.display);
@@ -811,10 +795,8 @@ const NOTES = [
       el.querySelectorAll('b')[1].textContent = state.ratio;
     }
     if (kind === 'accent'){
-      /* judge the accent actually painting the page: the scheme default when
-         untouched, the picked swatch once one is chosen */
-      const live = state.accent === DEFAULTS.accent ? tokenHex('--accent') : state.accent;
-      const r = contrastOf(live), out = el.querySelector('.ratio-out');
+      /* judge the accent actually painting the page, in the scheme it's in */
+      const r = contrastOf(accentOf(state.accent)), out = el.querySelector('.ratio-out');
       const pass = r >= 4.5;
       out.textContent = r.toFixed(2) + ':1 ' + (pass ? '· passes' : '· fails');
       out.classList.toggle('is-fail', !pass);
@@ -823,8 +805,12 @@ const NOTES = [
         ? 'WCAG AA asks for 4.5:1 between text and background. This clears it.'
         : 'Under 4.5:1, the WCAG AA minimum for body text. Fine on my screen, gone in sunlight or on a cheap monitor.';
       rule.classList.toggle('is-fail', !pass);
-      el.querySelectorAll('.swatch').forEach(b => b.setAttribute('aria-pressed', b.dataset.hex === state.accent));
-      const hit = ACCENTS.find(a => a.hex === state.accent);
+      /* swatches re-tint with the scheme, so the row always shows real choices */
+      el.querySelectorAll('.swatch').forEach(b => {
+        b.setAttribute('aria-pressed', b.dataset.key === state.accent);
+        b.style.background = accentOf(b.dataset.key);
+      });
+      const hit = ACCENTS.find(a => a.key === state.accent);
       el.querySelector('.swatch-why').textContent = hit ? hit.name + ' — ' + hit.why : '';
     }
     if (kind === 'pair'){
@@ -845,11 +831,11 @@ const NOTES = [
     if (kind === 'accent'){
       wrap.innerHTML = '<span class="note__proof-label"><b class="verb">Pick an accent</b> <span class="ratio-out"></span></span>' +
         '<span class="swatches">' + ACCENTS.map(a =>
-          `<button class="swatch" data-hex="${a.hex}" style="background:${a.hex}" aria-pressed="false" aria-label="${a.name}" title="${a.name}"></button>`).join('') +
+          `<button class="swatch" data-key="${a.key}" aria-pressed="false" aria-label="${a.name}" title="${a.name}"></button>`).join('') +
         '</span><span class="rule-note"></span><span class="swatch-why"></span>' +
         '<button class="proof-btn" type="button" data-flip>Flip the scheme — re-judge</button>';
       wrap.querySelectorAll('.swatch').forEach(b =>
-        b.addEventListener('click', () => { state.accent = b.dataset.hex; applyOverrides(); }));
+        b.addEventListener('click', () => { state.accent = b.dataset.key; applyOverrides(); }));
       wrap.querySelector('[data-flip]').addEventListener('click', () => flipTheme());
     }
     if (kind === 'pair'){
@@ -879,7 +865,7 @@ const NOTES = [
       `<span class="note__discipline">${n.discipline}</span>` +
       `<span class="note__principle">${n.principle}</span>` +
       `<span class="note__body">${n.body}</span>`;
-    if (n.control){ card.dataset.control = n.control; card.append(buildControl(n.control)); }
+    if (n.control) card.append(buildControl(n.control));
     layer.append(card);
 
     const pin = document.createElement('button');
@@ -893,7 +879,7 @@ const NOTES = [
     /* the pin has to ride an element that may contain a span; <dl> may not */
     const host = el.tagName === 'UL'  ? el.querySelector('li:last-child')
                : el.tagName === 'DL'  ? el.querySelector('dd:last-of-type')
-               : el.tagName === 'DIV' ? (el.querySelector('h3') || el.querySelector('.notes-control__label') || el)
+               : el.tagName === 'DIV' ? (el.querySelector('h3') || el)
                : el;
     host.append(pin);
 
@@ -919,8 +905,7 @@ const NOTES = [
     if (lens === 'off' || lens === 'parser') return;
 
     /* the short view is bullet-free and note-free — the sidebar carries the way back */
-    const short = body.classList.contains('condensed');
-    const active = short ? [] : entries.filter(e => inLens(e.note, lens));
+    const active = isShort() ? [] : entries.filter(e => inLens(e.note, lens));
     const pb = page.getBoundingClientRect();
 
     const GAP = 24;
@@ -1042,7 +1027,7 @@ const NOTES = [
   }
 
   /* ── lens switching ───────────────────────────────────────── */
-  const buttons = [...document.querySelectorAll('.lens[data-lens]')];
+  const buttons = [...document.querySelectorAll('.chip[data-lens]')];
   function setLens(lens){
     if (lens === 'parser') fillParserView();
     const swap = () => {
@@ -1063,10 +1048,8 @@ const NOTES = [
   }
   buttons.forEach(b => b.addEventListener('click', () =>
     setLens(body.dataset.notes === b.dataset.lens ? 'off' : b.dataset.lens)));
-  /* home means home: the plain button also walks back out of the short view */
-  document.querySelector('.lens--plain').addEventListener('click', () => {
-    if (body.classList.contains('condensed')){ body.classList.remove('condensed'); applyOverrides(); }
-  });
+  /* home means home: the full-résumé chip also walks back out of the short view */
+  fullBtn.addEventListener('click', exitShort);
   /* nav promises the document — if the target section is hidden by the current
      view (machine view, or contact in the short view), return to the full
      résumé first. scrolls by hand so the URL never grows a hash. */
@@ -1077,26 +1060,25 @@ const NOTES = [
       if (!t) return;
       if (t.offsetParent === null){
         if (body.dataset.notes === 'parser') setLens('off');
-        if (body.classList.contains('condensed')){ body.classList.remove('condensed'); applyOverrides(); }
+        exitShort();
       }
       t.scrollIntoView();
     }));
   /* the short view's own way back into the detail */
-  document.getElementById('shortToFull').addEventListener('click', () => {
-    body.classList.remove('condensed');
-    applyOverrides();
-  });
+  document.getElementById('shortToFull').addEventListener('click', exitShort);
   /* the wordmark is the way home: plain résumé, top of page */
   document.querySelector('.wordmark').addEventListener('click', e => {
     e.preventDefault();
-    if (body.classList.contains('condensed')){ body.classList.remove('condensed'); applyOverrides(); }
+    exitShort();
     if (body.dataset.notes !== 'off') setLens('off');
     window.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'});
   });
 
-  const doReset = () => { Object.assign(state, DEFAULTS); body.classList.remove('condensed'); applyOverrides(); };
-  document.getElementById('resetBtn').addEventListener('click', doReset);
-  document.getElementById('resetBtnFoot').addEventListener('click', doReset);
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    Object.assign(state, DEFAULTS);
+    body.classList.remove('condensed');
+    applyOverrides();
+  });
 
   /* ── scheme: a reader preference, not an experiment — persists, never resets ── */
   const schemeBtns = [...document.querySelectorAll('.scheme-opt')];
@@ -1105,9 +1087,8 @@ const NOTES = [
   function setTheme(t, save){
     document.documentElement.dataset.theme = t;
     if (save !== false) try { localStorage.setItem('kw:theme', t); } catch(e){}
-    updateInkSwatch();
     syncScheme();
-    document.querySelectorAll('[data-sync]').forEach(sync);   /* the readout re-judges */
+    applyOverrides();   /* a picked accent re-resolves, and the readout re-judges */
   }
   function flipTheme(){ setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'); }
   schemeBtns.forEach(b => b.addEventListener('click', () => setTheme(b.dataset.scheme)));
@@ -1115,12 +1096,8 @@ const NOTES = [
   /* the top-level way into the short view — same rules as the note's button:
      leaving it returns to the plain résumé, not to an annotated one */
   shortBtn.addEventListener('click', () => {
-    if (body.classList.contains('condensed')){
-      body.classList.remove('condensed');
-      setLens('off');
-    } else {
-      body.classList.add('condensed');
-    }
+    if (isShort()){ exitShort(); setLens('off'); return; }
+    body.classList.add('condensed');
     applyOverrides();
   });
   /* follow the system until the reader states a preference */
@@ -1130,7 +1107,6 @@ const NOTES = [
 
   let start = 'off';
   try { const saved = localStorage.getItem('kw:lens'); if (saved && (saved === 'off' || saved === 'parser' || LENSES[saved])) start = saved; } catch(e){}
-  updateInkSwatch();
   applyOverrides();
   setLens(start);
   setTimeout(layout, 200);
