@@ -1157,7 +1157,8 @@ const NOTES = [
       t.scrollIntoView();
     }));
   /* the short view's own way back into the detail */
-  document.getElementById('shortToFull').addEventListener('click', exitShort);
+  /* it sits at the foot of the short view, so it goes to the top of the long one */
+  document.getElementById('shortToFull').addEventListener('click', () => { exitShort(); toTop(); });
   /* the wordmark is the way home: plain résumé, top of page */
   document.querySelector('.wordmark').addEventListener('click', e => {
     e.preventDefault();
