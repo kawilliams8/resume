@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Katherine Williams — Senior Software Engineer</title>
+<meta name="description" content="Fullstack engineer, seven years in React, TypeScript and Node. Design systems, accessibility, and LLM features shipped to production. Colorado, remote.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FDFDFB" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#32312B" media="(prefers-color-scheme: dark)">
+<script>
+/* resolve the scheme before first paint: a saved choice wins, else the system's */
+(function(){try{var t=localStorage.getItem('kw:theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=t}catch(e){}})();
+</script>
+<link rel="canonical" href="https://katherinewilliams.co/">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="%2316161A"/><text x="16" y="21.5" text-anchor="middle" font-family="Menlo,Consolas,monospace" font-size="13" font-weight="600" fill="%23FDFDFB">KW</text></svg>'>
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://katherinewilliams.co/">
+<meta property="og:title" content="Katherine Williams — Senior Software Engineer">
+<meta property="og:description" content="Fullstack engineer, seven years in React, TypeScript and Node. Read the full résumé, or the 30-second version.">
+<meta property="og:image" content="https://katherinewilliams.co/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Katherine Williams",
+  "jobTitle": ["Senior Software Engineer", "Senior Frontend Engineer", "Full-Stack Engineer", "Product Engineer", "UI Engineer"],
+  "url": "https://katherinewilliams.co",
+  "email": "mailto:kawilliams8@gmail.com",
+  "address": { "@type": "PostalAddress", "addressRegion": "CO", "addressCountry": "US" },
+  "sameAs": [
+    "https://linkedin.com/in/kawilliamsco",
+    "https://github.com/kawilliams8",
+    "https://racerandpacer.com"
+  ]
+}
+</script>
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   TOKENS
+   Everything visual resolves from here. Port this block as-is;
+   in the Vite app it becomes tokens.css imported once at the root.
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+  /* color */
+  --bg:#FDFDFB;
+  --surface:#FFFFFF;
+  --ink:#16161A;          /* headings, emphasis            */
+  --ink-2:#42424C;        /* body copy, 9.75:1 on --bg     */
+  --ink-3:#6E6E78;        /* labels, meta, 5.4:1 on --bg   */
+  --rule:#E2E2DC;
+  --rule-2:#EFEFEA;
+  --accent:#1F4FD8;       /* links, status, notes, measured figures */
+  --accent-wash:rgba(31,79,216,.09);
+  --shadow:0 6px 20px -10px rgba(22,22,26,.35);
+  --shadow-lift:0 10px 26px -10px rgba(22,22,26,.45);
+  --fail:#C0392B;
+  color-scheme:light;
+
+  /* type */
+  --font-sans: -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;
+  --font-display: var(--font-sans);   /* headings — swappable in the designer lens */
+  --font-body: var(--font-sans);      /* prose */
+  --font-mono: ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  --font-hand: "Bradley Hand","Noteworthy","Marker Felt","Chalkboard SE","Segoe Print",cursive;
+  /* scale — every prose size derives from one base and one ratio.
+     drag the ratio in the designer lens and the whole page re-proportions. */
+  --base:16px;
+  --ratio:1.25;
+  --step-0:var(--base);
+  --step-1:calc(var(--base) * var(--ratio));
+  --step-2:clamp(28px, 6vw, calc(var(--base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio)));
+  --measure:66ch;
+
+  /* space — 4px base, doubled between sections */
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:20px; --s-5:32px; --s-6:52px;
+
+  /* sticky geometry — the nav parks at 0, everything else parks under it */
+  --stick:68px;        /* top offset for anything sticky below the nav */
+  --rail-top:150px;    /* where the picker rail starts, level with the name */
+
+  /* motion */
+  --dur:240ms; --ease:cubic-bezier(.22,1,.36,1);
+}
+/* the same tokens, resolved for reading in the dark. still one accent —
+   and the contrast readout re-judges every color against this background live */
+:root[data-theme="dark"]{
+  --bg:#32312B;
+  --surface:#3A3932;
+  --ink:#F2F1EA;
+  --ink-2:#CCCBC1;
+  --ink-3:#A09F95;
+  --rule:#525148;
+  --rule-2:#424138;
+  --accent:#8FA9FF;
+  --accent-wash:rgba(143,169,255,.16);
+  --shadow:0 8px 22px -10px rgba(0,0,0,.7);
+  --shadow-lift:0 12px 28px -10px rgba(0,0,0,.8);
+  --fail:#FF7A66;
+  color-scheme:dark;
+}
+
+@media (prefers-reduced-motion: reduce){ :root{ --dur:1ms } }
+
+/* The layer takes the page's accent. One hue on the page, always — which is
+   what the color note claims, so the layer had better not contradict it. */
+
+/* ═══════════════════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════════════════ */
+*{box-sizing:border-box}
+@media (prefers-reduced-motion: no-preference){ html{scroll-behavior:smooth} }
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--font-body);font-size:var(--step-0);line-height:1.62;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+a{color:var(--accent)}
+:where(button,a):focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT · notes control
+   Part of the page, not browser chrome. It's the second-most
+   important thing above the fold, so it's sized like it.
+   ═══════════════════════════════════════════════════════════════ */
+.notes-control{margin:var(--s-5) 0 0;padding:var(--s-3) var(--s-4);
+  border:1px solid var(--rule);border-radius:3px;
+  background:var(--surface);transition:border-color var(--dur) var(--ease)}
+/* wide screens: the picker vacates the column and holds the left gutter — it
+   scrolls with the page, then pins below the sticky nav. annotation cards go
+   right-only at these widths (see layout()) so the two never share a gutter. */
+.picker-rail{display:contents}
+.notes-control__label{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:var(--s-3);
+  display:flex;align-items:center;gap:var(--s-3);flex-wrap:wrap}
+/* lenses hidden until their copy is done — see LENSES_LIVE in the script */
+:root[data-lenses="off"] .lenses,
+:root[data-lenses="off"] .notes-control__label{display:none}
+:root[data-lenses="off"] .versions{margin-bottom:0}
+/* one chip, two families: versions of the document press to ink, lenses onto
+   it press to accent. hover always previews the press. */
+.chip{display:inline-flex;align-items:baseline;justify-content:center;gap:var(--s-2);cursor:pointer;
+  font-family:var(--font-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+  padding:var(--s-2) var(--s-3);border-radius:3px;
+  border:1.5px solid var(--rule);background:var(--surface);color:var(--ink-3);
+  transition:background var(--dur) var(--ease),color var(--dur) var(--ease),border-color var(--dur) var(--ease)}
+.chip:hover{color:var(--ink);border-color:var(--ink-3)}
+.chip--version[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.chip--short{border-style:dashed}
+.chip--short[aria-pressed="true"]{border-style:solid}
+.chip--lens:hover{color:var(--accent);border-color:var(--accent)}
+.chip--lens[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+/* two versions of one document, side by side so the relationship is legible.
+   the full résumé doubles as home: always visible, always the way back. */
+.versions{display:flex;gap:var(--s-2);flex-wrap:wrap;margin-bottom:var(--s-3)}
+.lenses{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-2);margin-bottom:var(--s-3)}
+/* scheme always; reset joins it only once something has been changed */
+.picker-foot{display:flex;justify-content:flex-end;gap:var(--s-2);flex-wrap:wrap;
+  border-top:1px solid var(--rule-2);margin-top:var(--s-3);padding-top:var(--s-3)}
+@media (min-width:1360px){
+  .picker-rail{display:block;position:absolute;top:var(--rail-top);bottom:0;left:32px;width:236px}
+  .notes-control{position:sticky;top:var(--stick);margin:0}
+  .versions{flex-direction:column;align-items:stretch}
+  .picker-foot .scheme{max-width:none;margin-left:0}
+  .picker-foot .reset{width:100%;justify-content:center}
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT · parser view
+   The fourth audience gets a real lens: the résumé body swaps for
+   what a machine extracts — text from the live DOM, then JSON-LD.
+   Header and picker stay visible so the way back is obvious.
+   ═══════════════════════════════════════════════════════════════ */
+#parserView{display:none;margin:var(--s-5) 0 0}
+body[data-notes="parser"] #parserView{display:block}
+body[data-notes="parser"] main > :not(#parserView):not(header){display:none}
+/* the machine view IS the page in this lens — the visible header would only
+   duplicate what the text layer already carries. the picker stays. */
+body[data-notes="parser"] header > :not(.picker-rail){display:none}
+.machine-block{margin:0 0 var(--s-4)}
+#parserView .machine-cap{font-family:var(--font-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
+  margin:0;padding:var(--s-2) var(--s-3);background:var(--rule-2);
+  border:1px solid var(--rule);border-bottom:0;border-radius:3px 3px 0 0}
+#parserView pre{font-family:var(--font-mono);font-size:12px;line-height:1.55;color:var(--ink-2);
+  background:var(--surface);border:1px solid var(--rule);border-radius:0 0 3px 3px;
+  padding:var(--s-3) var(--s-3) var(--s-4);margin:0;white-space:pre-wrap;word-break:break-word}
+#parserText{counter-reset:ln}
+#parserText i{display:block;font-style:normal;counter-increment:ln}
+#parserText i::before{content:counter(ln,decimal-leading-zero);display:inline-block;width:3ch;
+  margin-right:var(--s-3);color:var(--ink-3);opacity:.5;text-align:right;user-select:none}
+#parserJson b,#parserMeta b{color:var(--accent);font-weight:500}
+#parserView .machine-foot{font-family:var(--font-mono);font-size:11px;line-height:1.6;color:var(--ink-3);
+  margin:var(--s-4) 0 0;padding:0 var(--s-3)}   /* spans the blocks, text aligns with theirs */
+/* ═══════════════════════════════════════════════════════════════
+   LAYOUT
+   One measure. The annotation layer overlays — it never occupies
+   layout space, so turning it off costs nothing.
+   ═══════════════════════════════════════════════════════════════ */
+.page{max-width:1400px;margin:0 auto;padding:var(--s-6) var(--s-5) 120px;position:relative}
+/* the column holds the same position in every state — nothing reflows when a
+   lens opens, so the entrance animation has a still page to land on */
+main{max-width:760px;margin:0 auto}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT · site nav
+   ═══════════════════════════════════════════════════════════════ */
+.sitenav{display:flex;justify-content:space-between;align-items:center;gap:var(--s-4);flex-wrap:wrap;
+  position:sticky;top:0;z-index:60;background:var(--bg);
+  padding:var(--s-3) 0;border-bottom:1px solid var(--ink);margin-bottom:var(--s-6);
+  transition:background-color var(--dur) var(--ease)}
+.sitenav .wordmark{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.18em;font-weight:600;
+  color:var(--ink);text-decoration:none}
+.sitenav .wordmark:hover{color:var(--accent)}
+.sitenav ul{list-style:none;display:flex;gap:var(--s-4);margin:0;padding:0}
+.sitenav a{font-family:var(--font-mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-3);text-decoration:none;white-space:nowrap}
+.sitenav a:hover{color:var(--ink)}
+/* the scheme control names both states and marks the one you're in */
+.scheme{display:flex;flex:1;max-width:220px;margin-left:auto}
+.scheme-opt{flex:1;font-family:var(--font-mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;font-weight:600;
+  cursor:pointer;color:var(--ink-3);background:none;border:1.5px solid var(--rule);padding:5px 0;text-align:center;
+  transition:color var(--dur) var(--ease),background var(--dur) var(--ease),border-color var(--dur) var(--ease)}
+.scheme-opt:first-child{border-radius:3px 0 0 3px;border-right:0}
+.scheme-opt:last-child{border-radius:0 3px 3px 0}
+.scheme-opt:hover{color:var(--ink)}
+.scheme-opt[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT · résumé header
+   ═══════════════════════════════════════════════════════════════ */
+h1{font-family:var(--font-display);font-size:var(--step-2);line-height:1.02;letter-spacing:-.032em;font-weight:600;margin:0 0 var(--s-2)}
+.role{font-family:var(--font-display);font-size:var(--step-1);color:var(--ink-2);margin-bottom:var(--s-3)}
+/* three registers, one voice: location as a quiet label, links a step up,
+   the status line in accent. separators live in the pseudo layer — punctuation
+   for people, invisible to innerText, so the machine copy stays a clean list */
+.contact{font-family:var(--font-mono);color:var(--ink-3);
+  padding-bottom:var(--s-4);border-bottom:1px solid var(--rule)}
+.contact__row{display:flex;flex-wrap:wrap;gap:var(--s-1) var(--s-3)}
+.contact__row > *:not(:last-child)::after{content:"·";display:inline-block;color:var(--ink-3);margin-left:var(--s-3)}
+.contact__links{font-size:11px;letter-spacing:.02em}
+.contact__where{font-size:10px;letter-spacing:.16em;text-transform:uppercase;margin-top:var(--s-3)}
+.contact .status{margin:0 0 var(--s-3);font-size:12.5px;letter-spacing:.05em;
+  color:var(--accent);font-weight:600}
+@media (max-width:640px){ .contact__row > *:not(:last-child)::after{content:none} }
+.contact a{color:var(--ink-2);text-decoration:underline;text-decoration-color:var(--rule);text-underline-offset:3px}
+.contact a:hover{text-decoration-color:var(--accent);color:var(--accent)}
+.lede{font-size:var(--step-1);line-height:1.58;color:var(--ink-2);max-width:var(--measure);margin:var(--s-5) 0 0}
+/* emphasis lives in the summary and nowhere else. the bullets are already the
+   detail — picking phrases out of them was decoration pretending to be a system */
+.lede b{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+/* the AI claim stands on its own line — near enough to read as part of the
+   summary, separate enough to be answerable for */
+.lede--ai{margin-top:var(--s-3)}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT · section heading
+   ═══════════════════════════════════════════════════════════════ */
+h2{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent);font-weight:600;margin:var(--s-6) 0 2px;
+  padding-bottom:var(--s-2);border-bottom:1px solid var(--rule);
+  scroll-margin-top:calc(var(--stick) + var(--s-1))}   /* land below the sticky nav */
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT · role entry
+   ═══════════════════════════════════════════════════════════════ */
+.role-entry{padding:var(--s-4) 0 var(--s-2);border-bottom:1px solid var(--rule-2)}
+.role-entry:last-of-type{border-bottom:0}
+.role-head{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s-4)}
+.role-title{font-family:var(--font-display);font-size:var(--step-1);font-weight:600;letter-spacing:-.016em;margin:0}
+.role-org{font-size:14px;color:var(--ink-3);margin-top:2px}
+.role-org a{color:var(--ink-3);text-decoration:none;border-bottom:1px solid var(--rule)}
+.role-note{font-weight:400;font-size:15px;color:var(--ink-3)}
+.role-dates{font-family:var(--font-mono);font-size:12.5px;color:var(--ink-2);white-space:nowrap;
+  font-variant-numeric:tabular-nums lining-nums}
+.bullets{list-style:none;margin:var(--s-3) 0 0;padding:0;max-width:var(--measure)}
+.bullets li{font-size:var(--step-0);line-height:1.6;color:var(--ink-2);
+  padding-left:18px;position:relative;margin-bottom:var(--s-2)}
+.bullets li::before{content:"—";position:absolute;left:0;color:var(--ink-3)}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT · key/value list
+   ═══════════════════════════════════════════════════════════════ */
+.kv{display:grid;grid-template-columns:fit-content(300px) minmax(0,1fr);gap:2px var(--s-5);margin:var(--s-4) 0 0}
+/* school names read as one line — the column has the room */
+section[aria-labelledby="h-education"] .kv dt{white-space:nowrap}
+@media (max-width:900px){ section[aria-labelledby="h-education"] .kv dt{white-space:normal} }
+.kv dt{font-family:var(--font-mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--ink-3);padding-top:6px}
+.kv dd{margin:0 0 var(--s-3);font-size:var(--step-0);color:var(--ink-2)}
+
+/* two lines, two registers: the mono-caps claim, then the detail in quiet
+   sentence-case sans */
+.colophon{margin-top:var(--s-6);padding-top:var(--s-4);border-top:1px solid var(--rule);
+  font-family:var(--font-mono);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
+.colophon p{margin:0}
+.colophon .colo-sub{font-family:var(--font-sans);text-transform:none;letter-spacing:.02em;
+  font-size:10.5px;margin-top:4px}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT · annotation layer
+   Overlay only. Absolutely positioned against .page, z-index above
+   content, display:none when off — zero layout cost.
+   ═══════════════════════════════════════════════════════════════ */
+#annotations{position:absolute;inset:0;pointer-events:none;z-index:40;display:none}
+body:not([data-notes="off"]) #annotations{display:block}
+
+/* no room in the margins — the card falls into the flow under its subject */
+.note--inline{position:static!important;width:auto!important;--tilt:0deg;
+  margin:var(--s-3) 0 var(--s-4);box-shadow:none;max-width:var(--measure);
+  background:var(--accent-wash);border-color:transparent;padding:var(--s-2) var(--s-3)}
+.note--inline .note__principle{font-size:13px;padding-bottom:var(--s-1);margin-bottom:var(--s-1)}
+.note--inline .note__body{font-size:13.5px}
+.note--inline .note__proof{margin-top:var(--s-2)}
+.note--inline .note__index{position:static;display:inline-flex;margin:0 var(--s-2) var(--s-2) 0;vertical-align:middle}
+.note{--tilt:-.4deg;transform:rotate(var(--tilt));transform-origin:left top;
+  position:absolute;width:236px;pointer-events:auto;outline:none;cursor:default;
+  background:var(--surface);border:1px solid var(--rule);
+  border-radius:2px;box-shadow:var(--shadow);
+  padding:var(--s-2) var(--s-3) var(--s-3);
+  transition:box-shadow 140ms,background 140ms}
+.note:nth-of-type(even){--tilt:.35deg}
+/* left-hand notes mirror: the index chip flips to the inside edge */
+.note.is-left .note__index{left:auto;right:-11px}
+.note__index{position:absolute;left:-11px;top:-10px;display:inline-flex;align-items:center;justify-content:center;
+  width:19px;height:19px;border-radius:50%;border:1px solid var(--accent);background:var(--bg);
+  font-family:var(--font-mono);font-size:9.5px;font-weight:600;color:var(--accent);
+  transition:background 140ms,color 140ms}
+.note__discipline{display:inline-block;font-family:var(--font-mono);font-size:8.5px;letter-spacing:.16em;
+  text-transform:uppercase;font-weight:600;color:var(--surface);background:var(--accent);
+  padding:2px 6px;border-radius:2px;margin-bottom:var(--s-2)}
+.note__principle{display:block;font-family:var(--font-sans);font-size:14px;letter-spacing:-.005em;
+  font-weight:600;color:var(--ink);padding-bottom:var(--s-2);margin-bottom:var(--s-2);
+  border-bottom:1px solid var(--rule)}
+.note__proof-label b.verb{font-family:var(--font-mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--accent);font-weight:600}
+.note__body{display:block;font-family:var(--font-hand);font-size:14.5px;line-height:1.34;color:var(--ink-2)}
+.note__body em{font-style:normal;text-decoration:underline;text-underline-offset:2px}
+
+/* ── proofs: a control inside the note that makes the claim ── */
+.note__proof{display:block;margin-top:var(--s-3);padding-top:var(--s-2);border-top:1px solid var(--rule)}
+.note__proof-label{display:flex;justify-content:space-between;gap:var(--s-2);align-items:baseline;
+  font-family:var(--font-mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3)}
+.note__proof-label b{font-family:var(--font-mono);font-size:10px;letter-spacing:.04em;color:var(--accent);font-weight:600}
+.note__proof input[type=range]{width:100%;margin:var(--s-2) 0 0;accent-color:var(--accent);height:18px}
+.swatches{display:flex;gap:6px;margin:var(--s-2) 0 var(--s-2)}
+.swatch{width:26px;height:26px;border-radius:3px;cursor:pointer;padding:0;
+  border:1.5px solid var(--rule);transition:transform 120ms,border-color 120ms}
+.swatch[aria-pressed="true"]{border-color:var(--ink);transform:scale(1.08)}
+.swatch:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.pairs{display:flex;flex-wrap:wrap;gap:5px;margin:var(--s-2) 0}
+.pairbtn{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;
+  padding:5px 7px;border-radius:3px;border:1.5px solid var(--rule);background:var(--surface);
+  color:var(--ink-2);font-size:15px;line-height:1;transition:border-color 120ms,background 120ms}
+.pairbtn i{font-family:var(--font-mono);font-style:normal;font-size:7px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-3)}
+.pairbtn[aria-pressed="true"]{border-color:var(--ink);background:var(--accent-wash)}
+.pairbtn[aria-pressed="true"] i{color:var(--ink)}
+.pairbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.swatch-why{font-family:var(--font-sans);font-size:11px;line-height:1.4;color:var(--ink-3);min-height:2.6em}
+.ratio-out{font-family:var(--font-mono);font-size:10.5px;color:var(--ink-2)}
+.ratio-out.is-fail{color:var(--fail);font-weight:600}
+.rule-note{display:block;font-family:var(--font-sans);font-size:10.5px;line-height:1.4;
+  color:var(--ink-3);margin-bottom:var(--s-2);padding-left:var(--s-2);border-left:2px solid var(--rule)}
+.rule-note.is-fail{color:var(--fail);border-left-color:var(--fail)}
+.proof-btn{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  cursor:pointer;padding:var(--s-2) var(--s-3);border-radius:3px;width:100%;
+  border:1.5px solid var(--accent);background:var(--surface);color:var(--accent);font-weight:600;
+  transition:background 140ms,color 140ms}
+.proof-btn[aria-pressed="true"]{background:var(--accent);color:var(--surface)}
+
+/* ── reset — always findable, never persisted ── */
+.reset{display:none;align-items:center;gap:var(--s-2);
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+  cursor:pointer;background:var(--accent);border:1.5px solid var(--accent);color:var(--surface);
+  padding:var(--s-2) var(--s-4);border-radius:3px}
+body.is-overridden .reset{display:inline-flex}
+.reset:hover{filter:brightness(1.12)}
+.short-contact{display:none;margin:var(--s-5) 0 0;padding-top:var(--s-4);border-top:1px solid var(--rule);
+  font-size:var(--step-1);color:var(--ink-2)}
+/* changes the view, not the address — a button that reads as a link */
+.as-link{font:inherit;color:var(--accent);background:none;border:0;padding:0;cursor:pointer;
+  text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--rule)}
+.as-link:hover{text-decoration-color:var(--accent)}
+
+/* ── the 30-second version: same header, one line per role, no notes ── */
+.short-only{display:none}
+/* one broad line where the bullets were — enough to turn a date list back
+   into a career, short enough to still scan in thirty seconds */
+.role-summary{margin:var(--s-2) 0 0;font-size:var(--step-0);line-height:1.5;
+  color:var(--ink-2)}   /* full column — one line each, so the eye keeps its rhythm */
+body.condensed .bullets,
+body.condensed .secondary,
+body.condensed .colophon,
+body.condensed .lenses,
+body.condensed .notes-control__label,
+body.condensed .reset,
+body.condensed section[aria-labelledby="h-fit"],
+body.condensed section[aria-labelledby="h-education"],
+body.condensed section[aria-labelledby="h-contact"]{display:none}
+body.condensed .note,body.condensed .pin{display:none!important}
+body.condensed .short-only{display:block}
+body.condensed .short-contact{display:block}
+body.condensed .role-head > div{display:flex;align-items:baseline;gap:var(--s-2);flex-wrap:wrap}
+body.condensed .role-title{font-size:var(--step-0);font-weight:600}
+/* company names read as ink beside the title — the accent stays earned by
+   the section headings and the status line */
+body.condensed .role-org{margin-top:0;font-size:14px;color:var(--ink-2)}
+body.condensed .role-org::before{content:"· ";color:var(--ink-3)}
+body.condensed .role-entry{padding:var(--s-3) 0 var(--s-2);border-bottom:0}
+body.condensed h2{margin-top:var(--s-5)}
+.note:hover,.note:focus-visible,.note.is-lit{background:var(--surface);box-shadow:var(--shadow-lift)}
+.note:focus-visible{box-shadow:0 0 0 2px var(--accent)}
+.note.is-lit .note__index{background:var(--accent);color:var(--surface)}
+
+/* pin dropped onto the annotated element — the pairing that survives every width */
+.pin{display:none;align-items:center;justify-content:center;width:15px;height:15px;line-height:1;
+  border:1px solid var(--accent);border-radius:50%;background:var(--bg);color:var(--accent);
+  font-family:var(--font-mono);font-size:8.5px;font-weight:600;vertical-align:super;margin-left:5px;
+  padding:0;cursor:pointer;transition:background 140ms,color 140ms}
+body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
+.pin.is-lit{background:var(--accent);color:var(--surface)}
+.is-annotated{box-shadow:inset 0 0 0 1px var(--accent);background:var(--accent-wash);border-radius:2px}
+
+/* narrow: cards fall into the flow under their subjects, pins carry the pairing */
+@media (max-width:900px){
+  .page{padding:var(--s-5) var(--s-4) 80px}
+  .kv{grid-template-columns:1fr}
+  .kv dt{padding-top:var(--s-3)}
+  .role-head{flex-direction:column;gap:var(--s-1)}
+}
+
+@media print{
+  /* paper is always the light scheme */
+  :root[data-theme="dark"]{--bg:#fff;--surface:#fff;--ink:#16161A;--ink-2:#42424C;--ink-3:#6E6E78;
+    --rule:#E2E2DC;--rule-2:#EFEFEA;--accent:#1F4FD8;--fail:#C0392B;color-scheme:light}
+  .notes-control,#annotations,.pin,.note,
+  .sitenav,.short-contact{display:none!important}
+  body[data-notes="parser"] main > :not(#parserView){display:revert!important}
+  body[data-notes="parser"] header > :not(.picker-rail){display:revert!important}
+  #parserView{display:none!important}
+  body{background:#fff;font-size:11pt}
+  .page{max-width:none;padding:0}
+  main{max-width:none}
+  a{color:inherit;text-decoration:none}
+}
+</style>
+<noscript><style>.notes-control{display:none}</style></noscript>
+</head>
+<body data-notes="off">
+
+<div class="page" id="page">
+
+  <nav class="sitenav" aria-label="Primary">
+    <a href="/" class="wordmark">KATHERINE WILLIAMS</a>
+    <ul>
+      <li><a href="#h-experience">Experience</a></li>
+      <li><a href="#h-projects">Projects</a></li>
+      <li><a href="#h-fit">Skills</a></li>
+      <li><a href="#h-contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <header>
+      <h1 data-note="type-scale">Katherine Williams</h1>
+      <p class="role" data-note="role-type">Senior Software Engineer</p>
+      <div class="contact">
+        <p class="status" data-note="status">Next role: senior, product-minded, frontend-leaning, AI-forward</p>
+        <div class="contact__row contact__links">
+          <a href="mailto:kawilliams8@gmail.com">kawilliams8@gmail.com</a>
+          <a href="https://katherinewilliams.co">katherinewilliams.co</a>
+          <a href="https://linkedin.com/in/kawilliamsco">linkedin.com/in/kawilliamsco</a>
+          <a href="https://github.com/kawilliams8">github.com/kawilliams8</a>
+        </div>
+        <div class="contact__row contact__where">
+          <span>Colorado</span>
+          <span>Remote</span>
+        </div>
+      </div>
+
+      <div class="picker-rail">
+        <div class="notes-control">
+          <div class="versions" role="group" aria-label="Version">
+            <button type="button" class="chip chip--version" id="fullBtn" data-lens="off" aria-pressed="true">The full résumé</button>
+            <button type="button" class="chip chip--version chip--short" id="shortBtn" aria-pressed="false">30-second version</button>
+          </div>
+          <div class="notes-control__label">Read this résumé as</div>
+          <div class="lenses" role="group" aria-label="Annotation lens">
+            <button type="button" class="chip chip--lens" data-lens="hiring" aria-pressed="false" aria-controls="annotations">A hiring manager</button>
+            <button type="button" class="chip chip--lens" data-lens="engineering" aria-pressed="false" aria-controls="annotations">An engineer</button>
+            <button type="button" class="chip chip--lens" data-lens="design" aria-pressed="false" aria-controls="annotations">A designer</button>
+            <button type="button" class="chip chip--lens" data-lens="parser" aria-pressed="false" aria-controls="parserView">An ATS parser</button>
+          </div>
+          <div class="picker-foot">
+            <button class="reset" id="resetBtn" type="button">↺ Reset the page</button>
+            <div class="scheme" role="group" aria-label="Color scheme">
+              <button type="button" class="scheme-opt" data-scheme="light" aria-pressed="false">Light</button>
+              <button type="button" class="scheme-opt" data-scheme="dark" aria-pressed="false">Dark</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="lede" data-note="measure">Fullstack engineer, <b>seven years</b> building component-driven applications in React, TypeScript, Node and other modern backend technologies.<span class="secondary"> Polished interfaces, owned end to end. I sweat interaction detail and web performance, and my product instincts hold up with real users. Equal parts builder and communicator.</span></p>
+      <p class="lede lede--ai" data-note="ai-claim">I build with <b>Claude Code</b> daily and ship <b>LLM features</b> to production.</p>
+    </header>
+
+    <!-- ══ the machine's copy — filled from the live DOM when the parser lens opens ══ -->
+    <div id="parserView" aria-label="Machine-readable view">
+      <div class="machine-block">
+        <p class="machine-cap">01 · text layer — main.innerText</p>
+        <pre id="parserText"></pre>
+      </div>
+      <div class="machine-block">
+        <p class="machine-cap">02 · structured layer — application/ld+json</p>
+        <pre id="parserJson"></pre>
+      </div>
+      <div class="machine-block">
+        <p class="machine-cap">03 · meta layer — what a crawler reads first</p>
+        <pre id="parserMeta"></pre>
+      </div>
+      <p class="machine-foot">Extracted live from this page's DOM — nothing here is hand-maintained, so it cannot drift from the résumé it describes. The whole document ships in the initial HTML: an ATS, a crawler, or an LLM gets all of it without executing a line of JavaScript.</p>
+    </div>
+
+    <section aria-labelledby="h-experience">
+      <h2 id="h-experience" data-note="proximity">Experience</h2>
+
+      <article class="role-entry">
+        <div class="role-head">
+          <div>
+            <h3 class="role-title">Customer Success Engineer</h3>
+            <p class="role-org">Fluint</p>
+          </div>
+          <p class="role-dates" data-note="figures"><span class="secondary">Oct </span>2025 — <span class="secondary">May </span>2026</p>
+        </div>
+        <p class="short-only role-summary">Owned features end to end on a multi-tenant AI product, in React and TypeScript.</p>
+        <ul class="bullets" data-note="serial-position">
+          <li>Owned features end to end on a multi-tenant AI product: complex task schedulers, token usage visualizations, and the React/TypeScript surfaces customers used most, plus the UX and product decisions behind them.</li>
+          <li>Built the output surface for an AI tool generating sales slidedecks through multiple models, so people could verify and rework whatever the model wrote, then present it live.</li>
+          <li>Built and maintained the shared React component patterns the team relied on to ship consistent UI quickly.</li>
+          <li>Worked directly with the founders to turn customer insight into product decisions and shipped features, closing the loop between feedback and release.</li>
+          <li>Integrated frontend applications with CRM APIs (Salesforce, HubSpot).</li>
+        </ul>
+      </article>
+
+      <article class="role-entry">
+        <div class="role-head">
+          <div>
+            <h3 class="role-title">Full Stack Developer <span class="role-note">(Contract)</span></h3>
+            <p class="role-org">ultraPacer</p>
+          </div>
+          <p class="role-dates"><span class="secondary">Apr 2025 — Oct </span>2025</p>
+        </div>
+        <p class="short-only role-summary">Owned the front end of a consumer endurance-running tool in Vue and TypeScript.</p>
+        <ul class="bullets">
+          <li>Owned the front end on a small team, building responsive consumer-facing interfaces for an endurance-running tool in Vue and TypeScript.</li>
+          <li>Translated Figma layouts into pixel-accurate interfaces, and picked up Vue on the job while shipping from week one.</li>
+          <li>Implemented shared Storybook components for buttons and typography to keep the UI consistent.</li>
+        </ul>
+      </article>
+
+      <article class="role-entry">
+        <div class="role-head">
+          <div>
+            <h3 class="role-title">Full Stack Developer</h3>
+            <p class="role-org">Array</p>
+          </div>
+          <p class="role-dates"><span class="secondary">Nov </span>2021 — <span class="secondary">Jun </span>2024</p>
+        </div>
+        <p class="short-only role-summary">Full-stack work on a real-time audience platform used live at Fortune 500 events.</p>
+        <ul class="bullets">
+          <li>Worked full stack on a real-time audience platform used live in front of Fortune 500 audiences: React and TypeScript in front, Laravel and Redis behind it, with WebSocket interaction that stayed fast under load.</li>
+          <li>Validated API payloads at runtime with io-ts, so a bad response failed at the boundary instead of somewhere deep in the UI.</li>
+          <li>Built an in-app configuration suite for customizing presentations, making complex authoring feel simple for non-technical users.</li>
+          <li>Owned the unit testing for its color palette configuration, where the combinations multiply fast and a regression shows up on stage.</li>
+          <li>Partnered with product and design to turn Figma into responsive, pixel-accurate, reusable Material UI components, keeping the interface consistent as the product grew.</li>
+        </ul>
+      </article>
+
+      <article class="role-entry">
+        <div class="role-head">
+          <div>
+            <h3 class="role-title">Full Stack Developer</h3>
+            <p class="role-org">National Renewable Energy Laboratory</p>
+          </div>
+          <p class="role-dates"><span class="secondary">Dec </span>2019 — <span class="secondary">Nov </span>2021</p>
+        </div>
+        <p class="short-only role-summary">Built web applications for research teams in an agency-style delivery model.</p>
+        <ul class="bullets">
+          <li>Built web applications across many languages in an agency-style delivery model.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section aria-labelledby="h-projects">
+      <h2 id="h-projects">Projects</h2>
+      <article class="role-entry">
+        <div class="role-head">
+          <div>
+            <h3 class="role-title">Racer &amp; Pacer</h3>
+            <p class="role-org">Founder, solo developer · <a href="https://racerandpacer.com">racerandpacer.com</a></p>
+          </div>
+          <p class="role-dates">2026 — Present</p>
+        </div>
+        <p class="short-only role-summary">Race-planning app, live with real users: React, Express, MongoDB, Clerk auth, Stripe payments.</p>
+        <ul class="bullets" data-note="project">
+          <li>Race-planning app for the ultrarunning community: React 18, TypeScript, Vite, with a custom design token system over Chakra UI, bespoke color scales, an RP-prefixed reusable component library, and self-hosted variable typography.</li>
+          <li>Interactive UI craft: Mapbox GL race map with custom markers, drag-and-drop crew planner (dnd-kit), Framer Motion animation, and a cache-first TanStack Query data layer.</li>
+          <li>Production-grade: Clerk auth, Stripe payments, Express and MongoDB backend, Sentry monitoring; tested with Vitest, Testing Library and Playwright; deployed on AWS Amplify and Railway.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section aria-labelledby="h-fit">
+      <h2 id="h-fit">Skills</h2>
+      <dl class="kv" data-note="skills">
+        <dt class="secondary">Frontend</dt><dd class="secondary">TypeScript · JavaScript (ES6+) · React · React Hooks · Vue · component-driven architecture · SPAs · state management (Redux) · semantic HTML · CSS animations · responsive design · performance optimization · cross-browser compatibility</dd>
+        <dt class="secondary">UI &amp; design</dt><dd class="secondary">UI/UX design · Figma · design systems · Storybook · Tailwind CSS · shadcn/ui · Material UI · web accessibility (WCAG)</dd>
+        <dt class="secondary">AI-assisted</dt><dd class="secondary">Claude Code (custom agents · MCP connectors) · LLM integration</dd>
+        <dt class="secondary">Full-stack &amp; tooling</dt><dd class="secondary">Node.js · Express · PHP · Laravel · Redis · REST APIs · WebSockets · webhooks · runtime schema validation (io-ts · Zod) · API integration · CRM integration (Salesforce · HubSpot) · AWS · Docker · CI/CD (GitHub Actions) · Webpack · Vite · Jest · Vitest · React Testing Library · Playwright</dd>
+        <dt class="secondary">Database &amp; ORM</dt><dd class="secondary">MySQL · MongoDB · Mongoose · SQLite · Eloquent ORM</dd>
+        <dt class="secondary">Practice</dt><dd class="secondary">Git · Agile/Scrum · unit, integration &amp; E2E testing · code review · mentorship · live presentations &amp; demos · async &amp; cross-functional collaboration · Jira · Linear</dd>
+        <dt data-note="looking-for">Looking for</dt><dd>Senior scope on a product team that ships — UI craft valued, a design system to own, and users close enough to watch using the thing. Colorado remote.</dd>
+      </dl>
+    </section>
+
+    <section aria-labelledby="h-education">
+      <h2 id="h-education">Education &amp; certifications</h2>
+      <dl class="kv">
+        <dt>Turing School of Software and Design</dt><dd>Front-End Engineering Certificate</dd>
+        <dt>Colorado Mountain College</dt><dd>Graphic Technologies Certificate</dd>
+        <dt>Western Michigan University</dt><dd>BA, Media Studies &amp; French</dd>
+      </dl>
+    </section>
+
+    <section aria-labelledby="h-contact">
+      <h2 id="h-contact">Contact</h2>
+      <p class="lede" data-note="contact">Get my attention via <a href="mailto:kawilliams8@gmail.com">kawilliams8@gmail.com</a>. I answer ASAP and I'll tell you straight if I don't think I'm right for your role. Might even have a great recommendation from my network!</p>
+    </section>
+
+    <p class="short-contact"><button type="button" class="as-link" id="shortToFull">Full page</button> for the detail, or <a href="mailto:kawilliams8@gmail.com">kawilliams8@gmail.com</a> to skip it.</p>
+
+    <div class="colophon">
+      <p class="colo-line">Katherine Williams · Senior Software Engineer</p>
+      <p class="colo-sub">This site runs on one file of good old HTML, CSS and vanilla JavaScript. Built with Claude Code. Updated August, 2026.</p>
+    </div>
+  </main>
+
+  <!-- ══ annotation layer — overlay, no layout cost ══ -->
+  <aside id="annotations" aria-label="Design notes"></aside>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   ANNOTATION DATA
+   One page, three vocabularies. `set` selects the lens; '*' shows
+   in all of them. `target` is a data-note token on the element, so
+   markup can be refactored without breaking an anchor.
+   In the Vite app this is notes.ts.
+   ═══════════════════════════════════════════════════════════════ */
+/* ─────────────────────────────────────────────────────────────
+   The annotation lenses ship when their copy is finished. Flip
+   this to true to bring back the four "Read this résumé as"
+   buttons, the note cards, and the ATS parser view.
+   ───────────────────────────────────────────────────────────── */
+const LENSES_LIVE = false;
+
+const LENSES = { design:1, engineering:1, hiring:1 };
+
+const NOTES = [
+  /* ── designer ─────────────────────────────────────────────── */
+  { set:'design', target:'type-scale', discipline:'Typography', principle:'Type scale, one ratio',
+    control:'ratio',
+    body:'Prose sizes derive from one base and one ratio. Drag it and the relationships between them hold, which is the only reason to have a scale rather than a list of sizes.' },
+  { set:'design', target:'role-type', discipline:'Typography', principle:'Pairing is a voice',
+    control:'pair',
+    body:'Same words, five personalities. Type is the loudest thing on a page before anyone reads it, so the pairing makes a claim about who I am before the summary gets a chance.' },
+  { set:'design', target:'status', discipline:'Color', principle:'One accent, earned',
+    control:'accent',
+    body:'One hue for links, availability and these notes. Change it and the whole page moves together, which is the only way to know a color actually works. Which option fails the floor depends on the scheme — flip it and watch the verdict move.' },
+  { set:'design', target:'proximity', discipline:'Layout', principle:'Law of Proximity',
+    body:'Sections sit more than twice as far apart as the items inside them. Proximity does the grouping, so the rules can stay hairline instead of shouting.' },
+  { set:'design', target:'figures', discipline:'Typography', principle:'Tabular figures',
+    body:'Tabular numerals: every digit the same width, so the date column aligns. Tenure scans <em>vertically</em>, without reading a single role title.' },
+  { set:'design', target:'serial-position', discipline:'Hierarchy', principle:'Serial position effect',
+    body:'Strongest bullet first. The first and last positions survive a scan; the middle evaporates, so nothing load-bearing goes there.' },
+  { set:'design', target:'skills', discipline:'Content', principle:'Chunking',
+    body:'Labelled groups, not one long list. Everyone cites 7±2 here and everyone is wrong: that is about recall. This is about scanning.' },
+  { set:'design', target:'contact', discipline:'Hierarchy', principle:'Peak-end rule',
+    body:'The last thing read is weighted like the best thing read, so the page ends on a promise I can keep. <a href="https://lawsofux.com/" target="_blank" rel="noopener">lawsofux.com</a>' },
+
+  /* ── engineer ─────────────────────────────────────────────── */
+  { set:'engineering', target:'type-scale', discipline:'Architecture', principle:'One token block',
+    control:'ratio',
+    body:'The slider writes one custom property and CSS does the rest: no sizes recalculated in JS, no components re-rendered. Watch --ratio in devtools while you drag.' },
+  { set:'engineering', target:'role-type', discipline:'Performance', principle:'System stacks, zero bytes',
+    control:'pair',
+    body:'No webfonts, no network request, no FOUT. Switching pairs writes two custom properties. A hosted pairing would cost about 80kb and a flash of unstyled text: worth it on a product, not here.' },
+  { set:'engineering', target:'status', discipline:'Instrumentation', principle:'Measured, not typed',
+    control:'accent',
+    body:'The ratio is computed from <em>getComputedStyle</em> against the live background on every change, so a bad choice gets caught rather than shipped quietly.' },
+  { set:'engineering', target:'proximity', discipline:'Machine readers', principle:'The whole résumé, first response',
+    body:'No JavaScript required to read a word of this. An ATS, a crawler or an LLM gets the complete document in the initial HTML, and the layer builds on top afterwards. Rendering that needs a runtime is rendering half the audience cannot see.' },
+  { set:'engineering', target:'serial-position', discipline:'Performance', principle:'Read pass, then write pass',
+    body:'Positions are computed from a single batch of measurements: every rect and card height is read before any card is moved, so the placement pass never interleaves reads and writes.' },
+  { set:'engineering', target:'project', discipline:'Stack', principle:'What I reach for unsupervised',
+    body:'Racer &amp; Pacer is the honest sample; nobody reviewed those choices. Tokens over Chakra, cache-first TanStack Query, dnd-kit, Playwright.' },
+  { set:'engineering', target:'contact', discipline:'Accessibility', principle:'Both ends reachable',
+    body:'Cards take focus, pins are real buttons that hand it to them, and the lens control is wired with <em>aria-pressed</em>. Both ends of every pairing work from the keyboard.' },
+
+  /* ── hiring manager ───────────────────────────────────────── */
+  { set:'hiring', target:'measure', discipline:'If you have 30 seconds', principle:'What the short version cuts',
+    body:'It keeps the roles, the dates, the stack, and where I want to land next. It drops the bullets: if the shape does not fit, the detail will not change your mind, and you have the rest of the pile to get through.' },
+  { set:'hiring', target:'role-type', discipline:'Level', principle:'Scope, not tenure',
+    body:'Senior here means scope owned: features end to end, the shared component patterns a team ships on, the front end of a live product.' },
+  { set:'hiring', target:'ai-claim', discipline:'Where to push', principle:'Interrogate this line',
+    body:'"Uses AI daily" is the easiest claim on any résumé and the hardest to back. Ask what shipped, who used it, what it got wrong, and what I did about the wrongness.' },
+  { set:'hiring', target:'figures', discipline:'Dates', principle:'Role dates, not a claim',
+    body:'Not an assertion of continuous employment. There is a gap in 2024 to 2025, and the latest role has an end date. Ask directly; it is a shorter conversation than you think.' },
+  { set:'hiring', target:'project', discipline:'Unsupervised work', principle:'The best evidence here',
+    body:'The only thing on this page nobody assigned me. If you want to know what I do when the constraints are mine, start here rather than with the roles.' },
+  { set:'hiring', target:'looking-for', discipline:'Fit check', principle:'Start here',
+    body:'If the role doesn\'t rhyme with this row, we can save each other a phone screen. And if it does, that\'s worth knowing in the first minute too.' },
+];
+
+(function(){
+  const body = document.body,
+        page = document.getElementById('page'),
+        layer = document.getElementById('annotations'),
+        reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const shortBtn = document.getElementById('shortBtn');
+  const fullBtn = document.getElementById('fullBtn');
+  const isShort = () => body.classList.contains('condensed');
+  /* the version pair is a two-state radio: exactly one pressed unless a lens
+     or the machine view has the floor */
+  function syncVersion(){
+    shortBtn.setAttribute('aria-pressed', isShort());
+    fullBtn.setAttribute('aria-pressed', body.dataset.notes === 'off' && !isShort());
+  }
+  /* every way back to the detail runs through here */
+  function exitShort(){
+    if (!isShort()) return;
+    body.classList.remove('condensed');
+    applyOverrides();
+  }
+
+  const inLens = (n, lens) => n.set === lens;
+
+  /* ── overrides: live on :root, never persisted, so a shared link cannot
+        open in someone else's experiment. (The chosen lens does persist.) ── */
+  const DEFAULTS = { ratio:'1.25', accent:'blue', pair:'system' };
+  const state = { ...DEFAULTS };
+  /* two swatches mean a relationship rather than a color — the page's own
+     accent and "no accent at all" — so each scheme resolves them differently */
+  const ACCENTS = [
+    { key:'blue',    hex:{ light:'#1F4FD8', dark:'#8FA9FF' }, name:'Institutional blue', why:'Reads as infrastructure. Trusted, slightly cold, and the one nobody argues with.' },
+    { key:'ink',     hex:{ light:'#16161A', dark:'#F2F1EA' }, name:'Ink',                why:'No accent at all. Maximum restraint, and links stop announcing themselves, which is a real cost.' },
+    { key:'teal',    hex:'#0B5D51',                           name:'Deep teal',          why:'Considered and calm. Warmer than blue without tipping into product-startup green.' },
+    { key:'oxblood', hex:'#8C2F39',                           name:'Oxblood',            why:'Editorial and serious. Closer to a masthead than a product, and it dates the least.' },
+    { key:'violet',  hex:'#5B3A9E',                           name:'Violet',             why:'Craft-forward. Signals design attention, and risks reading decorative on an engineering résumé.' },
+    { key:'amber',   hex:'#C79A12',                           name:'Amber',              why:'Fine at display size, fails at body size. This is the one the readout catches before it ships.' },
+  ];
+  const accentOf = key => {
+    const a = ACCENTS.find(x => x.key === key) || ACCENTS[0];
+    return typeof a.hex === 'string' ? a.hex
+         : a.hex[document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light'];
+  };
+  const PAIRS = [
+    { id:'system',    name:'System',    display:'var(--font-sans)',
+      body:'var(--font-sans)',
+      why:'Invisible and fast. The reader never thinks about the type, which is usually the point.' },
+    { id:'editorial', name:'Editorial', display:'"Iowan Old Style",Georgia,"Times New Roman",serif',
+      body:'var(--font-sans)',
+      why:'Serif headline over sans body. Reads considered and print-adjacent, the most common way to look thoughtful without looking fussy.' },
+    { id:'technical', name:'Technical', display:'var(--font-mono)',
+      body:'var(--font-sans)',
+      why:'Mono display says "engineer" before a word is read. Confident, and one step from looking like a terminal.' },
+    { id:'humanist',  name:'Humanist',  display:'"Avenir Next","Segoe UI",var(--font-sans)',
+      body:'"Iowan Old Style",Georgia,serif',
+      why:'Sans headline over serif body. Warmer and slower: better for reading, worse for scanning, which is the wrong trade on a résumé.' },
+    { id:'classic',   name:'Classic',   display:'"Baskerville",Georgia,serif',
+      body:'"Baskerville",Georgia,serif',
+      why:'All serif. The most traditional and the least distinctive: safe, and indistinguishable from every other résumé that chose safe.' },
+  ];
+  const lum = c => { const a = c.map(v => (v/=255) <= .03928 ? v/12.92 : Math.pow((v+.055)/1.055, 2.4));
+                     return .2126*a[0] + .7152*a[1] + .0722*a[2]; };
+  const rgb = t => t.match(/\d+/g).slice(0,3).map(Number);
+  const ratio = (a, b) => (Math.max(a,b)+.05) / (Math.min(a,b)+.05);
+  const hexLum = hex => { const n = parseInt(hex.slice(1),16);
+    return lum([n>>16 & 255, n>>8 & 255, n & 255]); };
+  const tokenHex = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  /* two ratios matter: the accent as text on the page, and surface-colored text
+     sitting on the accent (chips, pins, the pressed button). report the worse —
+     both read live, so a scheme flip re-judges everything. */
+  function contrastOf(hex){
+    const a = hexLum(hex);
+    return Math.min(ratio(a, lum(rgb(getComputedStyle(body).backgroundColor))),
+                    ratio(a, hexLum(tokenHex('--surface'))));
+  }
+  function applyOverrides(){
+    const root = document.documentElement.style;
+    root.setProperty('--ratio', state.ratio);
+    if (state.accent === DEFAULTS.accent){
+      /* untouched: let each scheme's own token paint */
+      root.removeProperty('--accent'); root.removeProperty('--accent-wash');
+    } else {
+      root.setProperty('--accent', accentOf(state.accent));
+      root.setProperty('--accent-wash', accentOf(state.accent) + '17');
+    }
+    const pair = PAIRS.find(p => p.id === state.pair) || PAIRS[0];
+    root.setProperty('--font-display', pair.display);
+    root.setProperty('--font-body', pair.body);
+    const dirty = state.ratio !== DEFAULTS.ratio || state.accent !== DEFAULTS.accent || state.pair !== DEFAULTS.pair;
+    body.classList.toggle('is-overridden', dirty);   /* condensed has its own toggle; not an override */
+    document.querySelectorAll('[data-sync]').forEach(sync);
+    syncVersion();
+    layout();
+  }
+  function sync(el){
+    const kind = el.dataset.sync;
+    if (kind === 'ratio'){
+      el.querySelector('input').value = state.ratio;
+      el.querySelectorAll('b')[1].textContent = state.ratio;
+    }
+    if (kind === 'accent'){
+      /* judge the accent actually painting the page, in the scheme it's in */
+      const r = contrastOf(accentOf(state.accent)), out = el.querySelector('.ratio-out');
+      const pass = r >= 4.5;
+      out.textContent = r.toFixed(2) + ':1 ' + (pass ? '· passes' : '· fails');
+      out.classList.toggle('is-fail', !pass);
+      const rule = el.querySelector('.rule-note');
+      rule.textContent = pass
+        ? 'WCAG AA asks for 4.5:1 between text and background. This clears it.'
+        : 'Under 4.5:1, the WCAG AA minimum for body text. Fine on my screen, gone in sunlight or on a cheap monitor.';
+      rule.classList.toggle('is-fail', !pass);
+      /* swatches re-tint with the scheme, so the row always shows real choices */
+      el.querySelectorAll('.swatch').forEach(b => {
+        b.setAttribute('aria-pressed', b.dataset.key === state.accent);
+        b.style.background = accentOf(b.dataset.key);
+      });
+      const hit = ACCENTS.find(a => a.key === state.accent);
+      el.querySelector('.swatch-why').textContent = hit ? hit.name + ' — ' + hit.why : '';
+    }
+    if (kind === 'pair'){
+      const p = PAIRS.find(x => x.id === state.pair) || PAIRS[0];
+      el.querySelectorAll('.pairbtn').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === state.pair));
+      el.querySelector('.swatch-why').textContent = p.name + ' — ' + p.why;
+    }
+  }
+  function buildControl(kind){
+    const wrap = document.createElement('span');
+    wrap.className = 'note__proof';
+    wrap.dataset.sync = kind;
+    if (kind === 'ratio'){
+      wrap.innerHTML = '<span class="note__proof-label"><b class="verb">Drag the ratio</b> <b></b></span>' +
+        '<input type="range" min="1.10" max="1.45" step="0.01" aria-label="Type scale ratio">';
+      wrap.querySelector('input').addEventListener('input', e => { state.ratio = e.target.value; applyOverrides(); });
+    }
+    if (kind === 'accent'){
+      wrap.innerHTML = '<span class="note__proof-label"><b class="verb">Pick an accent</b> <span class="ratio-out"></span></span>' +
+        '<span class="swatches">' + ACCENTS.map(a =>
+          `<button class="swatch" data-key="${a.key}" aria-pressed="false" aria-label="${a.name}" title="${a.name}"></button>`).join('') +
+        '</span><span class="rule-note"></span><span class="swatch-why"></span>' +
+        '<button class="proof-btn" type="button" data-flip>Flip the scheme — re-judge</button>';
+      wrap.querySelectorAll('.swatch').forEach(b =>
+        b.addEventListener('click', () => { state.accent = b.dataset.key; applyOverrides(); }));
+      wrap.querySelector('[data-flip]').addEventListener('click', () => flipTheme());
+    }
+    if (kind === 'pair'){
+      wrap.innerHTML = '<span class="note__proof-label"><b class="verb">Try a pairing</b></span>' +
+        '<span class="pairs">' + PAIRS.map(p =>
+          `<button class="pairbtn" data-id="${p.id}" aria-pressed="false" style="font-family:${p.display}">Aa<i>${p.name}</i></button>`).join('') +
+        '</span><span class="swatch-why"></span>';
+      wrap.querySelectorAll('.pairbtn').forEach(b =>
+        b.addEventListener('click', () => { state.pair = b.dataset.id; applyOverrides(); }));
+    }
+    return wrap;
+  }
+
+  if (!LENSES_LIVE) document.documentElement.dataset.lenses = 'off';
+
+  /* ── build every card and pin once; visibility is per lens ── */
+  const entries = (LENSES_LIVE ? NOTES : []).map(n => {
+    const el = document.querySelector(`[data-note="${n.target}"]`);
+    if (!el) return null;
+
+    const card = document.createElement('div');
+    card.className = 'note';
+    card.tabIndex = 0;
+    card.setAttribute('role', 'note');
+    card.setAttribute('aria-label', `Design note: ${n.discipline}, ${n.principle}`);
+    card.hidden = true;
+    card.innerHTML =
+      `<span class="note__index"></span>` +
+      `<span class="note__discipline">${n.discipline}</span>` +
+      `<span class="note__principle">${n.principle}</span>` +
+      `<span class="note__body">${n.body}</span>`;
+    if (n.control) card.append(buildControl(n.control));
+    layer.append(card);
+
+    const pin = document.createElement('button');
+    pin.type = 'button';
+    pin.className = 'pin';
+    pin.hidden = true;
+    pin.setAttribute('aria-label', `Jump to design note: ${n.principle}`);
+    /* the pin is the reachable end of the pairing: click or Enter hands focus
+       to its card, which lights both ends via the focusin wiring below */
+    pin.addEventListener('click', () => card.focus());
+    /* the pin has to ride an element that may contain a span; <dl> may not */
+    const host = el.tagName === 'UL'  ? el.querySelector('li:last-child')
+               : el.tagName === 'DL'  ? el.querySelector('dd:last-of-type')
+               : el.tagName === 'DIV' ? (el.querySelector('h3') || el)
+               : el;
+    host.append(pin);
+
+    const entry = { note:n, el, card, pin };
+    entry.on  = () => { card.classList.add('is-lit'); pin.classList.add('is-lit');
+                        el.classList.add('is-annotated'); };
+    entry.off = () => { card.classList.remove('is-lit'); pin.classList.remove('is-lit');
+                        el.classList.remove('is-annotated'); };
+    /* focusin/focusout have no IDL attribute — wire them once, here, not in the
+       layout pass. focusin bubbles, so focus moving into the card's own slider
+       keeps the pairing lit instead of dropping it mid-drag. */
+    card.addEventListener('focusin', entry.on);
+    card.addEventListener('focusout', entry.off);
+    pin.addEventListener('focus', entry.on);
+    pin.addEventListener('blur', entry.off);
+    return entry;
+  }).filter(Boolean);
+
+  /* ── layout: one read pass, then one write pass ───────────── */
+  function layout(opts){
+    const animate = opts && opts.animate && !reduce;
+    const lens = body.dataset.notes;
+    if (lens === 'off' || lens === 'parser') return;
+
+    /* the short view is bullet-free and note-free — the sidebar carries the way back */
+    const active = isShort() ? [] : entries.filter(e => inLens(e.note, lens));
+    const pb = page.getBoundingClientRect();
+
+    const GAP = 24;
+    const mb = document.querySelector('main').getBoundingClientRect();
+    const mainL = mb.left - pb.left, mainR = mb.right - pb.left;
+    const gutL = mainL, gutR = pb.width - mainR;
+    const sidebarUp = matchMedia('(min-width:1360px)').matches;   /* picker owns the left gutter */
+    const bothSides = !sidebarUp && gutL >= 260 && gutR >= 260;
+    const W = bothSides ? 236 : Math.min(236, Math.max(0, gutR - 14));
+    const rightOnly = !bothSides && W >= 200;
+    const inFlow = !bothSides && !rightOnly;
+    const xRight = bothSides ? mainR + GAP : (rightOnly ? mainR + 12 : Math.max(12, pb.width - 236 - 12));
+    const xLeft  = mainL - W - GAP;
+    const cardW  = Math.min(W, pb.width - 24);
+
+    /* narrow: put each card in the document flow, directly after the block it
+       annotates. wide: it belongs to the overlay. */
+    if (inFlow){
+      const blockOf = el => {                     /* climb to the landmark's own child */
+        let n = el;
+        while (n.parentElement && !['SECTION','HEADER','MAIN'].includes(n.parentElement.tagName)) n = n.parentElement;
+        return n;
+      };
+      const cursor = new Map();
+      active.forEach((e,i) => {
+        const block = blockOf(e.el);
+        const after = cursor.get(block) || block;   /* stack, don't leapfrog */
+        if (e.card.previousElementSibling !== after) after.after(e.card);
+        cursor.set(block, e.card);
+        e.card.classList.add('note--inline');
+        e.card.classList.remove('is-left');
+        e.card.style.left = e.card.style.top = e.card.style.width = '';
+        e.card.querySelector('.note__index').textContent = i + 1;
+        e.pin.textContent = i + 1;
+      });
+      if (animate && typeof Element.prototype.animate === 'function'){
+        active.forEach((e,i) => {
+          e.card.getAnimations().forEach(a => a.cancel());
+          e.card.animate([{ opacity:0, translate:'0 6px' }, { opacity:1, translate:'0 0' }],
+            { duration:300, delay:i * 30, easing:'cubic-bezier(.2,.7,.3,1)', fill:'backwards' });
+        });
+      }
+      return;
+    }
+    active.forEach(e => {
+      if (e.card.parentElement !== layer) layer.append(e.card);
+      e.card.classList.remove('note--inline');
+    });
+
+    /* READ — every rect gathered before anything is written. numbering follows
+       the pins in reading order — top to bottom, then left to right — because
+       the pin is the number the reader actually sees. */
+    const measured = active
+      .map(e => ({ e, box: e.el.getBoundingClientRect(), pinBox: e.pin.getBoundingClientRect() }))
+      .sort((a,b) => (a.pinBox.top - b.pinBox.top) || (a.pinBox.left - b.pinBox.left));
+    measured.forEach(m => { m.e.card.style.width = cardW + 'px'; });
+    measured.forEach(m => { m.h = m.e.card.offsetHeight; });   /* heights, still no writes to top/left */
+
+    /* WRITE — positions only */
+    let floorL = 8, floorR = 8;
+    measured.forEach((m,i) => {
+      const left = bothSides && i % 2 === 0;
+      const want = m.box.top - pb.top;
+      const top  = Math.max(want, left ? floorL : floorR);
+      m.left = left; m.top = top;
+      m.e.card.classList.toggle('is-left', left);
+      m.e.card.style.left = (left ? xLeft : xRight) + 'px';
+      m.e.card.style.top  = top + 'px';
+      if (left) floorL = top + m.h + 14; else floorR = top + m.h + 14;
+      m.e.card.querySelector('.note__index').textContent = i + 1;
+      m.e.pin.textContent = i + 1;
+      m.i = i;
+    });
+
+    /* the pairing is carried by the numbered pins and the hover/focus
+       lighting — pin, card, and annotated text light together */
+    if (animate && typeof Element.prototype.animate === 'function'){
+      measured.forEach(m => {
+        const c = m.e.card;
+        c.getAnimations().forEach(a => a.cancel());
+        c.animate(
+          [{ opacity:0, translate:'0 6px' },
+           { opacity:1, translate:'0 0' }],
+          { duration:320, delay:m.i * 40, easing:'cubic-bezier(.2,.7,.3,1)', fill:'backwards' });
+      });
+    }
+
+    measured.forEach(m => {
+      const e = m.e;
+      e.card.onmouseenter = e.on;
+      e.card.onmouseleave = e.off;
+      e.pin.onmouseenter  = e.on;
+      e.pin.onmouseleave  = e.off;
+    });
+  }
+
+  /* ── the machine's copy: captured once from the plain DOM, so the
+        parser view can never disagree with the page it lives on. the picker
+        is chrome, not résumé — hide it for the read. ── */
+  const nc = document.querySelector('.notes-control');
+  nc.style.display = 'none';
+  const machineText = document.querySelector('main').innerText.replace(/\n{3,}/g, '\n\n').trim();
+  nc.style.display = '';
+  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  function fillParserView(){
+    document.getElementById('parserText').innerHTML =
+      machineText.split('\n').map(l => `<i>${esc(l) || ' '}</i>`).join('');
+    const ld = document.querySelector('script[type="application/ld+json"]');
+    if (ld) document.getElementById('parserJson').innerHTML =
+      esc(JSON.stringify(JSON.parse(ld.textContent), null, 2)).replace(/"([^"]+)":/g, '<b>"$1"</b>:');
+    const metas = [['title', document.title]]
+      .concat([...document.querySelectorAll('meta[name],meta[property]')]
+        .map(m => [m.getAttribute('name') || m.getAttribute('property'), m.content])
+        .filter(([k]) => k !== 'viewport'))
+      .concat([['canonical', (document.querySelector('link[rel=canonical]') || {}).href || '']])
+      .filter(([, v]) => v);
+    document.getElementById('parserMeta').innerHTML =
+      metas.map(([k, v]) => `<b>${esc(k)}</b>  ${esc(v)}`).join('\n');
+  }
+
+  /* ── lens switching ───────────────────────────────────────── */
+  const toTop = () => window.scrollTo({ top:0, behavior: reduce ? 'auto' : 'smooth' });
+  const buttons = [...document.querySelectorAll('.chip[data-lens]')];
+  /* a lens is a fresh reading of the whole document: numbering restarts at 1
+     and the machine view replaces the page, so both start at the top. `keep`
+     is for the nav, which is on its way somewhere specific. */
+  function setLens(lens, keep){
+    if (lens === 'parser') fillParserView();
+    const swap = () => {
+      body.dataset.notes = lens;
+      buttons.forEach(b => b.setAttribute('aria-pressed', b.dataset.lens === lens));
+      syncVersion();
+      entries.forEach(e => {
+        const on = lens !== 'off' && inLens(e.note, lens);
+        e.card.hidden = !on;
+        e.pin.hidden = !on;
+      });
+    };
+    swap();
+    if (!keep) toTop();
+    try { localStorage.setItem('kw:lens', lens); } catch(e){}
+    /* the cards animate themselves in — a page-wide view transition
+       would just cross-fade over the top of it */
+    requestAnimationFrame(() => { layout({ animate:true }); });
+  }
+  buttons.forEach(b => b.addEventListener('click', () =>
+    setLens(body.dataset.notes === b.dataset.lens ? 'off' : b.dataset.lens)));
+  /* home means home: the full-résumé chip also walks back out of the short view */
+  fullBtn.addEventListener('click', exitShort);
+  /* nav promises the document — if the target section is hidden by the current
+     view (machine view, or contact in the short view), return to the full
+     résumé first. scrolls by hand so the URL never grows a hash. */
+  document.querySelectorAll('.sitenav a[href^="#"]').forEach(a =>
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const t = document.querySelector(a.getAttribute('href'));
+      if (!t) return;
+      if (t.offsetParent === null){
+        if (body.dataset.notes === 'parser') setLens('off', true);
+        exitShort();
+      }
+      t.scrollIntoView();
+    }));
+  /* the short view's own way back into the detail */
+  document.getElementById('shortToFull').addEventListener('click', exitShort);
+  /* the wordmark is the way home: plain résumé, top of page */
+  document.querySelector('.wordmark').addEventListener('click', e => {
+    e.preventDefault();
+    exitShort();
+    if (body.dataset.notes !== 'off') setLens('off');
+    toTop();
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    Object.assign(state, DEFAULTS);
+    body.classList.remove('condensed');
+    applyOverrides();
+  });
+
+  /* ── scheme: a reader preference, not an experiment — persists, never resets ── */
+  const schemeBtns = [...document.querySelectorAll('.scheme-opt')];
+  const syncScheme = () => schemeBtns.forEach(b =>
+    b.setAttribute('aria-pressed', b.dataset.scheme === document.documentElement.dataset.theme));
+  function setTheme(t, save){
+    document.documentElement.dataset.theme = t;
+    if (save !== false) try { localStorage.setItem('kw:theme', t); } catch(e){}
+    syncScheme();
+    applyOverrides();   /* a picked accent re-resolves, and the readout re-judges */
+  }
+  function flipTheme(){ setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'); }
+  schemeBtns.forEach(b => b.addEventListener('click', () => setTheme(b.dataset.scheme)));
+  syncScheme();
+  /* the top-level way into the short view — same rules as the note's button:
+     leaving it returns to the plain résumé, not to an annotated one */
+  shortBtn.addEventListener('click', () => {
+    if (isShort()){ exitShort(); setLens('off'); return; }
+    body.classList.add('condensed');
+    applyOverrides();
+    toTop();
+  });
+  /* follow the system until the reader states a preference */
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    try { if (!localStorage.getItem('kw:theme')) setTheme(e.matches ? 'dark' : 'light', false); } catch(err){}
+  });
+
+  let start = 'off';
+  if (LENSES_LIVE) try { const saved = localStorage.getItem('kw:lens');
+    if (saved && (saved === 'off' || saved === 'parser' || LENSES[saved])) start = saved; } catch(e){}
+  applyOverrides();
+  setLens(start);
+  setTimeout(layout, 200);
+  /* one relayout per frame at most, instead of one per resize event */
+  let rAF = 0;
+  addEventListener('resize', () => {
+    cancelAnimationFrame(rAF);
+    rAF = requestAnimationFrame(() => layout());
+  });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => layout());
+})();
+</script>
+</body>
+</html>
