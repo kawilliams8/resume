@@ -43,7 +43,7 @@
    in the Vite app it becomes tokens.css imported once at the root.
    ═══════════════════════════════════════════════════════════════ */
 :root{
-  /* colour */
+  /* color */
   --bg:#FDFDFB;
   --surface:#FFFFFF;
   --ink:#16161A;          /* headings, emphasis            */
@@ -84,7 +84,7 @@
   --dur:240ms; --ease:cubic-bezier(.22,1,.36,1);
 }
 /* the same tokens, resolved for reading in the dark. still one accent —
-   and the contrast readout re-judges every colour against this background live */
+   and the contrast readout re-judges every color against this background live */
 :root[data-theme="dark"]{
   --bg:#32312B;
   --surface:#3A3932;
@@ -104,7 +104,7 @@
 @media (prefers-reduced-motion: reduce){ :root{ --dur:1ms } }
 
 /* The layer takes the page's accent. One hue on the page, always — which is
-   what the colour note claims, so the layer had better not contradict it. */
+   what the color note claims, so the layer had better not contradict it. */
 
 /* ═══════════════════════════════════════════════════════════════
    BASE
@@ -133,6 +133,10 @@ a{color:var(--accent)}
 .picker-rail{display:contents}
 .notes-control__label{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:var(--s-3);
   display:flex;align-items:center;gap:var(--s-3);flex-wrap:wrap}
+/* lenses hidden until their copy is done — see LENSES_LIVE in the script */
+:root[data-lenses="off"] .lenses,
+:root[data-lenses="off"] .notes-control__label{display:none}
+:root[data-lenses="off"] .versions{margin-bottom:0}
 /* one chip, two families: versions of the document press to ink, lenses onto
    it press to accent. hover always previews the press. */
 .chip{display:inline-flex;align-items:baseline;justify-content:center;gap:var(--s-2);cursor:pointer;
@@ -241,12 +245,18 @@ h1{font-family:var(--font-display);font-size:var(--step-2);line-height:1.02;lett
 .contact a{color:var(--ink-2);text-decoration:underline;text-decoration-color:var(--rule);text-underline-offset:3px}
 .contact a:hover{text-decoration-color:var(--accent);color:var(--accent)}
 .lede{font-size:var(--step-1);line-height:1.58;color:var(--ink-2);max-width:var(--measure);margin:var(--s-5) 0 0}
+/* emphasis lives in the summary and nowhere else. the bullets are already the
+   detail — picking phrases out of them was decoration pretending to be a system */
+.lede b{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+/* the AI claim stands on its own line — near enough to read as part of the
+   summary, separate enough to be answerable for */
+.lede--ai{margin-top:var(--s-3)}
 
 /* ═══════════════════════════════════════════════════════════════
    COMPONENT · section heading
    ═══════════════════════════════════════════════════════════════ */
 h2{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--ink-3);font-weight:500;margin:var(--s-6) 0 2px;
+  color:var(--accent);font-weight:600;margin:var(--s-6) 0 2px;
   padding-bottom:var(--s-2);border-bottom:1px solid var(--rule);
   scroll-margin-top:calc(var(--stick) + var(--s-1))}   /* land below the sticky nav */
 
@@ -266,9 +276,6 @@ h2{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transfor
 .bullets li{font-size:var(--step-0);line-height:1.6;color:var(--ink-2);
   padding-left:18px;position:relative;margin-bottom:var(--s-2)}
 .bullets li::before{content:"—";position:absolute;left:0;color:var(--ink-3)}
-/* measured figures — see the colour note */
-.bullets b{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;
-  box-shadow:inset 0 -6px 0 var(--accent-wash)}
 
 /* ═══════════════════════════════════════════════════════════════
    COMPONENT · key/value list
@@ -399,7 +406,6 @@ body.condensed .role-title{font-size:var(--step-0);font-weight:600}
    the section headings and the status line */
 body.condensed .role-org{margin-top:0;font-size:14px;color:var(--ink-2)}
 body.condensed .role-org::before{content:"· ";color:var(--ink-3)}
-body.condensed h2{color:var(--accent)}
 body.condensed .role-entry{padding:var(--s-3) 0 var(--s-2);border-bottom:0}
 body.condensed h2{margin-top:var(--s-5)}
 .note:hover,.note:focus-visible,.note.is-lit{background:var(--surface);box-shadow:var(--shadow-lift)}
@@ -487,7 +493,7 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
           </div>
           <div class="picker-foot">
             <button class="reset" id="resetBtn" type="button">↺ Reset the page</button>
-            <div class="scheme" role="group" aria-label="Colour scheme">
+            <div class="scheme" role="group" aria-label="Color scheme">
               <button type="button" class="scheme-opt" data-scheme="light" aria-pressed="false">Light</button>
               <button type="button" class="scheme-opt" data-scheme="dark" aria-pressed="false">Dark</button>
             </div>
@@ -495,7 +501,8 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
         </div>
       </div>
 
-      <p class="lede" data-note="measure">Fullstack engineer, <b>seven years</b> building component-driven applications in React, TypeScript and modern backend technologies.<span class="secondary"> Polished interfaces, owned end to end — interaction detail, web performance, and product instincts that hold up under real users. Equal parts builder and communicator.</span> <span data-note="ai-claim">I build with <b>Claude Code</b> daily and ship <b>LLM features</b> to production.</span></p>
+      <p class="lede" data-note="measure">Fullstack engineer, <b>seven years</b> building component-driven applications in React, TypeScript, Node and other modern backend technologies.<span class="secondary"> Polished interfaces, owned end to end. I sweat interaction detail and web performance, and my product instincts hold up with real users. Equal parts builder and communicator.</span></p>
+      <p class="lede lede--ai" data-note="ai-claim">I build with <b>Claude Code</b> daily and ship <b>LLM features</b> to production.</p>
     </header>
 
     <!-- ══ the machine's copy — filled from the live DOM when the parser lens opens ══ -->
@@ -528,11 +535,11 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
         </div>
         <p class="short-only role-summary">Owned features end to end on a multi-tenant AI product, in React and TypeScript.</p>
         <ul class="bullets" data-note="serial-position">
-          <li>Owned features end to end on a <b>multi-tenant AI product</b> — task schedulers, tiered organization configuration, and the React/TypeScript surfaces customers used most, plus the UX and product decisions behind them.</li>
-          <li>Built the chat output surface for an AI tool generating sales documents <b>across multiple models</b>, so people could verify and rework whatever the model wrote.</li>
+          <li>Owned features end to end on a multi-tenant AI product: complex task schedulers, token usage visualizations, and the React/TypeScript surfaces customers used most, plus the UX and product decisions behind them.</li>
+          <li>Built the output surface for an AI tool generating sales slidedecks through multiple models, so people could verify and rework whatever the model wrote, then present it live.</li>
           <li>Built and maintained the shared React component patterns the team relied on to ship consistent UI quickly.</li>
           <li>Worked directly with the founders to turn customer insight into product decisions and shipped features, closing the loop between feedback and release.</li>
-          <li>Integrated frontend applications with CRM APIs (<b>Salesforce, HubSpot</b>).</li>
+          <li>Integrated frontend applications with CRM APIs (Salesforce, HubSpot).</li>
         </ul>
       </article>
 
@@ -546,8 +553,8 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
         </div>
         <p class="short-only role-summary">Owned the front end of a consumer endurance-running tool in Vue and TypeScript.</p>
         <ul class="bullets">
-          <li>Owned the front end on a small team, building responsive consumer-facing interfaces for an endurance-running tool in <b>Vue and TypeScript</b>.</li>
-          <li>Translated Figma layouts into pixel-accurate interfaces, and picked up Vue on the job while <b>shipping from week one</b>.</li>
+          <li>Owned the front end on a small team, building responsive consumer-facing interfaces for an endurance-running tool in Vue and TypeScript.</li>
+          <li>Translated Figma layouts into pixel-accurate interfaces, and picked up Vue on the job while shipping from week one.</li>
           <li>Implemented shared Storybook components for buttons and typography to keep the UI consistent.</li>
         </ul>
       </article>
@@ -560,10 +567,12 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
           </div>
           <p class="role-dates"><span class="secondary">Nov </span>2021 — <span class="secondary">Jun </span>2024</p>
         </div>
-        <p class="short-only role-summary">Full-stack work on a real-time audience platform used live at large events.</p>
+        <p class="short-only role-summary">Full-stack work on a real-time audience platform used live at Fortune 500 events.</p>
         <ul class="bullets">
-          <li>Built the front end of a real-time consumer-facing audience platform used <b>live at large events</b>, in React and TypeScript, with WebSocket interaction that stayed fast under load.</li>
+          <li>Worked full stack on a real-time audience platform used live in front of Fortune 500 audiences: React and TypeScript in front, Laravel and Redis behind it, with WebSocket interaction that stayed fast under load.</li>
+          <li>Validated API payloads at runtime with io-ts, so a bad response failed at the boundary instead of somewhere deep in the UI.</li>
           <li>Built an in-app configuration suite for customizing presentations, making complex authoring feel simple for non-technical users.</li>
+          <li>Owned the unit testing for its color palette configuration, where the combinations multiply fast and a regression shows up on stage.</li>
           <li>Partnered with product and design to turn Figma into responsive, pixel-accurate, reusable Material UI components, keeping the interface consistent as the product grew.</li>
         </ul>
       </article>
@@ -576,9 +585,9 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
           </div>
           <p class="role-dates"><span class="secondary">Dec </span>2019 — <span class="secondary">Nov </span>2021</p>
         </div>
-        <p class="short-only role-summary">Built internal web applications for research teams in an agency-style delivery model.</p>
+        <p class="short-only role-summary">Built web applications for research teams in an agency-style delivery model.</p>
         <ul class="bullets">
-          <li>Built internal web applications across many languages in an agency-style delivery model.</li>
+          <li>Built web applications across many languages in an agency-style delivery model.</li>
         </ul>
       </article>
     </section>
@@ -595,7 +604,7 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
         </div>
         <p class="short-only role-summary">Race-planning app, live with real users: React, Express, MongoDB, Clerk auth, Stripe payments.</p>
         <ul class="bullets" data-note="project">
-          <li>Race-planning app for the ultrarunning community: <b>React 18, TypeScript, Vite</b>, with a custom design token system over Chakra UI, bespoke color scales, an RP-prefixed reusable component library, and self-hosted variable typography.</li>
+          <li>Race-planning app for the ultrarunning community: React 18, TypeScript, Vite, with a custom design token system over Chakra UI, bespoke color scales, an RP-prefixed reusable component library, and self-hosted variable typography.</li>
           <li>Interactive UI craft: Mapbox GL race map with custom markers, drag-and-drop crew planner (dnd-kit), Framer Motion animation, and a cache-first TanStack Query data layer.</li>
           <li>Production-grade: Clerk auth, Stripe payments, Express and MongoDB backend, Sentry monitoring; tested with Vitest, Testing Library and Playwright; deployed on AWS Amplify and Railway.</li>
         </ul>
@@ -608,8 +617,8 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
         <dt class="secondary">Frontend</dt><dd class="secondary">TypeScript · JavaScript (ES6+) · React · React Hooks · Vue · component-driven architecture · SPAs · state management (Redux) · semantic HTML · CSS animations · responsive design · performance optimization · cross-browser compatibility</dd>
         <dt class="secondary">UI &amp; design</dt><dd class="secondary">UI/UX design · Figma · design systems · Storybook · Tailwind CSS · shadcn/ui · Material UI · web accessibility (WCAG)</dd>
         <dt class="secondary">AI-assisted</dt><dd class="secondary">Claude Code (custom agents · MCP connectors) · LLM integration</dd>
-        <dt class="secondary">Full-stack &amp; tooling</dt><dd class="secondary">Node.js · Express · Redis · REST APIs · WebSockets · webhooks · API integration · CRM integration (Salesforce · HubSpot) · AWS · Docker · CI/CD (GitHub Actions) · Webpack · Vite · Jest · Vitest · React Testing Library · Playwright</dd>
-        <dt class="secondary">Database &amp; ORM</dt><dd class="secondary">MySQL · MongoDB · Mongoose · SQLite · Eloquent ORM (Laravel)</dd>
+        <dt class="secondary">Full-stack &amp; tooling</dt><dd class="secondary">Node.js · Express · PHP · Laravel · Redis · REST APIs · WebSockets · webhooks · runtime schema validation (io-ts · Zod) · API integration · CRM integration (Salesforce · HubSpot) · AWS · Docker · CI/CD (GitHub Actions) · Webpack · Vite · Jest · Vitest · React Testing Library · Playwright</dd>
+        <dt class="secondary">Database &amp; ORM</dt><dd class="secondary">MySQL · MongoDB · Mongoose · SQLite · Eloquent ORM</dd>
         <dt class="secondary">Practice</dt><dd class="secondary">Git · Agile/Scrum · unit, integration &amp; E2E testing · code review · mentorship · live presentations &amp; demos · async &amp; cross-functional collaboration · Jira · Linear</dd>
         <dt data-note="looking-for">Looking for</dt><dd>Senior scope on a product team that ships — UI craft valued, a design system to own, and users close enough to watch using the thing. Colorado remote.</dd>
       </dl>
@@ -649,6 +658,13 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
    markup can be refactored without breaking an anchor.
    In the Vite app this is notes.ts.
    ═══════════════════════════════════════════════════════════════ */
+/* ─────────────────────────────────────────────────────────────
+   The annotation lenses ship when their copy is finished. Flip
+   this to true to bring back the four "Read this résumé as"
+   buttons, the note cards, and the ATS parser view.
+   ───────────────────────────────────────────────────────────── */
+const LENSES_LIVE = false;
+
 const LENSES = { design:1, engineering:1, hiring:1 };
 
 const NOTES = [
@@ -659,9 +675,9 @@ const NOTES = [
   { set:'design', target:'role-type', discipline:'Typography', principle:'Pairing is a voice',
     control:'pair',
     body:'Same words, five personalities. Type is the loudest thing on a page before anyone reads it, so the pairing makes a claim about who I am before the summary gets a chance.' },
-  { set:'design', target:'status', discipline:'Colour', principle:'One accent, earned',
+  { set:'design', target:'status', discipline:'Color', principle:'One accent, earned',
     control:'accent',
-    body:'One hue for links, availability and these notes. Change it and the whole page moves together, which is the only way to know a colour actually works. Which option fails the floor depends on the scheme — flip it and watch the verdict move.' },
+    body:'One hue for links, availability and these notes. Change it and the whole page moves together, which is the only way to know a color actually works. Which option fails the floor depends on the scheme — flip it and watch the verdict move.' },
   { set:'design', target:'proximity', discipline:'Layout', principle:'Law of Proximity',
     body:'Sections sit more than twice as far apart as the items inside them. Proximity does the grouping, so the rules can stay hairline instead of shouting.' },
   { set:'design', target:'figures', discipline:'Typography', principle:'Tabular figures',
@@ -734,7 +750,7 @@ const NOTES = [
         open in someone else's experiment. (The chosen lens does persist.) ── */
   const DEFAULTS = { ratio:'1.25', accent:'blue', pair:'system' };
   const state = { ...DEFAULTS };
-  /* two swatches mean a relationship rather than a colour — the page's own
+  /* two swatches mean a relationship rather than a color — the page's own
      accent and "no accent at all" — so each scheme resolves them differently */
   const ACCENTS = [
     { key:'blue',    hex:{ light:'#1F4FD8', dark:'#8FA9FF' }, name:'Institutional blue', why:'Reads as infrastructure. Trusted, slightly cold, and the one nobody argues with.' },
@@ -773,7 +789,7 @@ const NOTES = [
   const hexLum = hex => { const n = parseInt(hex.slice(1),16);
     return lum([n>>16 & 255, n>>8 & 255, n & 255]); };
   const tokenHex = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-  /* two ratios matter: the accent as text on the page, and surface-coloured text
+  /* two ratios matter: the accent as text on the page, and surface-colored text
      sitting on the accent (chips, pins, the pressed button). report the worse —
      both read live, so a scheme flip re-judges everything. */
   function contrastOf(hex){
@@ -861,8 +877,10 @@ const NOTES = [
     return wrap;
   }
 
+  if (!LENSES_LIVE) document.documentElement.dataset.lenses = 'off';
+
   /* ── build every card and pin once; visibility is per lens ── */
-  const entries = NOTES.map(n => {
+  const entries = (LENSES_LIVE ? NOTES : []).map(n => {
     const el = document.querySelector(`[data-note="${n.target}"]`);
     if (!el) return null;
 
@@ -1124,7 +1142,8 @@ const NOTES = [
   });
 
   let start = 'off';
-  try { const saved = localStorage.getItem('kw:lens'); if (saved && (saved === 'off' || saved === 'parser' || LENSES[saved])) start = saved; } catch(e){}
+  if (LENSES_LIVE) try { const saved = localStorage.getItem('kw:lens');
+    if (saved && (saved === 'off' || saved === 'parser' || LENSES[saved])) start = saved; } catch(e){}
   applyOverrides();
   setLens(start);
   setTimeout(layout, 200);
