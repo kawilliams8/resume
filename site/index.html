@@ -699,7 +699,7 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
 
     <div class="colophon">
       <p class="colo-line">Katherine Williams · Senior Software Engineer</p>
-      <p class="colo-sub">This site runs on <a href="https://github.com/kawilliams8/resume/blob/main/site/index.html">one file</a> of good old HTML, CSS and vanilla JavaScript. Built with Claude Code. Updated August, 2026.</p>
+      <p class="colo-sub">This site runs on <a href="https://github.com/kawilliams8/resume/blob/main/site/index.html">one file</a> of good old HTML, CSS and <a href="https://github.com/kawilliams8/resume#why-vanilla-js">vanilla JavaScript</a>. Built with Claude Code. Updated August, 2026.</p>
     </div>
   </main>
 
@@ -1157,7 +1157,8 @@ const NOTES = [
       t.scrollIntoView();
     }));
   /* the short view's own way back into the detail */
-  document.getElementById('shortToFull').addEventListener('click', exitShort);
+  /* it sits at the foot of the short view, so it goes to the top of the long one */
+  document.getElementById('shortToFull').addEventListener('click', () => { exitShort(); toTop(); });
   /* the wordmark is the way home: plain résumé, top of page */
   document.querySelector('.wordmark').addEventListener('click', e => {
     e.preventDefault();

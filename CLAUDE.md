@@ -1,51 +1,53 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code when working in this repository.
 
-## Development Commands
+## What this is
 
-- `npm run dev` - Start development server (runs on port 3000, opens browser automatically)
-- `npm run build` - Build for production (TypeScript compilation + Vite build)
-- `npm run preview` - Preview production build locally
-- `npm run lint` - Run ESLint with TypeScript support
-- `npm run type-check` - Run TypeScript type checking without emitting files
+One self-contained HTML file: `site/index.html`. It holds the markup, the design
+tokens, the layout and the behavior. There is no framework, no build step, no
+package manager and no dependencies. Editing the site means editing that file.
 
-## Architecture Overview
+`amplify.yml` publishes `site/` as static files with an empty build phase.
 
-This is a React/TypeScript resume website built with Vite, featuring:
+## Working on it
 
-### Core Technologies
-- **React 19** with TypeScript
-- **Material-UI (MUI)** for components and theming
-- **Emotion** for styled components
-- **Vite** for build tooling with React Compiler plugin
-- **AWS Amplify** for deployment (configured in amplify.yml)
+- **Preview locally** by serving `site/` — e.g. `python3 -m http.server 8901 -d site`.
+  Do not add a bundler or a dev-server dependency.
+- **Verify in a real browser.** Check the full résumé and the 30-second version,
+  light and dark, and at least one narrow width.
+- **`dev` → `main`.** Work on `dev`, which deploys to its own Amplify URL. Merge
+  to `main` only when it's ready; `main` is live at katherinewilliams.co.
 
-### Performance Architecture
-The application implements sophisticated performance optimizations:
+## Conventions in the file
 
-- **Lazy loading system**: Custom `LazyComponent` wrapper with Intersection Observer API for viewport-based loading
-- **Component preloading**: `useComponentPreloader` hook for strategic component preloading
-- **Performance monitoring**: `usePerformanceMonitor` hook tracks component load times
-- **Bundle splitting**: Vendor chunks separated for React/DOM and MUI libraries
-- **Skeleton UI**: Custom skeleton components for loading states
+- **Tokens first.** Colors, type scale, spacing and sticky offsets are custom
+  properties in the `:root` block. The dark scheme re-declares the same tokens
+  under `:root[data-theme="dark"]` — never a second stylesheet.
+- **One measure.** Prose is capped at `--measure` (66ch). The column is wider so
+  full-width rows can finish their lines. Don't cap single scannable lines to
+  the measure; they're meant to run the column.
+- **Emphasis is a rule.** Bold appears in the summary only. Bullets get none.
+  Accent color is section headings, the status lines and links — nothing else.
+- **The résumé must read with JavaScript off.** Everything ships in the initial
+  HTML; script only adds the interactive layer.
+- **Both views share markup.** The 30-second version is `body.condensed` plus
+  `.short-only` / `.secondary` elements, not a second copy of the résumé.
+- American spelling. No em dashes in the résumé copy.
 
-### Theme System
-Dual-theme architecture with:
-- Light/dark theme toggle via `useThemeMode` hook
-- Dynamic gradient backgrounds that change with theme
-- Custom MUI component overrides for cards and containers
-- Persistent theme state management
+## The annotation layer
 
-### Component Structure
-- **Lazy-loaded components**: CodeBlock, ResumeCards, BotExplainer with dedicated skeleton fallbacks
-- **Layout layers**: Fixed background layer with animated stars, relative foreground content
-- **Responsive design**: Mobile-first approach with breakpoint-specific styling
+The file contains margin notes for four readers (hiring manager, engineer,
+designer, ATS parser), plus the machine view that shows what a parser extracts.
+It is switched off behind `const LENSES_LIVE = false` in the script while the
+writing is finished. Flipping it to `true` restores the chips, the note cards,
+the pins and the parser view.
 
-### Key Files
-- `src/utils/LazyComponent.tsx` - Core lazy loading infrastructure
-- `src/theme/theme.ts` - Theme definitions and MUI customizations
-- `src/hooks/` - Performance and component preloading hooks
-- `vite.config.js` - Build configuration with manual chunk splitting
+Notes live in the `NOTES` array; each anchors to a `data-note` token in the
+markup, so markup can be refactored without breaking an anchor.
 
-The codebase uses path aliasing (`@/` maps to `./src`) and follows TypeScript strict mode conventions.
+## Ground rules
+
+- Every claim a note makes must be true of the code it points at. If a note
+  says the contrast is measured, it has to be measured.
+- Prefer deleting to adding. This page's whole argument is that it is small.
