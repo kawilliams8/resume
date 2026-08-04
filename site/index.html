@@ -233,9 +233,9 @@ h1{font-family:var(--font-display);font-size:var(--step-2);line-height:1.02;lett
   padding-bottom:var(--s-4);border-bottom:1px solid var(--rule)}
 .contact__row{display:flex;flex-wrap:wrap;gap:var(--s-1) var(--s-3)}
 .contact__row > *:not(:last-child)::after{content:"·";display:inline-block;color:var(--ink-3);margin-left:var(--s-3)}
-.contact__where{font-size:10px;letter-spacing:.16em;text-transform:uppercase}
-.contact__links{font-size:11px;letter-spacing:.02em;margin-top:var(--s-2)}
-.contact .status{margin:var(--s-3) 0 0;font-size:12.5px;letter-spacing:.05em;
+.contact__links{font-size:11px;letter-spacing:.02em}
+.contact__where{font-size:10px;letter-spacing:.16em;text-transform:uppercase;margin-top:var(--s-3)}
+.contact .status{margin:0 0 var(--s-3);font-size:12.5px;letter-spacing:.05em;
   color:var(--accent);font-weight:600}
 @media (max-width:640px){ .contact__row > *:not(:last-child)::after{content:none} }
 .contact a{color:var(--ink-2);text-decoration:underline;text-decoration-color:var(--rule);text-underline-offset:3px}
@@ -375,14 +375,19 @@ body.is-overridden .reset{display:inline-flex}
   text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--rule)}
 .as-link:hover{text-decoration-color:var(--accent)}
 
-/* ── the 30-second version: same header, no bullets, no notes ── */
+/* ── the 30-second version: same header, one line per role, no notes ── */
 .short-only{display:none}
+/* one broad line where the bullets were — enough to turn a date list back
+   into a career, short enough to still scan in thirty seconds */
+.role-summary{margin:var(--s-2) 0 0;font-size:var(--step-0);line-height:1.5;
+  color:var(--ink-2)}   /* full column — one line each, so the eye keeps its rhythm */
 body.condensed .bullets,
 body.condensed .secondary,
 body.condensed .colophon,
 body.condensed .lenses,
 body.condensed .notes-control__label,
 body.condensed .reset,
+body.condensed section[aria-labelledby="h-fit"],
 body.condensed section[aria-labelledby="h-education"],
 body.condensed section[aria-labelledby="h-contact"]{display:none}
 body.condensed .note,body.condensed .pin{display:none!important}
@@ -390,8 +395,11 @@ body.condensed .short-only{display:block}
 body.condensed .short-contact{display:block}
 body.condensed .role-head > div{display:flex;align-items:baseline;gap:var(--s-2);flex-wrap:wrap}
 body.condensed .role-title{font-size:var(--step-0);font-weight:600}
-body.condensed .role-org{margin-top:0;font-size:14px}
-body.condensed .role-org::before{content:"· "}
+/* company names read as ink beside the title — the accent stays earned by
+   the section headings and the status line */
+body.condensed .role-org{margin-top:0;font-size:14px;color:var(--ink-2)}
+body.condensed .role-org::before{content:"· ";color:var(--ink-3)}
+body.condensed h2{color:var(--accent)}
 body.condensed .role-entry{padding:var(--s-3) 0 var(--s-2);border-bottom:0}
 body.condensed h2{margin-top:var(--s-5)}
 .note:hover,.note:focus-visible,.note.is-lit{background:var(--surface);box-shadow:var(--shadow-lift)}
@@ -451,17 +459,17 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
       <h1 data-note="type-scale">Katherine Williams</h1>
       <p class="role" data-note="role-type">Senior Software Engineer</p>
       <div class="contact">
-        <div class="contact__row contact__where">
-          <span>Colorado</span>
-          <span>Remote</span>
-        </div>
+        <p class="status" data-note="status">Next role: senior, product-minded, frontend-leaning, AI-forward</p>
         <div class="contact__row contact__links">
           <a href="mailto:kawilliams8@gmail.com">kawilliams8@gmail.com</a>
           <a href="https://katherinewilliams.co">katherinewilliams.co</a>
           <a href="https://linkedin.com/in/kawilliamsco">linkedin.com/in/kawilliamsco</a>
           <a href="https://github.com/kawilliams8">github.com/kawilliams8</a>
         </div>
-        <p class="status" data-note="status">Next role: senior, product-minded, frontend-leaning, AI-forward</p>
+        <div class="contact__row contact__where">
+          <span>Colorado</span>
+          <span>Remote</span>
+        </div>
       </div>
 
       <div class="picker-rail">
@@ -487,7 +495,7 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
         </div>
       </div>
 
-      <p class="lede" data-note="measure">Frontend engineer with <b>seven years</b> building component-driven applications in TypeScript and React.<span class="secondary"> Polished interfaces, owned end to end — with a focus on interaction detail, web performance, and product instincts that hold up under real users. Equal parts builder and communicator.</span> <span data-note="ai-claim">I build with <b>Claude Code</b> daily, and shipped LLM features to production at Fluint.</span></p>
+      <p class="lede" data-note="measure">Fullstack engineer, <b>seven years</b> building component-driven applications in React, TypeScript and modern backend technologies.<span class="secondary"> Polished interfaces, owned end to end — interaction detail, web performance, and product instincts that hold up under real users. Equal parts builder and communicator.</span> <span data-note="ai-claim">I build with <b>Claude Code</b> daily and ship <b>LLM features</b> to production.</span></p>
     </header>
 
     <!-- ══ the machine's copy — filled from the live DOM when the parser lens opens ══ -->
@@ -516,8 +524,9 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
             <h3 class="role-title">Customer Success Engineer</h3>
             <p class="role-org">Fluint</p>
           </div>
-          <p class="role-dates" data-note="figures">Oct 2025 — May 2026</p>
+          <p class="role-dates" data-note="figures"><span class="secondary">Oct </span>2025 — <span class="secondary">May </span>2026</p>
         </div>
+        <p class="short-only role-summary">Owned features end to end on a multi-tenant AI product, in React and TypeScript.</p>
         <ul class="bullets" data-note="serial-position">
           <li>Owned features end to end on a <b>multi-tenant AI product</b> — task schedulers, tiered organization configuration, and the React/TypeScript surfaces customers used most, plus the UX and product decisions behind them.</li>
           <li>Built the chat output surface for an AI tool generating sales documents <b>across multiple models</b>, so people could verify and rework whatever the model wrote.</li>
@@ -533,8 +542,9 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
             <h3 class="role-title">Full Stack Developer <span class="role-note">(Contract)</span></h3>
             <p class="role-org">ultraPacer</p>
           </div>
-          <p class="role-dates">Apr 2025 — Oct 2025</p>
+          <p class="role-dates"><span class="secondary">Apr 2025 — Oct </span>2025</p>
         </div>
+        <p class="short-only role-summary">Owned the front end of a consumer endurance-running tool in Vue and TypeScript.</p>
         <ul class="bullets">
           <li>Owned the front end on a small team, building responsive consumer-facing interfaces for an endurance-running tool in <b>Vue and TypeScript</b>.</li>
           <li>Translated Figma layouts into pixel-accurate interfaces, and picked up Vue on the job while <b>shipping from week one</b>.</li>
@@ -548,8 +558,9 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
             <h3 class="role-title">Full Stack Developer</h3>
             <p class="role-org">Array</p>
           </div>
-          <p class="role-dates">Nov 2021 — Jun 2024</p>
+          <p class="role-dates"><span class="secondary">Nov </span>2021 — <span class="secondary">Jun </span>2024</p>
         </div>
+        <p class="short-only role-summary">Full-stack work on a real-time audience platform used live at large events.</p>
         <ul class="bullets">
           <li>Built the front end of a real-time consumer-facing audience platform used <b>live at large events</b>, in React and TypeScript, with WebSocket interaction that stayed fast under load.</li>
           <li>Built an in-app configuration suite for customizing presentations, making complex authoring feel simple for non-technical users.</li>
@@ -563,8 +574,9 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
             <h3 class="role-title">Full Stack Developer</h3>
             <p class="role-org">National Renewable Energy Laboratory</p>
           </div>
-          <p class="role-dates">Dec 2019 — Nov 2021</p>
+          <p class="role-dates"><span class="secondary">Dec </span>2019 — <span class="secondary">Nov </span>2021</p>
         </div>
+        <p class="short-only role-summary">Built internal web applications for research teams in an agency-style delivery model.</p>
         <ul class="bullets">
           <li>Built internal web applications across many languages in an agency-style delivery model.</li>
         </ul>
@@ -581,6 +593,7 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
           </div>
           <p class="role-dates">2026 — Present</p>
         </div>
+        <p class="short-only role-summary">Race-planning app, live with real users: React, Express, MongoDB, Clerk auth, Stripe payments.</p>
         <ul class="bullets" data-note="project">
           <li>Race-planning app for the ultrarunning community: <b>React 18, TypeScript, Vite</b>, with a custom design token system over Chakra UI, bespoke color scales, an RP-prefixed reusable component library, and self-hosted variable typography.</li>
           <li>Interactive UI craft: Mapbox GL race map with custom markers, drag-and-drop crew planner (dnd-kit), Framer Motion animation, and a cache-first TanStack Query data layer.</li>
@@ -592,7 +605,6 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
     <section aria-labelledby="h-fit">
       <h2 id="h-fit">Skills</h2>
       <dl class="kv" data-note="skills">
-        <dt class="short-only">Core</dt><dd class="short-only">TypeScript · React · Vue · design systems · accessibility · Node</dd>
         <dt class="secondary">Frontend</dt><dd class="secondary">TypeScript · JavaScript (ES6+) · React · React Hooks · Vue · component-driven architecture · SPAs · state management (Redux) · semantic HTML · CSS animations · responsive design · performance optimization · cross-browser compatibility</dd>
         <dt class="secondary">UI &amp; design</dt><dd class="secondary">UI/UX design · Figma · design systems · Storybook · Tailwind CSS · shadcn/ui · Material UI · web accessibility (WCAG)</dd>
         <dt class="secondary">AI-assisted</dt><dd class="secondary">Claude Code (custom agents · MCP connectors) · LLM integration</dd>
