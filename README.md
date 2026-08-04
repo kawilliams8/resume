@@ -8,6 +8,23 @@ No framework, no build step, no network requests. `site/index.html` holds the
 markup, the design tokens, the layout and the behavior in one place — open it in
 a browser from disk and it works.
 
+## Why vanilla JS?
+
+The React version worked great. It had lazy loading behind an Intersection
+Observer, bundle splitting, a component preloader, skeleton states, and more;
+real engineering and genuinely fun to create. But real devs know that tech is
+overkill for a text site and there are real drawbacks for readers.
+
+So: one file. It arrives in a single request, works with JavaScript off in the
+browser, prints cleanly, opens from disk, and hands an ATS or an LLM the entire
+résumé in the initial HTML. When a date changes I open one file and change a
+date. Easy peasy.
+
+But this isn't an argument against React! I build with it daily, and
+[Racer & Pacer](https://racerandpacer.com) is React, TypeScript and Vite because
+that app earns it. This resume is an argument for fitting the tool to the
+problem.
+
 ## What's here
 
 | | |
@@ -52,10 +69,9 @@ deploys to its own URL, and merges to `main` when it's ready.
 ## Site updates
 
 **August 2026 — rebuilt as one file.** Vanilla HTML, CSS and JavaScript, no
-framework and no build. Added the 30-second version, a dark scheme, a print
-stylesheet, and metadata written for machines as much as for people. The React
-version had grown lazy loading, bundle splitting and a component preloader to
-serve what is, in the end, one page of text.
+framework and no build — the reasoning is up in [Why vanilla JS?](#why-vanilla-js).
+Added the 30-second version, a dark scheme, a print stylesheet, and metadata
+written for machines as much as for people.
 
 **May 2026 — content refresh.** Corrected dates, updated skills.
 
