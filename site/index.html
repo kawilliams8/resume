@@ -70,7 +70,9 @@
   --ratio:1.25;
   --step-0:var(--base);
   --step-1:calc(var(--base) * var(--ratio));
-  --step-2:clamp(28px, 6vw, calc(var(--base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio)));
+  /* the name stays the largest thing on the page: it grows with the viewport
+     until it hits the scale's top step, and never wraps */
+  --step-2:clamp(28px, 10vw, calc(var(--base) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio) * var(--ratio)));
   --measure:66ch;
 
   /* space — 4px base, doubled between sections */
@@ -79,6 +81,7 @@
   /* sticky geometry — the nav parks at 0, everything else parks under it */
   --stick:68px;        /* top offset for anything sticky below the nav */
   --rail-top:150px;    /* where the picker rail starts, level with the name */
+  --rail-w:200px;      /* the picker rail, and the offset the column takes */
 
   /* motion */
   --dur:240ms; --ease:cubic-bezier(.22,1,.36,1);
@@ -157,12 +160,36 @@ a{color:var(--accent)}
 /* scheme always; reset joins it only once something has been changed */
 .picker-foot{display:flex;justify-content:flex-end;gap:var(--s-2);flex-wrap:wrap;
   border-top:1px solid var(--rule-2);margin-top:var(--s-3);padding-top:var(--s-3)}
-@media (min-width:1360px){
-  .picker-rail{display:block;position:absolute;top:var(--rail-top);bottom:0;left:32px;width:236px}
-  .notes-control{position:sticky;top:var(--stick);margin:0}
+/* below the rail: the picker is a cluster of controls in the column, not a
+   panel. it hugs its content so nothing is stranded across empty space. */
+@media (max-width:899px){
+  /* no rail fits — so the controls stop being a panel and read as a row of
+     chips under the contact block, not a box interrupting the page */
+  .notes-control{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-2) var(--s-4);
+    width:fit-content;max-width:100%;border:0;background:none;padding:0;margin-top:var(--s-4)}
+  .versions,.lenses{margin-bottom:0}
+  .notes-control__label{width:100%;margin-bottom:0}
+  .picker-foot{border-top:0;margin:0;padding:0}
+  .picker-foot .scheme{margin-left:0;max-width:200px}
+}
+/* the rail and the column are a pair, laid out from the left. the column stops
+   centering itself the moment the rail appears — otherwise the rail gets
+   squeezed into whatever gutter centring happens to leave, while the slack
+   piles up on the right doing nothing. */
+@media (min-width:900px){
+  .picker-rail{display:block;position:absolute;top:var(--rail-top);bottom:0;
+    left:var(--s-5);width:var(--rail-w)}
+  .notes-control{position:sticky;top:var(--stick);margin:0;padding:var(--s-3)}
   .versions{flex-direction:column;align-items:stretch}
   .picker-foot .scheme{max-width:none;margin-left:0}
   .picker-foot .reset{width:100%;justify-content:center}
+  /* the column takes the offset and gives back width as the window narrows —
+     prose is capped at the measure anyway, so it never gets long-lined */
+  .page > main{margin-left:calc(var(--rail-w) + var(--s-5));margin-right:0}
+}
+@media (min-width:1120px){
+  :root{--rail-w:236px}
+  .notes-control{padding:var(--s-3) var(--s-4)}
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -196,10 +223,15 @@ body[data-notes="parser"] header > :not(.picker-rail){display:none}
    One measure. The annotation layer overlays — it never occupies
    layout space, so turning it off costs nothing.
    ═══════════════════════════════════════════════════════════════ */
-.page{max-width:1400px;margin:0 auto;padding:var(--s-6) var(--s-5) 120px;position:relative}
+/* wide enough that the rail, a full column, and the note-card gutter all fit
+   on a large screen without the column having to give any width back */
+.page{max-width:1500px;margin:0 auto;padding:var(--s-6) var(--s-5) 120px;position:relative}
 /* the column holds the same position in every state — nothing reflows when a
    lens opens, so the entrance animation has a still page to land on */
-main{max-width:760px;margin:0 auto}
+/* the column is wider than the prose inside it: paragraphs stay capped at the
+   measure, while the full-width rows (status, contact, role heads, rules) get
+   room to finish their lines */
+main{max-width:880px;margin:0 auto}
 
 /* ═══════════════════════════════════════════════════════════════
    COMPONENT · site nav
@@ -212,13 +244,28 @@ main{max-width:760px;margin:0 auto}
   color:var(--ink);text-decoration:none}
 .sitenav .wordmark:hover{color:var(--accent)}
 .sitenav ul{list-style:none;display:flex;gap:var(--s-4);margin:0;padding:0}
+.sitenav li{display:flex}
+/* both sides hug their own text, so centring puts them on one line and leaves
+   an even gap above the rule. the padding is the tap target — it sets the bar's
+   height rather than the text's line box. */
+.sitenav a,.sitenav .wordmark{line-height:1;padding:var(--s-2) 0}
+/* phone: the wordmark is redundant with the name right below it, and dropping
+   it keeps the links on one row instead of doubling the sticky bar's height */
+@media (max-width:640px){
+  .sitenav a{padding:var(--s-3) 0}
+  .sitenav .wordmark{display:none}
+  .sitenav{justify-content:center}
+}
 .sitenav a{font-family:var(--font-mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;
   color:var(--ink-3);text-decoration:none;white-space:nowrap}
 .sitenav a:hover{color:var(--ink)}
 /* the scheme control names both states and marks the one you're in */
 .scheme{display:flex;flex:1;max-width:220px;margin-left:auto}
-.scheme-opt{flex:1;font-family:var(--font-mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;font-weight:600;
-  cursor:pointer;color:var(--ink-3);background:none;border:1.5px solid var(--rule);padding:5px 0;text-align:center;
+/* equal halves that never collapse to their text: a min width so the pair
+   reads as one control whether it's stretching in the rail or hugging in the
+   column */
+.scheme-opt{flex:1 1 0;min-width:72px;font-family:var(--font-mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;font-weight:600;
+  cursor:pointer;color:var(--ink-3);background:none;border:1.5px solid var(--rule);padding:6px var(--s-3);text-align:center;
   transition:color var(--dur) var(--ease),background var(--dur) var(--ease),border-color var(--dur) var(--ease)}
 .scheme-opt:first-child{border-radius:3px 0 0 3px;border-right:0}
 .scheme-opt:last-child{border-radius:0 3px 3px 0}
@@ -228,7 +275,8 @@ main{max-width:760px;margin:0 auto}
 /* ═══════════════════════════════════════════════════════════════
    COMPONENT · résumé header
    ═══════════════════════════════════════════════════════════════ */
-h1{font-family:var(--font-display);font-size:var(--step-2);line-height:1.02;letter-spacing:-.032em;font-weight:600;margin:0 0 var(--s-2)}
+h1{font-family:var(--font-display);font-size:var(--step-2);line-height:1.02;letter-spacing:-.032em;font-weight:600;
+  margin:0 0 var(--s-2);white-space:nowrap}
 .role{font-family:var(--font-display);font-size:var(--step-1);color:var(--ink-2);margin-bottom:var(--s-3)}
 /* three registers, one voice: location as a quiet label, links a step up,
    the status line in accent. separators live in the pseudo layer — punctuation
@@ -241,7 +289,8 @@ h1{font-family:var(--font-display);font-size:var(--step-2);line-height:1.02;lett
 .contact__where{font-size:10px;letter-spacing:.16em;text-transform:uppercase;margin-top:var(--s-3)}
 .contact .status{margin:0 0 var(--s-3);font-size:12.5px;letter-spacing:.05em;
   color:var(--accent);font-weight:600}
-@media (max-width:640px){ .contact__row > *:not(:last-child)::after{content:none} }
+/* the second line answers a different question, so it sits a step quieter */
+.contact .status--where{margin:var(--s-1) 0 var(--s-3);font-weight:500;color:var(--ink-2)}
 .contact a{color:var(--ink-2);text-decoration:underline;text-decoration-color:var(--rule);text-underline-offset:3px}
 .contact a:hover{text-decoration-color:var(--accent);color:var(--accent)}
 .lede{font-size:var(--step-1);line-height:1.58;color:var(--ink-2);max-width:var(--measure);margin:var(--s-5) 0 0}
@@ -283,7 +332,7 @@ h2{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transfor
 .kv{display:grid;grid-template-columns:fit-content(300px) minmax(0,1fr);gap:2px var(--s-5);margin:var(--s-4) 0 0}
 /* school names read as one line — the column has the room */
 section[aria-labelledby="h-education"] .kv dt{white-space:nowrap}
-@media (max-width:900px){ section[aria-labelledby="h-education"] .kv dt{white-space:normal} }
+@media (max-width:720px){ section[aria-labelledby="h-education"] .kv dt{white-space:normal} }
 .kv dt{font-family:var(--font-mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;
   color:var(--ink-3);padding-top:6px}
 .kv dd{margin:0 0 var(--s-3);font-size:var(--step-0);color:var(--ink-2)}
@@ -427,6 +476,10 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
 /* narrow: cards fall into the flow under their subjects, pins carry the pairing */
 @media (max-width:900px){
   .page{padding:var(--s-5) var(--s-4) 80px}
+}
+/* only stack when the column is genuinely narrow — with the rail up, a 900px
+   window still leaves a 628px column, which holds a title and its dates fine */
+@media (max-width:720px){
   .kv{grid-template-columns:1fr}
   .kv dt{padding-top:var(--s-3)}
   .role-head{flex-direction:column;gap:var(--s-1)}
@@ -468,7 +521,8 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
       <h1 data-note="type-scale">Katherine Williams</h1>
       <p class="role" data-note="role-type">Senior Software Engineer</p>
       <div class="contact">
-        <p class="status" data-note="status">Next role: senior, product-minded, frontend-leaning, AI-forward</p>
+        <p class="status" data-note="status">Next role: senior, product-minded, customer-focused, frontend-leaning, AI-forward</p>
+        <p class="status status--where">Best role: design, UX, feature work, and the conversations that shape what gets built (and why)</p>
         <div class="contact__row contact__links">
           <a href="mailto:kawilliams8@gmail.com">kawilliams8@gmail.com</a>
           <a href="https://katherinewilliams.co">katherinewilliams.co</a>
@@ -945,7 +999,7 @@ const NOTES = [
     const mb = document.querySelector('main').getBoundingClientRect();
     const mainL = mb.left - pb.left, mainR = mb.right - pb.left;
     const gutL = mainL, gutR = pb.width - mainR;
-    const sidebarUp = matchMedia('(min-width:1360px)').matches;   /* picker owns the left gutter */
+    const sidebarUp = matchMedia('(min-width:900px)').matches;   /* picker owns the left gutter */
     const bothSides = !sidebarUp && gutL >= 260 && gutR >= 260;
     const W = bothSides ? 236 : Math.min(236, Math.max(0, gutR - 14));
     const rightOnly = !bothSides && W >= 200;
