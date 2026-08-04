@@ -1027,8 +1027,12 @@ const NOTES = [
   }
 
   /* ── lens switching ───────────────────────────────────────── */
+  const toTop = () => window.scrollTo({ top:0, behavior: reduce ? 'auto' : 'smooth' });
   const buttons = [...document.querySelectorAll('.chip[data-lens]')];
-  function setLens(lens){
+  /* a lens is a fresh reading of the whole document: numbering restarts at 1
+     and the machine view replaces the page, so both start at the top. `keep`
+     is for the nav, which is on its way somewhere specific. */
+  function setLens(lens, keep){
     if (lens === 'parser') fillParserView();
     const swap = () => {
       body.dataset.notes = lens;
@@ -1041,6 +1045,7 @@ const NOTES = [
       });
     };
     swap();
+    if (!keep) toTop();
     try { localStorage.setItem('kw:lens', lens); } catch(e){}
     /* the cards animate themselves in — a page-wide view transition
        would just cross-fade over the top of it */
@@ -1059,7 +1064,7 @@ const NOTES = [
       const t = document.querySelector(a.getAttribute('href'));
       if (!t) return;
       if (t.offsetParent === null){
-        if (body.dataset.notes === 'parser') setLens('off');
+        if (body.dataset.notes === 'parser') setLens('off', true);
         exitShort();
       }
       t.scrollIntoView();
@@ -1071,7 +1076,7 @@ const NOTES = [
     e.preventDefault();
     exitShort();
     if (body.dataset.notes !== 'off') setLens('off');
-    window.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'});
+    toTop();
   });
 
   document.getElementById('resetBtn').addEventListener('click', () => {
@@ -1099,6 +1104,7 @@ const NOTES = [
     if (isShort()){ exitShort(); setLens('off'); return; }
     body.classList.add('condensed');
     applyOverrides();
+    toTop();
   });
   /* follow the system until the reader states a preference */
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
