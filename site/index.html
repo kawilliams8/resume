@@ -63,7 +63,10 @@
   --font-display: var(--font-sans);   /* headings — swappable in the designer lens */
   --font-body: var(--font-sans);      /* prose */
   --font-mono: ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
-  --font-hand: "Bradley Hand","Noteworthy","Marker Felt","Chalkboard SE","Segoe Print",cursive;
+  /* the notes are in a hand, so they read as margin commentary rather than more
+     résumé. installed faces only — no webfont, no request. Georgia is the last
+     resort instead of `cursive`, which lands on Comic Sans on Windows. */
+  --font-note: "Marker Felt","Ink Free","Segoe Script",Georgia,serif;
   /* scale — every prose size derives from one base and one ratio.
      drag the ratio in the designer lens and the whole page re-proportions. */
   --base:16px;
@@ -167,10 +170,17 @@ a{color:var(--accent)}
      chips under the contact block, not a box interrupting the page */
   .notes-control{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-2) var(--s-4);
     width:fit-content;max-width:100%;border:0;background:none;padding:0;margin-top:var(--s-4)}
+  .notes-control__label{width:100%}
   .versions,.lenses{margin-bottom:0}
   .notes-control__label{width:100%;margin-bottom:0}
   .picker-foot{border-top:0;margin:0;padding:0}
   .picker-foot .scheme{margin-left:0;max-width:200px}
+}
+/* only on a real phone do the chips need columns — anywhere wider they should
+   hug their own labels rather than stretch across the page */
+@media (max-width:560px){
+  .versions,.lenses{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-2);width:100%}
+  .chip{padding:var(--s-2)}
 }
 /* the rail and the column are a pair, laid out from the left. the column stops
    centering itself the moment the rail appears — otherwise the rail gets
@@ -356,21 +366,31 @@ section[aria-labelledby="h-education"] .kv dt{white-space:nowrap}
 #annotations{position:absolute;inset:0;pointer-events:none;z-index:40;display:none}
 body:not([data-notes="off"]) #annotations{display:block}
 
-/* no room in the margins — the card falls into the flow under its subject */
+/* no room in the margins — the card falls into the flow under its subject, but
+   only once its pin is tapped. the résumé reads uninterrupted until you ask. */
+.note--inline{display:none}
+.note--inline.is-open{display:block}
 .note--inline{position:static!important;width:auto!important;--tilt:0deg;
-  margin:var(--s-3) 0 var(--s-4);box-shadow:none;max-width:var(--measure);
+  /* more air below than above, so the card still reads as belonging to the
+     line it explains rather than to whatever follows it */
+  margin:var(--s-4) 0 var(--s-5);box-shadow:none;max-width:min(100%, 420px);
   background:var(--accent-wash);border-color:transparent;padding:var(--s-2) var(--s-3)}
 .note--inline .note__principle{font-size:13px;padding-bottom:var(--s-1);margin-bottom:var(--s-1)}
 .note--inline .note__body{font-size:13.5px}
 .note--inline .note__proof{margin-top:var(--s-2)}
+/* the index and the discipline chip share a centre line */
 .note--inline .note__index{position:static;display:inline-flex;margin:0 var(--s-2) var(--s-2) 0;vertical-align:middle}
-.note{--tilt:-.4deg;transform:rotate(var(--tilt));transform-origin:left top;
+.note--inline .note__discipline{vertical-align:middle;margin-bottom:var(--s-2)}
+.note{--tilt:-.9deg;transform:rotate(var(--tilt));transform-origin:left top;
   position:absolute;width:236px;pointer-events:auto;outline:none;cursor:default;
   background:var(--surface);border:1px solid var(--rule);
   border-radius:2px;box-shadow:var(--shadow);
   padding:var(--s-2) var(--s-3) var(--s-3);
   transition:box-shadow 140ms,background 140ms}
-.note:nth-of-type(even){--tilt:.35deg}
+.note:nth-of-type(even){--tilt:.8deg}
+/* a card in the flow sits square — the tilt is only for cards pinned in the
+   margin. declared last so it beats both tilt rules above. */
+.note.note--inline{--tilt:0deg}
 /* left-hand notes mirror: the index chip flips to the inside edge */
 .note.is-left .note__index{left:auto;right:-11px}
 .note__index{position:absolute;left:-11px;top:-10px;display:inline-flex;align-items:center;justify-content:center;
@@ -385,7 +405,10 @@ body:not([data-notes="off"]) #annotations{display:block}
   border-bottom:1px solid var(--rule)}
 .note__proof-label b.verb{font-family:var(--font-mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;
   color:var(--accent);font-weight:600}
-.note__body{display:block;font-family:var(--font-hand);font-size:14.5px;line-height:1.34;color:var(--ink-2)}
+/* the marker face has very little built-in leading, so its first line rides up
+   against the rule above it — give it the space the font doesn't */
+.note__body{display:block;font-family:var(--font-note);font-size:14.5px;line-height:1.42;
+  color:var(--ink-2);margin-top:var(--s-2)}
 .note__body em{font-style:normal;text-decoration:underline;text-underline-offset:2px}
 
 /* ── proofs: a control inside the note that makes the claim ── */
@@ -467,11 +490,32 @@ body.condensed h2{margin-top:var(--s-5)}
 /* pin dropped onto the annotated element — the pairing that survives every width */
 .pin{display:none;align-items:center;justify-content:center;width:15px;height:15px;line-height:1;
   border:1px solid var(--accent);border-radius:50%;background:var(--bg);color:var(--accent);
-  font-family:var(--font-mono);font-size:8.5px;font-weight:600;vertical-align:super;margin-left:5px;
+  font-family:var(--font-mono);font-size:8.5px;font-weight:600;margin-left:5px;
+  /* sits on the text's baseline and dips just below it. relative offset, so
+     the line box never grows and the copy's leading is untouched. */
+  vertical-align:baseline;position:relative;top:-4px;
   padding:0;cursor:pointer;transition:background 140ms,color 140ms}
 body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
 .pin.is-lit{background:var(--accent);color:var(--surface)}
-.is-annotated{box-shadow:inset 0 0 0 1px var(--accent);background:var(--accent-wash);border-radius:2px}
+/* on a phone the pin is the whole affordance: filled so it reads as a control
+   rather than a footnote marker, and wrapped in an invisible 40px tap target */
+@media (max-width:899px){
+  .pin{position:relative;width:24px;height:24px;font-size:11px;margin-left:7px;
+    background:var(--accent);color:var(--bg);border-color:var(--accent);
+    box-shadow:0 1px 3px rgba(0,0,0,.18)}
+  .pin::after{content:"";position:absolute;inset:-8px}
+  .pin[aria-expanded="true"],.pin[aria-expanded="true"].is-lit{
+    background:var(--ink);border-color:var(--ink);color:var(--bg)}
+}
+/* backgrounds and borders mark the element's box, which runs the full column
+   even when the text is half that wide. a decoration marks the text itself.
+   dotted, so it reads as an annotation rather than a link. */
+/* solid, not dotted: a dotted underline restarts its dot phase at every inline
+   box, so any line containing a <b> or a <span> — the AI claim, every date —
+   stutters where the fragment begins. a hairline has no phase to break. */
+.is-annotated{text-decoration:underline var(--accent);
+  text-decoration-thickness:1.5px;text-underline-offset:4px;
+  text-decoration-skip-ink:none}
 
 /* narrow: cards fall into the flow under their subjects, pins carry the pairing */
 @media (max-width:900px){
@@ -585,7 +629,7 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
       <article class="role-entry">
         <div class="role-head">
           <div>
-            <h3 class="role-title">Customer Success Engineer</h3>
+            <h3 class="role-title" data-note="role-title-1">Customer Success Engineer</h3>
             <p class="role-org">Fluint</p>
           </div>
           <p class="role-dates" data-note="figures"><span class="secondary">Oct </span>2025 — <span class="secondary">May </span>2026</p>
@@ -622,7 +666,7 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
             <h3 class="role-title">Full Stack Developer</h3>
             <p class="role-org">Array</p>
           </div>
-          <p class="role-dates"><span class="secondary">Nov </span>2021 — <span class="secondary">Jun </span>2024</p>
+          <p class="role-dates" data-note="the-gap"><span class="secondary">Nov </span>2021 — <span class="secondary">Jun </span>2024</p>
         </div>
         <p class="short-only role-summary">Full-stack work on a real-time audience platform used live at Fortune 500 events.</p>
         <ul class="bullets">
@@ -654,13 +698,13 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
       <article class="role-entry">
         <div class="role-head">
           <div>
-            <h3 class="role-title">Racer &amp; Pacer</h3>
+            <h3 class="role-title" data-note="project">Racer &amp; Pacer</h3>
             <p class="role-org">Founder, solo developer · <a href="https://racerandpacer.com">racerandpacer.com</a></p>
           </div>
           <p class="role-dates">2026 — Present</p>
         </div>
         <p class="short-only role-summary">Race-planning app, live with real users: React, Express, MongoDB, Clerk auth, Stripe payments.</p>
-        <ul class="bullets" data-note="project">
+        <ul class="bullets">
           <li>Race-planning app for the ultrarunning community: React 18, TypeScript, Vite, with a custom design token system over Chakra UI, bespoke color scales, an RP-prefixed reusable component library, and self-hosted variable typography.</li>
           <li>Interactive UI craft: Mapbox GL race map with custom markers, drag-and-drop crew planner (dnd-kit), Framer Motion animation, and a cache-first TanStack Query data layer.</li>
           <li>Production-grade: Clerk auth, Stripe payments, Express and MongoDB backend, Sentry monitoring; tested with Vitest, Testing Library and Playwright; deployed on AWS Amplify and Railway.</li>
@@ -716,11 +760,13 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
    In the Vite app this is notes.ts.
    ═══════════════════════════════════════════════════════════════ */
 /* ─────────────────────────────────────────────────────────────
-   The annotation lenses ship when their copy is finished. Flip
-   this to true to bring back the four "Read this résumé as"
-   buttons, the note cards, and the ATS parser view.
+   The annotation lenses are still being written, so they run
+   everywhere except the live site: localhost and the dev URL get
+   the four "Read this résumé as" buttons, the note cards and the
+   ATS parser view; katherinewilliams.co doesn't. Delete the check
+   to ship them.
    ───────────────────────────────────────────────────────────── */
-const LENSES_LIVE = false;
+const LENSES_LIVE = !/(^|\.)katherinewilliams\.co$/.test(location.hostname);
 
 const LENSES = { design:1, engineering:1, hiring:1 };
 
@@ -766,17 +812,17 @@ const NOTES = [
     body:'Cards take focus, pins are real buttons that hand it to them, and the lens control is wired with <em>aria-pressed</em>. Both ends of every pairing work from the keyboard.' },
 
   /* ── hiring manager ───────────────────────────────────────── */
-  { set:'hiring', target:'measure', discipline:'If you have 30 seconds', principle:'What the short version cuts',
-    body:'It keeps the roles, the dates, the stack, and where I want to land next. It drops the bullets: if the shape does not fit, the detail will not change your mind, and you have the rest of the pile to get through.' },
+  { set:'hiring', target:'role-title-1', discipline:'Title', principle:'Read the bullets, not the title',
+    body:'Early-stage titles are whatever fits the org chart that quarter. The work was product and engineering: features owned end to end, the React and TypeScript surfaces customers used most, and the decisions behind them.' },
   { set:'hiring', target:'role-type', discipline:'Level', principle:'Scope, not tenure',
     body:'Senior here means scope owned: features end to end, the shared component patterns a team ships on, the front end of a live product.' },
   { set:'hiring', target:'ai-claim', discipline:'Where to push', principle:'Interrogate this line',
     body:'"Uses AI daily" is the easiest claim on any résumé and the hardest to back. Ask what shipped, who used it, what it got wrong, and what I did about the wrongness.' },
-  { set:'hiring', target:'figures', discipline:'Dates', principle:'Role dates, not a claim',
+  { set:'hiring', target:'the-gap', discipline:'Dates', principle:'Role dates, not a claim',
     body:'Not an assertion of continuous employment. There is a gap in 2024 to 2025, and the latest role has an end date. Ask directly; it is a shorter conversation than you think.' },
   { set:'hiring', target:'project', discipline:'Unsupervised work', principle:'The best evidence here',
     body:'The only thing on this page nobody assigned me. If you want to know what I do when the constraints are mine, start here rather than with the roles.' },
-  { set:'hiring', target:'looking-for', discipline:'Fit check', principle:'Start here',
+  { set:'hiring', target:'looking-for', discipline:'Fit check', principle:'The quickest read on fit',
     body:'If the role doesn\'t rhyme with this row, we can save each other a phone screen. And if it does, that\'s worth knowing in the first minute too.' },
 ];
 
@@ -802,6 +848,17 @@ const NOTES = [
   }
 
   const inLens = (n, lens) => n.set === lens;
+  /* closing has to put the highlight back too, or the annotated text stays lit
+     until focus happens to land somewhere else */
+  function closeInlineNotes(){
+    entries.forEach(e => {
+      if (e.card.classList.contains('is-open')){
+        e.card.classList.remove('is-open');
+        e.pin.setAttribute('aria-expanded', 'false');
+        e.off();
+      }
+    });
+  }
 
   /* ── overrides: live on :root, never persisted, so a shared link cannot
         open in someone else's experiment. (The chosen lens does persist.) ── */
@@ -960,9 +1017,16 @@ const NOTES = [
     pin.className = 'pin';
     pin.hidden = true;
     pin.setAttribute('aria-label', `Jump to design note: ${n.principle}`);
-    /* the pin is the reachable end of the pairing: click or Enter hands focus
-       to its card, which lights both ends via the focusin wiring below */
-    pin.addEventListener('click', () => card.focus());
+    /* wide: the pin hands focus to its card in the margin. narrow: the card is
+       not in the page until the pin asks for it, and only one is open at a time. */
+    pin.addEventListener('click', () => {
+      if (!card.classList.contains('note--inline')){ card.focus(); return; }
+      const wasOpen = card.classList.contains('is-open');
+      closeInlineNotes();
+      pin.setAttribute('aria-expanded', !wasOpen);
+      if (!wasOpen){ card.classList.add('is-open'); entry.on(); card.focus(); }
+      else { entry.off(); card.blur(); }
+    });
     /* the pin has to ride an element that may contain a span; <dl> may not */
     const host = el.tagName === 'UL'  ? el.querySelector('li:last-child')
                : el.tagName === 'DL'  ? el.querySelector('dd:last-of-type')
@@ -1011,13 +1075,27 @@ const NOTES = [
     /* narrow: put each card in the document flow, directly after the block it
        annotates. wide: it belongs to the overlay. */
     if (inFlow){
-      const blockOf = el => {                     /* climb to the landmark's own child */
+      /* land the card as close to the tapped pin as the layout allows: after
+         the annotated element itself, climbing only out of inline text and out
+         of flex/grid parents, where a card would become a stray row or cell */
+      const blockOf = el => {
         let n = el;
-        while (n.parentElement && !['SECTION','HEADER','MAIN'].includes(n.parentElement.tagName)) n = n.parentElement;
+        while (n.parentElement){
+          const me = getComputedStyle(n).display, up = getComputedStyle(n.parentElement).display;
+          if (me.startsWith('inline') || up === 'flex' || up === 'grid') n = n.parentElement;
+          else break;
+        }
         return n;
       };
+      /* a relayout closes whatever was open: the card belongs to a tap, not to
+         the page */
+      closeInlineNotes();
+      /* number by where the pins actually sit, not by the order the notes are
+         written in — the number is the reader's only map back to the card */
+      const ordered = [...active].sort((a,b) =>
+        a.pin.compareDocumentPosition(b.pin) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1);
       const cursor = new Map();
-      active.forEach((e,i) => {
+      ordered.forEach((e,i) => {
         const block = blockOf(e.el);
         const after = cursor.get(block) || block;   /* stack, don't leapfrog */
         if (e.card.previousElementSibling !== after) after.after(e.card);
