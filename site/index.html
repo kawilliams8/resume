@@ -295,6 +295,9 @@ section[aria-labelledby="h-education"] .kv dt{white-space:nowrap}
 .colophon p{margin:0}
 .colophon .colo-sub{font-family:var(--font-sans);text-transform:none;letter-spacing:.02em;
   font-size:10.5px;margin-top:4px}
+/* the claim links to its own proof */
+.colophon a{color:var(--accent);text-decoration:underline;text-decoration-color:var(--rule);text-underline-offset:2px}
+.colophon a:hover{text-decoration-color:var(--accent)}
 
 /* ═══════════════════════════════════════════════════════════════
    COMPONENT · annotation layer
@@ -642,7 +645,7 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
 
     <div class="colophon">
       <p class="colo-line">Katherine Williams · Senior Software Engineer</p>
-      <p class="colo-sub">This site runs on one file of good old HTML, CSS and vanilla JavaScript. Built with Claude Code. Updated August, 2026.</p>
+      <p class="colo-sub">This site runs on <a href="https://github.com/kawilliams8/resume/blob/main/site/index.html">one file</a> of good old HTML, CSS and vanilla JavaScript. Built with Claude Code. Updated August, 2026.</p>
     </div>
   </main>
 
