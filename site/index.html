@@ -375,7 +375,8 @@ body:not([data-notes="off"]) #annotations{display:block}
      line it explains rather than to whatever follows it */
   margin:var(--s-4) 0 var(--s-5);box-shadow:none;max-width:min(100%, 420px);
   background:var(--accent-wash);border-color:transparent;padding:var(--s-2) var(--s-3)}
-.note--inline .note__principle{font-size:13px;padding-bottom:var(--s-1);margin-bottom:var(--s-1)}
+.note--inline.note--right{margin-left:auto}
+.note--inline .note__principle{font-size:15px;padding-bottom:var(--s-2);margin-bottom:var(--s-2)}
 .note--inline .note__body{font-size:13.5px}
 .note--inline .note__proof{margin-top:var(--s-2)}
 /* the index and the discipline chip share a centre line */
@@ -397,10 +398,10 @@ body:not([data-notes="off"]) #annotations{display:block}
   width:19px;height:19px;border-radius:50%;border:1px solid var(--accent);background:var(--bg);
   font-family:var(--font-mono);font-size:9.5px;font-weight:600;color:var(--accent);
   transition:background 140ms,color 140ms}
-.note__discipline{display:inline-block;font-family:var(--font-mono);font-size:8.5px;letter-spacing:.16em;
+.note__discipline{display:inline-block;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.11em;
   text-transform:uppercase;font-weight:600;color:var(--surface);background:var(--accent);
-  padding:2px 6px;border-radius:2px;margin-bottom:var(--s-2)}
-.note__principle{display:block;font-family:var(--font-sans);font-size:14px;letter-spacing:-.005em;
+  padding:3px 8px;border-radius:2px;margin-bottom:var(--s-2)}
+.note__principle{display:block;font-family:var(--font-sans);font-size:15.5px;letter-spacing:-.008em;line-height:1.28;
   font-weight:600;color:var(--ink);padding-bottom:var(--s-2);margin-bottom:var(--s-2);
   border-bottom:1px solid var(--rule)}
 .note__proof-label b.verb{font-family:var(--font-mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;
@@ -513,6 +514,8 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
 /* solid, not dotted: a dotted underline restarts its dot phase at every inline
    box, so any line containing a <b> or a <span> — the AI claim, every date —
    stutters where the fragment begins. a hairline has no phase to break. */
+/* while a lens is open, anything with a note is a target */
+body:not([data-notes="off"]) .has-note{cursor:pointer}
 .is-annotated{text-decoration:underline var(--accent);
   text-decoration-thickness:1.5px;text-underline-offset:4px;
   text-decoration-skip-ink:none}
@@ -666,7 +669,7 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
             <h3 class="role-title">Full Stack Developer</h3>
             <p class="role-org">Array</p>
           </div>
-          <p class="role-dates" data-note="the-gap"><span class="secondary">Nov </span>2021 — <span class="secondary">Jun </span>2024</p>
+          <p class="role-dates"><span class="secondary">Nov </span>2021 — <span class="secondary">Jun </span>2024</p>
         </div>
         <p class="short-only role-summary">Full-stack work on a real-time audience platform used live at Fortune 500 events.</p>
         <ul class="bullets">
@@ -721,14 +724,13 @@ body:not([data-notes="off"]) .pin:not([hidden]){display:inline-flex}
         <dt class="secondary">Full-stack &amp; tooling</dt><dd class="secondary">Node.js · Express · PHP · Laravel · Redis · REST APIs · WebSockets · webhooks · runtime schema validation (io-ts · Zod) · API integration · CRM integration (Salesforce · HubSpot) · AWS · Docker · CI/CD (GitHub Actions) · Webpack · Vite · Jest · Vitest · React Testing Library · Playwright</dd>
         <dt class="secondary">Database &amp; ORM</dt><dd class="secondary">MySQL · MongoDB · Mongoose · SQLite · Eloquent ORM</dd>
         <dt class="secondary">Practice</dt><dd class="secondary">Git · Agile/Scrum · unit, integration &amp; E2E testing · code review · mentorship · live presentations &amp; demos · async &amp; cross-functional collaboration · Jira · Linear</dd>
-        <dt data-note="looking-for">Looking for</dt><dd>Senior scope on a product team that ships — UI craft valued, a design system to own, and users close enough to watch using the thing. Colorado remote.</dd>
       </dl>
     </section>
 
     <section aria-labelledby="h-education">
       <h2 id="h-education">Education &amp; certifications</h2>
       <dl class="kv">
-        <dt>Turing School of Software and Design</dt><dd>Front-End Engineering Certificate</dd>
+        <dt data-note="school">Turing School of Software and Design</dt><dd>Front-End Engineering Certificate</dd>
         <dt>Colorado Mountain College</dt><dd>Graphic Technologies Certificate</dd>
         <dt>Western Michigan University</dt><dd>BA, Media Studies &amp; French</dd>
       </dl>
@@ -812,18 +814,18 @@ const NOTES = [
     body:'Cards take focus, pins are real buttons that hand it to them, and the lens control is wired with <em>aria-pressed</em>. Both ends of every pairing work from the keyboard.' },
 
   /* ── hiring manager ───────────────────────────────────────── */
-  { set:'hiring', target:'role-title-1', discipline:'Title', principle:'Read the bullets, not the title',
-    body:'Early-stage titles are whatever fits the org chart that quarter. The work was product and engineering: features owned end to end, the React and TypeScript surfaces customers used most, and the decisions behind them.' },
-  { set:'hiring', target:'role-type', discipline:'Level', principle:'Scope, not tenure',
-    body:'Senior here means scope owned: features end to end, the shared component patterns a team ships on, the front end of a live product.' },
-  { set:'hiring', target:'ai-claim', discipline:'Where to push', principle:'Interrogate this line',
-    body:'"Uses AI daily" is the easiest claim on any résumé and the hardest to back. Ask what shipped, who used it, what it got wrong, and what I did about the wrongness.' },
-  { set:'hiring', target:'the-gap', discipline:'Dates', principle:'Role dates, not a claim',
-    body:'Not an assertion of continuous employment. There is a gap in 2024 to 2025, and the latest role has an end date. Ask directly; it is a shorter conversation than you think.' },
-  { set:'hiring', target:'project', discipline:'Unsupervised work', principle:'The best evidence here',
-    body:'The only thing on this page nobody assigned me. If you want to know what I do when the constraints are mine, start here rather than with the roles.' },
-  { set:'hiring', target:'looking-for', discipline:'Fit check', principle:'The quickest read on fit',
-    body:'If the role doesn\'t rhyme with this row, we can save each other a phone screen. And if it does, that\'s worth knowing in the first minute too.' },
+  { set:'hiring', target:'role-title-1', discipline:'Customer Success?', principle:'Much more complex than it sounds',
+    body:'At a startup, the basic version of this role doesn\'t exist. I worked with the CS Managers, chose what to build for them and their users, designed it end-to-end and shipped it. Plus standard feature work. That autonomy only works with a ton of experience.' },
+  { set:'hiring', target:'role-type', discipline:'Am I senior?', principle:'Yes, the titles just never said so',
+    body:'My companies didn\'t title that way. The work did: whole features concept to deploy, the component patterns the rest of the team built on, and the decisions behind both.' },
+  { set:'hiring', target:'ai-claim', lift:120, discipline:'The AI claim', principle:'Everyone says this, but I can really back it up',
+    body:'Ask me about my processes, what it gets wrong and how I adapt. Racer &amp; Pacer has some great examples.' },
+  { set:'hiring', target:'figures', discipline:'Why it ended', principle:'Layoff, not performance',
+    body:'Fluint pivoted to a different product for entirely new users. When the current customers are expected to churn, the team that supports them goes too. Half the company went in the same round.' },
+  { set:'hiring', target:'school', discipline:'Only a bootcamp?', principle:'One of the best, yep.',
+    body:'Accredited, and almost a year of coursework with around 80 hours of coding each week. It has since closed, which is a genuine loss. A life changing experience.' },
+  { set:'hiring', target:'project', discipline:'My passion project', principle:'Imagined it, designed it, built it, shipped it. Maintain it.',
+    body:'React and TypeScript front end, Express and MongoDB behind it, Clerk auth, Stripe payments, Sentry watching, Resend for communication. Runners, please take a look!' },
 ];
 
 (function(){
@@ -854,6 +856,7 @@ const NOTES = [
     entries.forEach(e => {
       if (e.card.classList.contains('is-open')){
         e.card.classList.remove('is-open');
+        e.card.style.marginTop = '';        /* drop any measured pull-up */
         e.pin.setAttribute('aria-expanded', 'false');
         e.off();
       }
@@ -1024,7 +1027,18 @@ const NOTES = [
       const wasOpen = card.classList.contains('is-open');
       closeInlineNotes();
       pin.setAttribute('aria-expanded', !wasOpen);
-      if (!wasOpen){ card.classList.add('is-open'); entry.on(); card.focus(); }
+      if (!wasOpen){
+        card.classList.add('is-open');
+        /* a card placed after a block whose anchor sits at the top of it — the
+           dates, above the org line — lands too low. measure once it is in the
+           page and pull it back level with the line it belongs to. */
+        if (card.classList.contains('note--right')){
+          const drop = (el.getBoundingClientRect().bottom + 8) - card.getBoundingClientRect().top;
+          if (drop < 0) card.style.marginTop =
+            (parseFloat(getComputedStyle(card).marginTop) + drop) + 'px';
+        }
+        entry.on(); card.focus();
+      }
       else { entry.off(); card.blur(); }
     });
     /* the pin has to ride an element that may contain a span; <dl> may not */
@@ -1035,10 +1049,28 @@ const NOTES = [
     host.append(pin);
 
     const entry = { note:n, el, card, pin };
-    entry.on  = () => { card.classList.add('is-lit'); pin.classList.add('is-lit');
+    /* several lenses can annotate the same element — the role line is both a
+       Level note and a Typography note — so a handler must ignore itself when
+       its own lens isn't the one being read, or it will clear the other's mark */
+    const mine = () => inLens(n, body.dataset.notes);
+    entry.on  = () => { if (!mine()) return;
+                        card.classList.add('is-lit'); pin.classList.add('is-lit');
                         el.classList.add('is-annotated'); };
-    entry.off = () => { card.classList.remove('is-lit'); pin.classList.remove('is-lit');
+    /* an open card keeps its pairing lit — the mouse wandering off shouldn't
+       drop the marker on the line you're reading about */
+    entry.off = () => { if (!mine() || card.classList.contains('is-open')) return;
+                        card.classList.remove('is-lit'); pin.classList.remove('is-lit');
                         el.classList.remove('is-annotated'); };
+
+    /* the whole annotated element is the target, not just the pin: hovering it
+       lights the pairing, clicking it opens the note. links inside still win. */
+    el.classList.add('has-note');
+    el.addEventListener('mouseenter', entry.on);
+    el.addEventListener('mouseleave', entry.off);
+    el.addEventListener('click', ev => {
+      if (!mine() || ev.target.closest('a') || ev.target.closest('.pin')) return;
+      pin.click();
+    });
     /* focusin/focusout have no IDL attribute — wire them once, here, not in the
        layout pass. focusin bubbles, so focus moving into the card's own slider
        keeps the pairing lit instead of dropping it mid-drag. */
@@ -1059,16 +1091,17 @@ const NOTES = [
     const active = isShort() ? [] : entries.filter(e => inLens(e.note, lens));
     const pb = page.getBoundingClientRect();
 
-    const GAP = 24;
+    const GAP = 32;      /* clear air between the column and a margin card */
+    const EDGE = 12;     /* and between the card and the window */
     const mb = document.querySelector('main').getBoundingClientRect();
     const mainL = mb.left - pb.left, mainR = mb.right - pb.left;
     const gutL = mainL, gutR = pb.width - mainR;
     const sidebarUp = matchMedia('(min-width:900px)').matches;   /* picker owns the left gutter */
     const bothSides = !sidebarUp && gutL >= 260 && gutR >= 260;
-    const W = bothSides ? 236 : Math.min(236, Math.max(0, gutR - 14));
-    const rightOnly = !bothSides && W >= 200;
+    const W = bothSides ? 236 : Math.min(236, Math.max(0, gutR - GAP - EDGE));
+    const rightOnly = !bothSides && W >= 190;
     const inFlow = !bothSides && !rightOnly;
-    const xRight = bothSides ? mainR + GAP : (rightOnly ? mainR + 12 : Math.max(12, pb.width - 236 - 12));
+    const xRight = bothSides ? mainR + GAP : (rightOnly ? mainR + GAP : Math.max(12, pb.width - 236 - 12));
     const xLeft  = mainL - W - GAP;
     const cardW  = Math.min(W, pb.width - 24);
 
@@ -1102,6 +1135,11 @@ const NOTES = [
         cursor.set(block, e.card);
         e.card.classList.add('note--inline');
         e.card.classList.remove('is-left');
+        /* follow the anchor across the column: the dates sit flush right, so
+           their card shouldn't land under the opposite corner */
+        const a = e.el.getBoundingClientRect(), col = mb;
+        e.card.classList.toggle('note--right',
+          (a.left + a.right) / 2 > col.left + col.width * 0.6);
         e.card.style.left = e.card.style.top = e.card.style.width = '';
         e.card.querySelector('.note__index').textContent = i + 1;
         e.pin.textContent = i + 1;
@@ -1133,7 +1171,11 @@ const NOTES = [
     let floorL = 8, floorR = 8;
     measured.forEach((m,i) => {
       const left = bothSides && i % 2 === 0;
-      const want = m.box.top - pb.top;
+      /* start a little below the line it annotates, so the card's index badge
+         doesn't sit level with the pin and read as a duplicate of it. `lift`
+         pulls an individual card up the margin when its anchor sits low enough
+         to crowd everything stacked beneath it. */
+      const want = m.box.top - pb.top + 14 - (m.e.note.lift || 0);
       const top  = Math.max(want, left ? floorL : floorR);
       m.left = left; m.top = top;
       m.e.card.classList.toggle('is-left', left);
