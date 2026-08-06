@@ -392,8 +392,6 @@ body:not([data-notes="off"]) #annotations{display:block}
 /* a card in the flow sits square — the tilt is only for cards pinned in the
    margin. declared last so it beats both tilt rules above. */
 .note.note--inline{--tilt:0deg}
-/* left-hand notes mirror: the index chip flips to the inside edge */
-.note.is-left .note__index{left:auto;right:-11px}
 .note__index{position:absolute;left:-11px;top:-10px;display:inline-flex;align-items:center;justify-content:center;
   width:19px;height:19px;border-radius:50%;border:1px solid var(--accent);background:var(--bg);
   font-family:var(--font-mono);font-size:9.5px;font-weight:600;color:var(--accent);
@@ -845,7 +843,6 @@ const NOTES = [
     applyOverrides();
   }
 
-  const inLens = (n, lens) => n.set === lens;
   /* closing has to put the highlight back too, or the annotated text stays lit
      until focus happens to land somewhere else */
   function closeInlineNotes(){
@@ -1001,7 +998,7 @@ const NOTES = [
     card.className = 'note';
     card.tabIndex = 0;
     card.setAttribute('role', 'note');
-    card.setAttribute('aria-label', `Design note: ${n.discipline}, ${n.principle}`);
+    card.setAttribute('aria-label', `${n.discipline}: ${n.principle}`);
     card.hidden = true;
     card.innerHTML =
       `<span class="note__index"></span>` +
@@ -1015,7 +1012,7 @@ const NOTES = [
     pin.type = 'button';
     pin.className = 'pin';
     pin.hidden = true;
-    pin.setAttribute('aria-label', `Jump to design note: ${n.principle}`);
+    pin.setAttribute('aria-label', `Note: ${n.principle}`);
     /* wide: the pin hands focus to its card in the margin. narrow: the card is
        not in the page until the pin asks for it, and only one is open at a time. */
     pin.addEventListener('click', () => {
@@ -1048,7 +1045,7 @@ const NOTES = [
     /* several lenses can annotate the same element — the role line is both a
        Level note and a Typography note — so a handler must ignore itself when
        its own lens isn't the one being read, or it will clear the other's mark */
-    const mine = () => inLens(n, body.dataset.notes);
+    const mine = () => n.set === body.dataset.notes;
     entry.on  = () => { if (!mine()) return;
                         card.classList.add('is-lit'); pin.classList.add('is-lit');
                         el.classList.add('is-annotated'); };
@@ -1072,136 +1069,108 @@ const NOTES = [
        keeps the pairing lit instead of dropping it mid-drag. */
     card.addEventListener('focusin', entry.on);
     card.addEventListener('focusout', entry.off);
+    card.addEventListener('mouseenter', entry.on);
+    card.addEventListener('mouseleave', entry.off);
     pin.addEventListener('focus', entry.on);
     pin.addEventListener('blur', entry.off);
+    pin.addEventListener('mouseenter', entry.on);
+    pin.addEventListener('mouseleave', entry.off);
     return entry;
   }).filter(Boolean);
 
-  /* ── layout: one read pass, then one write pass ───────────── */
-  function layout(opts){
-    const animate = opts && opts.animate && !reduce;
+  /* ── layout ───────────────────────────────────────────────────
+     A card lives in one of two places. Wide enough for a card beside the
+     column, and it floats in the right margin. Otherwise it drops into the
+     flow under the line it annotates, hidden until a pin asks for it.
+     ───────────────────────────────────────────────────────────── */
+  const main = document.querySelector('main');
+  const CARD_W = 236,   /* what a margin card wants */
+        CARD_MIN = 190, /* and the least it will accept before dropping in-flow */
+        GAP = 32,       /* air between the column and the card */
+        EDGE = 12,      /* and between the card and the window */
+        DROP = 14;      /* a card starts below its line, so its badge clears the pin */
+
+  /* land the card as close to its pin as the markup allows: after the annotated
+     element, climbing only out of inline text and out of flex/grid parents,
+     where a card would become a stray row or cell */
+  const blockOf = el => {
+    let n = el;
+    while (n.parentElement){
+      const me = getComputedStyle(n).display, up = getComputedStyle(n.parentElement).display;
+      if (me.startsWith('inline') || up === 'flex' || up === 'grid') n = n.parentElement;
+      else break;
+    }
+    return n;
+  };
+
+  const fadeIn = cards => {
+    if (reduce || typeof Element.prototype.animate !== 'function') return;
+    cards.forEach((c, i) => {
+      c.getAnimations().forEach(a => a.cancel());
+      c.animate([{ opacity:0, translate:'0 6px' }, { opacity:1, translate:'0 0' }],
+        { duration:320, delay:i * 40, easing:'cubic-bezier(.2,.7,.3,1)', fill:'backwards' });
+    });
+  };
+
+  function layout({ animate = false } = {}){
     const lens = body.dataset.notes;
     if (lens === 'off' || lens === 'parser') return;
 
-    /* the short view is bullet-free and note-free — the sidebar carries the way back */
-    const active = isShort() ? [] : entries.filter(e => inLens(e.note, lens));
+    /* the short view is note-free; the sidebar carries the way back */
+    const active = (isShort() ? [] : entries.filter(e => e.note.set === lens))
+      .sort((a, b) => a.pin.compareDocumentPosition(b.pin) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1);
+
+    /* number by where the pins sit, not by the order the notes were written —
+       the number is the reader's only map from a pin back to its card */
+    active.forEach((e, i) => {
+      e.card.querySelector('.note__index').textContent = i + 1;
+      e.pin.textContent = i + 1;
+    });
+
     const pb = page.getBoundingClientRect();
+    const mb = main.getBoundingClientRect();
+    const mainR = mb.right - pb.left;
+    const W = Math.min(CARD_W, Math.max(0, pb.width - mainR - GAP - EDGE));
 
-    const GAP = 32;      /* clear air between the column and a margin card */
-    const EDGE = 12;     /* and between the card and the window */
-    const mb = document.querySelector('main').getBoundingClientRect();
-    const mainL = mb.left - pb.left, mainR = mb.right - pb.left;
-    const gutL = mainL, gutR = pb.width - mainR;
-    const sidebarUp = matchMedia('(min-width:900px)').matches;   /* picker owns the left gutter */
-    const bothSides = !sidebarUp && gutL >= 260 && gutR >= 260;
-    const W = bothSides ? 236 : Math.min(236, Math.max(0, gutR - GAP - EDGE));
-    const rightOnly = !bothSides && W >= 190;
-    const inFlow = !bothSides && !rightOnly;
-    const xRight = bothSides ? mainR + GAP : (rightOnly ? mainR + GAP : Math.max(12, pb.width - 236 - 12));
-    const xLeft  = mainL - W - GAP;
-    const cardW  = Math.min(W, pb.width - 24);
+    if (W >= CARD_MIN) placeInMargin(active, pb, mainR + GAP, W);
+    else placeInFlow(active, mb);
+    if (animate) fadeIn(active.map(e => e.card));
+  }
 
-    /* narrow: put each card in the document flow, directly after the block it
-       annotates. wide: it belongs to the overlay. */
-    if (inFlow){
-      /* land the card as close to the tapped pin as the layout allows: after
-         the annotated element itself, climbing only out of inline text and out
-         of flex/grid parents, where a card would become a stray row or cell */
-      const blockOf = el => {
-        let n = el;
-        while (n.parentElement){
-          const me = getComputedStyle(n).display, up = getComputedStyle(n.parentElement).display;
-          if (me.startsWith('inline') || up === 'flex' || up === 'grid') n = n.parentElement;
-          else break;
-        }
-        return n;
-      };
-      /* a relayout closes whatever was open: the card belongs to a tap, not to
-         the page */
-      closeInlineNotes();
-      /* number by where the pins actually sit, not by the order the notes are
-         written in — the number is the reader's only map back to the card */
-      const ordered = [...active].sort((a,b) =>
-        a.pin.compareDocumentPosition(b.pin) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1);
-      const cursor = new Map();
-      ordered.forEach((e,i) => {
-        const block = blockOf(e.el);
-        const after = cursor.get(block) || block;   /* stack, don't leapfrog */
-        if (e.card.previousElementSibling !== after) after.after(e.card);
-        cursor.set(block, e.card);
-        e.card.classList.add('note--inline');
-        e.card.classList.remove('is-left');
-        /* follow the anchor across the column: the dates sit flush right, so
-           their card shouldn't land under the opposite corner */
-        const a = e.el.getBoundingClientRect(), col = mb;
-        e.card.classList.toggle('note--right',
-          (a.left + a.right) / 2 > col.left + col.width * 0.6);
-        e.card.style.left = e.card.style.top = e.card.style.width = '';
-        e.card.querySelector('.note__index').textContent = i + 1;
-        e.pin.textContent = i + 1;
-      });
-      if (animate && typeof Element.prototype.animate === 'function'){
-        active.forEach((e,i) => {
-          e.card.getAnimations().forEach(a => a.cancel());
-          e.card.animate([{ opacity:0, translate:'0 6px' }, { opacity:1, translate:'0 0' }],
-            { duration:300, delay:i * 30, easing:'cubic-bezier(.2,.7,.3,1)', fill:'backwards' });
-        });
-      }
-      return;
-    }
+  function placeInMargin(active, pb, x, W){
     active.forEach(e => {
       if (e.card.parentElement !== layer) layer.append(e.card);
       e.card.classList.remove('note--inline');
     });
-
-    /* READ — every rect gathered before anything is written. numbering follows
-       the pins in reading order — top to bottom, then left to right — because
-       the pin is the number the reader actually sees. */
-    const measured = active
-      .map(e => ({ e, box: e.el.getBoundingClientRect(), pinBox: e.pin.getBoundingClientRect() }))
-      .sort((a,b) => (a.pinBox.top - b.pinBox.top) || (a.pinBox.left - b.pinBox.left));
-    measured.forEach(m => { m.e.card.style.width = cardW + 'px'; });
-    measured.forEach(m => { m.h = m.e.card.offsetHeight; });   /* heights, still no writes to top/left */
-
-    /* WRITE — positions only */
-    let floorL = 8, floorR = 8;
-    measured.forEach((m,i) => {
-      const left = bothSides && i % 2 === 0;
-      /* start a little below the line it annotates, so the card's index badge
-         doesn't sit level with the pin and read as a duplicate of it. `lift`
-         pulls an individual card up the margin when its anchor sits low enough
-         to crowd everything stacked beneath it. */
-      const want = m.box.top - pb.top + 14 - (m.e.note.lift || 0);
-      const top  = Math.max(want, left ? floorL : floorR);
-      m.left = left; m.top = top;
-      m.e.card.classList.toggle('is-left', left);
-      m.e.card.style.left = (left ? xLeft : xRight) + 'px';
-      m.e.card.style.top  = top + 'px';
-      if (left) floorL = top + m.h + 14; else floorR = top + m.h + 14;
-      m.e.card.querySelector('.note__index').textContent = i + 1;
-      m.e.pin.textContent = i + 1;
-      m.i = i;
+    /* READ every rect before writing a single position */
+    const boxes = active.map(e => e.el.getBoundingClientRect());
+    active.forEach(e => { e.card.style.width = W + 'px'; });
+    const heights = active.map(e => e.card.offsetHeight);
+    /* WRITE positions only. `lift` pulls one card up the margin when its anchor
+       sits low enough to crowd everything stacked beneath it. */
+    let floor = 8;
+    active.forEach((e, i) => {
+      const top = Math.max(boxes[i].top - pb.top + DROP - (e.note.lift || 0), floor);
+      e.card.style.left = x + 'px';
+      e.card.style.top = top + 'px';
+      floor = top + heights[i] + 14;
     });
+  }
 
-    /* the pairing is carried by the numbered pins and the hover/focus
-       lighting — pin, card, and annotated text light together */
-    if (animate && typeof Element.prototype.animate === 'function'){
-      measured.forEach(m => {
-        const c = m.e.card;
-        c.getAnimations().forEach(a => a.cancel());
-        c.animate(
-          [{ opacity:0, translate:'0 6px' },
-           { opacity:1, translate:'0 0' }],
-          { duration:320, delay:m.i * 40, easing:'cubic-bezier(.2,.7,.3,1)', fill:'backwards' });
-      });
-    }
-
-    measured.forEach(m => {
-      const e = m.e;
-      e.card.onmouseenter = e.on;
-      e.card.onmouseleave = e.off;
-      e.pin.onmouseenter  = e.on;
-      e.pin.onmouseleave  = e.off;
+  function placeInFlow(active, mb){
+    closeInlineNotes();   /* a relayout closes whatever was open */
+    const cursor = new Map();
+    active.forEach(e => {
+      const block = blockOf(e.el);
+      const after = cursor.get(block) || block;   /* stack, don't leapfrog */
+      if (e.card.previousElementSibling !== after) after.after(e.card);
+      cursor.set(block, e.card);
+      e.card.classList.add('note--inline');
+      /* follow the anchor across the column: the dates sit flush right, so
+         their card shouldn't land under the opposite corner */
+      const a = e.el.getBoundingClientRect();
+      e.card.classList.toggle('note--right', (a.left + a.right) / 2 > mb.left + mb.width * 0.6);
+      e.card.style.left = e.card.style.top = e.card.style.width = '';
     });
   }
 
@@ -1242,7 +1211,7 @@ const NOTES = [
       buttons.forEach(b => b.setAttribute('aria-pressed', b.dataset.lens === lens));
       syncVersion();
       entries.forEach(e => {
-        const on = lens !== 'off' && inLens(e.note, lens);
+        const on = e.note.set === lens;
         e.card.hidden = !on;
         e.pin.hidden = !on;
       });
