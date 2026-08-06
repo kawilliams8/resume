@@ -334,7 +334,7 @@ h2{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transfor
 .bullets{list-style:none;margin:var(--s-3) 0 0;padding:0;max-width:var(--measure)}
 .bullets li{font-size:var(--step-0);line-height:1.6;color:var(--ink-2);
   padding-left:18px;position:relative;margin-bottom:var(--s-2)}
-.bullets li::before{content:"—";position:absolute;left:0;color:var(--ink-3)}
+.bullets li::before{content:"›";position:absolute;left:0;color:var(--accent);font-size:16px}
 
 /* ═══════════════════════════════════════════════════════════════
    COMPONENT · key/value list
@@ -568,7 +568,7 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
       <h1 data-note="type-scale">Katherine Williams</h1>
       <p class="role" data-note="role-type">Senior Software Engineer</p>
       <div class="contact">
-        <p class="status" data-note="status">Next role: senior, product-minded, customer-focused, frontend-leaning, AI-forward</p>
+        <p class="status" data-note="status">Next role: AI-forward, senior, product-minded, customer-focused, frontend-leaning</p>
         <p class="status status--where">Best role: design, UX, feature work, and the conversations that shape what gets built (and why)</p>
         <div class="contact__row contact__links">
           <a href="mailto:kawilliams8@gmail.com">kawilliams8@gmail.com</a>
@@ -605,7 +605,7 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
         </div>
       </div>
 
-      <p class="lede" data-note="measure">Fullstack engineer, <b>seven years</b> building component-driven applications in React, TypeScript, Node and other modern backend technologies.<span class="secondary"> Polished interfaces, owned end to end. I sweat interaction detail and web performance, and my product instincts hold up with real users. Equal parts builder and communicator.</span></p>
+      <p class="lede">Fullstack engineer, <b>seven years</b> building component-driven applications in <b>React</b>, <b>TypeScript</b>, <b>Node</b> and other modern backend technologies.<span class="secondary"> Polished interfaces, owned end to end. I sweat interaction detail and web performance, and my product instincts hold up with real users. Equal parts builder and communicator.</span></p>
       <p class="lede lede--ai" data-note="ai-claim">I build with <b>Claude Code</b> daily and ship <b>LLM features</b> to production.</p>
     </header>
 
@@ -730,7 +730,7 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
     <section aria-labelledby="h-education">
       <h2 id="h-education">Education &amp; certifications</h2>
       <dl class="kv">
-        <dt data-note="school">Turing School of Software and Design</dt><dd>Front-End Engineering Certificate</dd>
+        <dt>Turing School of Software and Design</dt><dd>Front-End Engineering Certificate</dd>
         <dt>Colorado Mountain College</dt><dd>Graphic Technologies Certificate</dd>
         <dt>Western Michigan University</dt><dd>BA, Media Studies &amp; French</dd>
       </dl>
@@ -816,14 +816,10 @@ const NOTES = [
   /* ── hiring manager ───────────────────────────────────────── */
   { set:'hiring', target:'role-title-1', discipline:'Customer Success?', principle:'Much more complex than it sounds',
     body:'At a startup, the basic version of this role doesn\'t exist. I worked with the CS Managers, chose what to build for them and their users, designed it end-to-end and shipped it. Plus standard feature work. That autonomy only works with a ton of experience.' },
-  { set:'hiring', target:'role-type', discipline:'Am I senior?', principle:'Yes, the titles just never said so',
-    body:'My companies didn\'t title that way. The work did: whole features concept to deploy, the component patterns the rest of the team built on, and the decisions behind both.' },
   { set:'hiring', target:'ai-claim', lift:120, discipline:'The AI claim', principle:'Everyone says this, but I can really back it up',
     body:'Ask me about my processes, what it gets wrong and how I adapt. Racer &amp; Pacer has some great examples.' },
-  { set:'hiring', target:'figures', discipline:'Why it ended', principle:'Layoff, not performance',
-    body:'Fluint pivoted to a different product for entirely new users. When the current customers are expected to churn, the team that supports them goes too. Half the company went in the same round.' },
-  { set:'hiring', target:'school', discipline:'Only a bootcamp?', principle:'One of the best, yep.',
-    body:'Accredited, and almost a year of coursework with around 80 hours of coding each week. It has since closed, which is a genuine loss. A life changing experience.' },
+  { set:'hiring', target:'figures', discipline:'Why it ended', principle:'A startup pivot, not performance',
+    body:'Fluint moved to a different product for entirely new users. When the current customers are expected to churn, the team that supports them goes too. Half the company went in the same round.' },
   { set:'hiring', target:'project', discipline:'My passion project', principle:'Imagined it, designed it, built it, shipped it. Maintain it.',
     body:'React and TypeScript front end, Express and MongoDB behind it, Clerk auth, Stripe payments, Sentry watching, Resend for communication. Runners, please take a look!' },
 ];
