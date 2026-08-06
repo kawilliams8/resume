@@ -402,8 +402,10 @@ body:not([data-notes="off"]) #annotations{display:block}
 .note__principle{display:block;font-family:var(--font-sans);font-size:15.5px;letter-spacing:-.008em;line-height:1.28;
   font-weight:600;color:var(--ink);padding-bottom:var(--s-2);margin-bottom:var(--s-2);
   border-bottom:1px solid var(--rule)}
-.note__proof-label b.verb{font-family:var(--font-mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--accent);font-weight:600}
+/* the labels are instructions now, so they take a line of their own and drop
+   the uppercase: .15em tracking is for two words, not thirty-five characters */
+.note__proof-label b.verb{flex:1 1 100%;font-family:var(--font-mono);font-size:9px;letter-spacing:.02em;
+  text-transform:none;color:var(--accent);font-weight:600}
 /* the marker face has very little built-in leading, so its first line rides up
    against the rule above it — give it the space the font doesn't */
 .note__body{display:block;font-family:var(--font-note);font-size:14.5px;line-height:1.42;
@@ -412,7 +414,7 @@ body:not([data-notes="off"]) #annotations{display:block}
 
 /* ── proofs: a control inside the note that makes the claim ── */
 .note__proof{display:block;margin-top:var(--s-3);padding-top:var(--s-2);border-top:1px solid var(--rule)}
-.note__proof-label{display:flex;justify-content:space-between;gap:var(--s-2);align-items:baseline;
+.note__proof-label{display:flex;flex-wrap:wrap;gap:3px var(--s-2);align-items:baseline;
   font-family:var(--font-mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3)}
 .note__proof-label b{font-family:var(--font-mono);font-size:10px;letter-spacing:.04em;color:var(--accent);font-weight:600}
 .note__proof input[type=range]{width:100%;margin:var(--s-2) 0 0;accent-color:var(--accent);height:18px}
@@ -421,16 +423,16 @@ body:not([data-notes="off"]) #annotations{display:block}
   border:1.5px solid var(--rule);transition:transform 120ms,border-color 120ms}
 .swatch[aria-pressed="true"]{border-color:var(--ink);transform:scale(1.08)}
 .swatch:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.pairs{display:flex;flex-wrap:wrap;gap:5px;margin:var(--s-2) 0}
-.pairbtn{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;
-  padding:5px 7px;border-radius:3px;border:1.5px solid var(--rule);background:var(--surface);
-  color:var(--ink-2);font-size:15px;line-height:1;transition:border-color 120ms,background 120ms}
-.pairbtn i{font-family:var(--font-mono);font-style:normal;font-size:7px;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--ink-3)}
+/* five specimens across, sharing the width evenly. the face is the whole point,
+   so the name moves to the line below with its description — the same shape the
+   accent swatches already use */
+.pairs{display:flex;gap:5px;margin:var(--s-2) 0}
+.pairbtn{flex:1;display:flex;align-items:center;justify-content:center;cursor:pointer;
+  padding:8px 2px;border-radius:3px;border:1.5px solid var(--rule);background:var(--surface);
+  color:var(--ink-2);font-size:19px;line-height:1;transition:border-color 120ms,background 120ms}
 .pairbtn[aria-pressed="true"]{border-color:var(--ink);background:var(--accent-wash)}
-.pairbtn[aria-pressed="true"] i{color:var(--ink)}
 .pairbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.swatch-why{font-family:var(--font-sans);font-size:11px;line-height:1.4;color:var(--ink-3);min-height:2.6em}
+.swatch-why{font-family:var(--font-sans);font-size:11px;line-height:1.28;color:var(--ink-3);min-height:2.6em}
 .ratio-out{font-family:var(--font-mono);font-size:10.5px;color:var(--ink-2)}
 .ratio-out.is-fail{color:var(--fail);font-weight:600}
 .rule-note{display:block;font-family:var(--font-sans);font-size:10.5px;line-height:1.4;
@@ -780,7 +782,7 @@ const NOTES = [
     body:'Same words, five personalities. Type is the loudest thing on a page before anyone reads it, so the pairing makes a claim about who I am before the summary gets a chance.' },
   { set:'design', target:'status', discipline:'Color', principle:'One accent, earned',
     control:'accent',
-    body:'One hue for links, availability and these notes. Change it and the whole page moves together, which is the only way to know a color actually works. Which option fails the floor depends on the scheme — flip it and watch the verdict move.' },
+    body:'One hue for links, availability and these notes. Change it and the whole page moves together, which is the only way to know a color actually works. Which option fails the floor depends on the scheme. Flip it and watch the verdict move.' },
   { set:'design', target:'proximity', discipline:'Layout', principle:'Law of Proximity',
     body:'Sections sit more than twice as far apart as the items inside them. Proximity does the grouping, so the rules can stay hairline instead of shouting.' },
   { set:'design', target:'figures', discipline:'Typography', principle:'Tabular figures',
@@ -793,12 +795,14 @@ const NOTES = [
     body:'The last thing read is weighted like the best thing read, so the page ends on a promise I can keep. <a href="https://lawsofux.com/" target="_blank" rel="noopener">lawsofux.com</a>' },
 
   /* ── engineer ─────────────────────────────────────────────── */
-  { set:'engineering', target:'type-scale', discipline:'Architecture', principle:'One token block',
+  { set:'engineering', target:'type-scale', discipline:'One variable for h1 to h6',
+    principle:'Change the scale and the entire page adapts',
     control:'ratio',
-    body:'The slider writes one custom property and CSS does the rest: no sizes recalculated in JS, no components re-rendered. Watch --ratio in devtools while you drag.' },
-  { set:'engineering', target:'role-type', discipline:'Performance', principle:'System stacks, zero bytes',
+    body:'Every heading, label and gap is the base size multiplied by this ratio. No JavaScript recalculating, no components re-rendering, no awkward typography. Simple code can make a very elegant site.' },
+  { set:'engineering', target:'role-type', discipline:'No file requests, no CDN',
+    principle:'Every option is already on your machine',
     control:'pair',
-    body:'No webfonts, no network request, no FOUT. Switching pairs writes two custom properties. A hosted pairing would cost about 80kb and a flash of unstyled text: worth it on a product, not here.' },
+    body:'Switching fonts can be simple! No request, thus no flash of unstyled text while the Promise resolves. A hosted pairing would add about as much weight as this whole page. Worth it on a fully fledged web app. Not here.' },
   { set:'engineering', target:'status', discipline:'Instrumentation', principle:'Measured, not typed',
     control:'accent',
     body:'The ratio is computed from <em>getComputedStyle</em> against the live background on every change, so a bad choice gets caught rather than shipped quietly.' },
@@ -855,10 +859,36 @@ const NOTES = [
       }
     });
   }
+  /* a card placed after a block whose anchor sits at the top of it — the dates,
+     above the org line — lands too low. measure once it is in the page and pull
+     it back level with the line it belongs to. `focus` is false when a relayout
+     is re-opening the card the reader is already working inside. */
+  function openInline(entry, focus){
+    const { card, pin, el } = entry;
+    card.classList.add('is-open');
+    pin.setAttribute('aria-expanded', 'true');
+    if (card.classList.contains('note--right')){
+      const drop = (el.getBoundingClientRect().bottom + 8) - card.getBoundingClientRect().top;
+      if (drop < 0) card.style.marginTop =
+        (parseFloat(getComputedStyle(card).marginTop) + drop) + 'px';
+    }
+    entry.on();
+    if (focus) card.focus();
+  }
 
   /* ── overrides: live on :root, never persisted, so a shared link cannot
         open in someone else's experiment. (The chosen lens does persist.) ── */
-  const DEFAULTS = { ratio:'1.25', accent:'blue', pair:'system' };
+  /* five named steps off the modular scale, not a continuum. the control is
+     here to show one property driving every size on the page; picking the
+     ratio to two decimal places is a different job, done with a designer's eye */
+  const RATIOS = [
+    { v:'1.125', name:'Extra small' },
+    { v:'1.200', name:'Small' },
+    { v:'1.250', name:'Medium' },
+    { v:'1.333', name:'Large' },
+    { v:'1.414', name:'Extra large' },
+  ];
+  const DEFAULTS = { ratio:RATIOS[2].v, accent:'blue', pair:'system' };
   const state = { ...DEFAULTS };
   /* two swatches mean a relationship rather than a color — the page's own
      accent and "no accent at all" — so each scheme resolves them differently */
@@ -878,19 +908,24 @@ const NOTES = [
   const PAIRS = [
     { id:'system',    name:'System',    display:'var(--font-sans)',
       body:'var(--font-sans)',
-      why:'Invisible and fast. The reader never thinks about the type, which is usually the point.' },
+      why:'Invisible and fast. The reader never thinks about the type, which is usually the point.',
+      eng:'San Francisco on a Mac, Segoe UI on Windows. Whatever the OS already shipped, so there is nothing to download and no fallback to get wrong.' },
     { id:'editorial', name:'Editorial', display:'"Iowan Old Style",Georgia,"Times New Roman",serif',
       body:'var(--font-sans)',
-      why:'Serif headline over sans body. Reads considered and print-adjacent, the most common way to look thoughtful without looking fussy.' },
+      why:'Serif headline over sans body. Reads considered and print-adjacent, the most common way to look thoughtful without looking fussy.',
+      eng:'Iowan Old Style, falling back to Georgia. Both were drawn for screens and ship almost everywhere, so the fallback rarely has to fire.' },
     { id:'technical', name:'Technical', display:'var(--font-mono)',
       body:'var(--font-sans)',
-      why:'Mono display says "engineer" before a word is read. Confident, and one step from looking like a terminal.' },
+      why:'Mono display says "engineer" before a word is read. Confident, and one step from looking like a terminal.',
+      eng:'SF Mono on a Mac, Consolas on Windows. Every character takes the same width, which is why code lines up and a column needs no measuring.' },
     { id:'humanist',  name:'Humanist',  display:'"Avenir Next","Segoe UI",var(--font-sans)',
       body:'"Iowan Old Style",Georgia,serif',
-      why:'Sans headline over serif body. Warmer and slower: better for reading, worse for scanning, which is the wrong trade on a résumé.' },
+      why:'Sans headline over serif body. Warmer and slower: better for reading, worse for scanning, which is the wrong trade on a résumé.',
+      eng:'Avenir Next on a Mac, Segoe UI on Windows. One CSS declaration, and a different face on every platform that reads it.' },
     { id:'classic',   name:'Classic',   display:'"Baskerville",Georgia,serif',
       body:'"Baskerville",Georgia,serif',
-      why:'All serif. The most traditional and the least distinctive: safe, and indistinguishable from every other résumé that chose safe.' },
+      why:'All serif. The most traditional and the least distinctive: safe, and indistinguishable from every other résumé that chose safe.',
+      eng:'Baskerville, falling back to Georgia. Drawn for paper, so the thin strokes hold up in print and start to disappear on a low-resolution screen.' },
   ];
   const lum = c => { const a = c.map(v => (v/=255) <= .03928 ? v/12.92 : Math.pow((v+.055)/1.055, 2.4));
                      return .2126*a[0] + .7152*a[1] + .0722*a[2]; };
@@ -926,11 +961,21 @@ const NOTES = [
     syncVersion();
     layout();
   }
+  /* an engineer and a designer want different things said about the same
+     option, so each has its own line. `eng` is optional: anything without one
+     falls back to the design reading rather than going blank. */
+  const whyFor = (el, opt) => (el.dataset.lens === 'engineering' && opt.eng) || opt.why;
+
   function sync(el){
     const kind = el.dataset.sync;
     if (kind === 'ratio'){
-      el.querySelector('input').value = state.ratio;
-      el.querySelectorAll('b')[1].textContent = state.ratio;
+      const i = Math.max(0, RATIOS.findIndex(r => r.v === state.ratio));
+      const input = el.querySelector('input');
+      input.value = i;
+      /* a range reads its number aloud, which is meaningless here — the stop
+         has a name, so announce that instead */
+      input.setAttribute('aria-valuetext', `${RATIOS[i].name}, ${RATIOS[i].v}`);
+      el.querySelectorAll('b')[1].textContent = `${RATIOS[i].name} · ${RATIOS[i].v}`;
     }
     if (kind === 'accent'){
       /* judge the accent actually painting the page, in the scheme it's in */
@@ -949,40 +994,54 @@ const NOTES = [
         b.style.background = accentOf(b.dataset.key);
       });
       const hit = ACCENTS.find(a => a.key === state.accent);
-      el.querySelector('.swatch-why').textContent = hit ? hit.name + ' — ' + hit.why : '';
+      el.querySelector('.swatch-why').textContent = hit ? hit.name + ': ' + whyFor(el, hit) : '';
     }
     if (kind === 'pair'){
       const p = PAIRS.find(x => x.id === state.pair) || PAIRS[0];
       el.querySelectorAll('.pairbtn').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === state.pair));
-      el.querySelector('.swatch-why').textContent = p.name + ' — ' + p.why;
+      el.querySelector('.swatch-why').textContent = p.name + ': ' + whyFor(el, p);
     }
   }
-  function buildControl(kind){
+  /* each lens builds its own copy of a control, so the card remembers which
+     reading it belongs to and the option copy can differ by role */
+  function buildControl(kind, set){
     const wrap = document.createElement('span');
     wrap.className = 'note__proof';
     wrap.dataset.sync = kind;
+    wrap.dataset.lens = set;
     if (kind === 'ratio'){
-      wrap.innerHTML = '<span class="note__proof-label"><b class="verb">Drag the ratio</b> <b></b></span>' +
-        '<input type="range" min="1.10" max="1.45" step="0.01" aria-label="Type scale ratio">';
-      wrap.querySelector('input').addEventListener('input', e => { state.ratio = e.target.value; applyOverrides(); });
+      wrap.innerHTML = '<span class="note__proof-label"><b class="verb">Drag to change the font size ratio.</b> <b></b></span>' +
+        `<input type="range" min="0" max="${RATIOS.length - 1}" step="1" aria-label="Type scale ratio">`;
+      wrap.querySelector('input').addEventListener('input', e => {
+        state.ratio = RATIOS[e.target.value].v; applyOverrides(); });
     }
     if (kind === 'accent'){
-      wrap.innerHTML = '<span class="note__proof-label"><b class="verb">Pick an accent</b> <span class="ratio-out"></span></span>' +
+      wrap.innerHTML = '<span class="note__proof-label"><b class="verb">Click to change the accent color.</b> <span class="ratio-out"></span></span>' +
         '<span class="swatches">' + ACCENTS.map(a =>
           `<button class="swatch" data-key="${a.key}" aria-pressed="false" aria-label="${a.name}" title="${a.name}"></button>`).join('') +
         '</span><span class="rule-note"></span><span class="swatch-why"></span>' +
-        '<button class="proof-btn" type="button" data-flip>Flip the scheme — re-judge</button>';
+        '<button class="proof-btn" type="button" data-flip>Flip the scheme and re-judge</button>';
       wrap.querySelectorAll('.swatch').forEach(b =>
         b.addEventListener('click', () => { state.accent = b.dataset.key; applyOverrides(); }));
       wrap.querySelector('[data-flip]').addEventListener('click', () => flipTheme());
     }
     if (kind === 'pair'){
-      wrap.innerHTML = '<span class="note__proof-label"><b class="verb">Try a pairing</b></span>' +
-        '<span class="pairs">' + PAIRS.map(p =>
-          `<button class="pairbtn" data-id="${p.id}" aria-pressed="false" style="font-family:${p.display}">Aa<i>${p.name}</i></button>`).join('') +
+      /* no instruction line: each button shows Aa in its own face with the name
+         under it, so it explains itself. the group keeps the label for anyone
+         who cannot see that. */
+      wrap.innerHTML = '<span class="pairs" role="group" aria-label="Font pairing">' + PAIRS.map(p =>
+          `<button class="pairbtn" data-id="${p.id}" aria-pressed="false">Aa</button>`).join('') +
         '</span><span class="swatch-why"></span>';
-      wrap.querySelectorAll('.pairbtn').forEach(b =>
-        b.addEventListener('click', () => { state.pair = b.dataset.id; applyOverrides(); }));
+      /* face and name are set through the DOM, never interpolated into an
+         attribute: family names carry their own double quotes, which would
+         close the style="" early and drop the face this button exists to show */
+      wrap.querySelectorAll('.pairbtn').forEach(b => {
+        const p = PAIRS.find(x => x.id === b.dataset.id) || PAIRS[0];
+        b.style.fontFamily = p.display;
+        b.title = p.name;
+        b.setAttribute('aria-label', p.name);   /* "Aa" is not a name */
+        b.addEventListener('click', () => { state.pair = b.dataset.id; applyOverrides(); });
+      });
     }
     return wrap;
   }
@@ -1005,7 +1064,7 @@ const NOTES = [
       `<span class="note__discipline">${n.discipline}</span>` +
       `<span class="note__principle">${n.principle}</span>` +
       `<span class="note__body">${n.body}</span>`;
-    if (n.control) card.append(buildControl(n.control));
+    if (n.control) card.append(buildControl(n.control, n.set));
     layer.append(card);
 
     const pin = document.createElement('button');
@@ -1018,21 +1077,9 @@ const NOTES = [
     pin.addEventListener('click', () => {
       if (!card.classList.contains('note--inline')){ card.focus(); return; }
       const wasOpen = card.classList.contains('is-open');
-      closeInlineNotes();
-      pin.setAttribute('aria-expanded', !wasOpen);
-      if (!wasOpen){
-        card.classList.add('is-open');
-        /* a card placed after a block whose anchor sits at the top of it — the
-           dates, above the org line — lands too low. measure once it is in the
-           page and pull it back level with the line it belongs to. */
-        if (card.classList.contains('note--right')){
-          const drop = (el.getBoundingClientRect().bottom + 8) - card.getBoundingClientRect().top;
-          if (drop < 0) card.style.marginTop =
-            (parseFloat(getComputedStyle(card).marginTop) + drop) + 'px';
-        }
-        entry.on(); card.focus();
-      }
-      else { entry.off(); card.blur(); }
+      closeInlineNotes();          /* also lowers aria-expanded and unlights */
+      if (wasOpen) card.blur();
+      else openInline(entry, true);
     });
     /* the pin has to ride an element that may contain a span; <dl> may not */
     const host = el.tagName === 'UL'  ? el.querySelector('li:last-child')
@@ -1158,8 +1205,13 @@ const NOTES = [
   }
 
   function placeInFlow(active, mb){
-    closeInlineNotes();   /* a relayout closes whatever was open */
+    /* re-ordering the cards invalidates an open one's measured pull-up, so it
+       has to close and re-open. Re-open the same card: a control inside a note
+       relayouts the page, and a note must not shut itself when the reader
+       drags its slider. */
+    const open = entries.find(e => e.card.classList.contains('is-open'));
     const cursor = new Map();
+    closeInlineNotes();
     active.forEach(e => {
       const block = blockOf(e.el);
       const after = cursor.get(block) || block;   /* stack, don't leapfrog */
@@ -1172,6 +1224,7 @@ const NOTES = [
       e.card.classList.toggle('note--right', (a.left + a.right) / 2 > mb.left + mb.width * 0.6);
       e.card.style.left = e.card.style.top = e.card.style.width = '';
     });
+    if (open && active.includes(open)) openInline(open, false);
   }
 
   /* ── the machine's copy: captured once from the plain DOM, so the
