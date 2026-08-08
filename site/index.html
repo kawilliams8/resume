@@ -167,16 +167,56 @@ a{color:var(--accent)}
   border-top:1px solid var(--rule-2);margin-top:var(--s-3);padding-top:var(--s-3)}
 /* below the rail: the picker is a cluster of controls in the column, not a
    panel. it hugs its content so nothing is stranded across empty space. */
+/* the pill and its backdrop only exist on narrow screens */
+.sheet-toggle,.sheet-backdrop{display:none}
 @media (max-width:899px){
-  /* no rail fits — so the controls stop being a panel and read as a row of
-     chips under the contact block, not a box interrupting the page */
+  /* no rail fits, and inline the panel cost 184px of a 844px screen and was
+     unreachable once you scrolled into the notes. so it leaves the flow: a
+     pill names the current lens, and opens the controls as a sheet. */
+  /* centred with auto margins, not left:50%. an auto-width fixed element sized
+     from a 50% offset can only ever be half the viewport wide, so the label
+     wrapped regardless of what it said. */
+  .sheet-toggle{display:inline-flex;align-items:center;gap:var(--s-2);
+    position:fixed;left:0;right:0;margin-inline:auto;width:fit-content;max-width:calc(100% - 32px);
+    bottom:18px;z-index:73;
+    font-family:var(--font-mono);font-size:13px;letter-spacing:.08em;font-weight:600;
+    padding:13px 20px;border-radius:999px;cursor:pointer;
+    border:1.5px solid var(--accent);background:var(--accent);color:var(--surface);
+    box-shadow:0 3px 14px rgba(0,0,0,.28)}
+  .sheet-toggle__caret{transition:rotate var(--dur) var(--ease)}
+  /* it sits above the sheet so nothing can swallow the tap that opens it,
+     which means it has to leave once the sheet is up or it covers the last row */
+  .sheet-toggle{transition:opacity 180ms var(--ease),translate 220ms var(--ease)}
+  body.sheet-open .sheet-toggle{opacity:0;pointer-events:none;translate:0 24px}
+  /* the media query's display:block would otherwise beat the hidden attribute,
+     leaving an invisible full-screen layer sitting on top of the pill */
+  .sheet-backdrop{display:block;position:fixed;inset:0;z-index:71;
+    background:rgba(0,0,0,.32);opacity:0;pointer-events:none;
+    transition:opacity 200ms var(--ease)}
+  .sheet-backdrop[hidden]{display:none}
+  body.sheet-open .sheet-backdrop{opacity:1;pointer-events:auto}
+
   .notes-control{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-2) var(--s-4);
-    width:fit-content;max-width:100%;border:0;background:none;padding:0;margin-top:var(--s-4)}
-  .notes-control__label{width:100%}
-  .versions,.lenses{margin-bottom:0}
+    position:fixed;left:0;right:0;bottom:0;z-index:72;margin:0;
+    max-height:82vh;overflow-y:auto;
+    padding:var(--s-4) var(--s-4) calc(var(--s-4) + env(safe-area-inset-bottom));
+    border:0;border-top:1px solid var(--rule);border-radius:12px 12px 0 0;
+    background:var(--surface);box-shadow:0 -6px 24px rgba(0,0,0,.18);
+    /* hidden keeps the closed sheet out of the tab order. it has to flip on
+       instantly when opening, or there is nothing focusable to move to yet,
+       and flip off only after the slide out has finished. */
+    translate:0 100%;visibility:hidden;
+    transition:translate 260ms var(--ease),visibility 0s linear 260ms}
+  body.sheet-open .notes-control{translate:0 0;visibility:visible;
+    transition:translate 260ms var(--ease),visibility 0s}
   .notes-control__label{width:100%;margin-bottom:0}
-  .picker-foot{border-top:0;margin:0;padding:0}
+  .versions,.lenses{margin-bottom:0;width:100%}
+  .picker-foot{border-top:1px solid var(--rule-2);margin-top:var(--s-2);padding-top:var(--s-3);
+    width:100%;justify-content:space-between;align-items:center}
   .picker-foot .scheme{margin-left:0;max-width:200px}
+}
+@media (max-width:899px) and (prefers-reduced-motion:reduce){
+  .notes-control,.sheet-backdrop,.sheet-toggle__caret{transition:none}
 }
 /* only on a real phone do the chips need columns — anywhere wider they should
    hug their own labels rather than stretch across the page */
@@ -388,12 +428,15 @@ body:not([data-notes="off"]) #annotations{display:block}
 .note--inline .note__index{position:static;display:inline-flex;margin:0 var(--s-2) var(--s-2) 0;vertical-align:middle}
 .note--inline .note__discipline{vertical-align:middle;margin-bottom:var(--s-2)}
 .note{--tilt:-.9deg;transform:rotate(var(--tilt));transform-origin:left top;
-  position:absolute;width:236px;pointer-events:auto;outline:none;cursor:default;
+  position:absolute;z-index:40;width:236px;pointer-events:auto;outline:none;cursor:default;
   background:var(--surface);border:1px solid var(--rule);
   border-radius:2px;box-shadow:var(--shadow);
   padding:var(--s-2) var(--s-3) var(--s-3);
   transition:box-shadow 140ms,background 140ms}
-.note:nth-of-type(even){--tilt:.8deg}
+/* alternation is set from the card's index in the active lens, not from its
+   position among siblings: the cards live next to their anchors now, so
+   nth-of-type would count whatever markup happens to surround them */
+.note--tilt-b{--tilt:.8deg}
 /* a card in the flow sits square — the tilt is only for cards pinned in the
    margin. declared last so it beats both tilt rules above. */
 .note.note--inline{--tilt:0deg}
@@ -545,7 +588,7 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
   /* paper is always the light scheme */
   :root[data-theme="dark"]{--bg:#fff;--surface:#fff;--ink:#16161A;--ink-2:#42424C;--ink-3:#6E6E78;
     --rule:#E2E2DC;--rule-2:#EFEFEA;--accent:#1F4FD8;--fail:#C0392B;color-scheme:light}
-  .notes-control,#annotations,.pin,.note,
+  .notes-control,#annotations,.pin,.note,.sheet-toggle,.sheet-backdrop,
   .sitenav,.short-contact{display:none!important}
   body[data-notes="parser"] main > :not(#parserView){display:revert!important}
   body[data-notes="parser"] header > :not(.picker-rail){display:revert!important}
@@ -592,17 +635,25 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
       </div>
 
       <div class="picker-rail">
-        <div class="notes-control">
+        <!-- narrow screens only: the picker stops interrupting the résumé and
+             becomes a sheet this pill opens. inert above 900px. -->
+        <button type="button" class="sheet-toggle" id="sheetToggle"
+                aria-expanded="false" aria-controls="pickerSheet">
+          <span class="sheet-toggle__text">View this résumé as</span>
+          <span class="sheet-toggle__caret" aria-hidden="true">▾</span>
+        </button>
+        <div class="sheet-backdrop" id="sheetBackdrop" hidden></div>
+        <div class="notes-control" id="pickerSheet">
           <div class="versions" role="group" aria-label="Version">
             <button type="button" class="chip chip--version" id="fullBtn" data-lens="off" aria-pressed="true">The full résumé</button>
             <button type="button" class="chip chip--version chip--short" id="shortBtn" aria-pressed="false">30-second version</button>
           </div>
-          <div class="notes-control__label">Read this résumé as</div>
+          <div class="notes-control__label">View this résumé as</div>
           <div class="lenses" role="group" aria-label="Annotation lens">
-            <button type="button" class="chip chip--lens" data-lens="hiring" aria-pressed="false" aria-controls="annotations">A hiring manager</button>
-            <button type="button" class="chip chip--lens" data-lens="engineering" aria-pressed="false" aria-controls="annotations">An engineer</button>
-            <button type="button" class="chip chip--lens" data-lens="design" aria-pressed="false" aria-controls="annotations">A designer</button>
-            <button type="button" class="chip chip--lens" data-lens="parser" aria-pressed="false" aria-controls="parserView">An ATS parser</button>
+            <button type="button" class="chip chip--lens" data-lens="hiring" aria-pressed="false" aria-controls="annotations">Hiring manager</button>
+            <button type="button" class="chip chip--lens" data-lens="engineering" aria-pressed="false" aria-controls="annotations">Engineer</button>
+            <button type="button" class="chip chip--lens" data-lens="design" aria-pressed="false" aria-controls="annotations">Designer</button>
+            <button type="button" class="chip chip--lens" data-lens="parser" aria-pressed="false" aria-controls="parserView">ATS parser</button>
           </div>
           <div class="picker-foot">
             <button class="reset" id="resetBtn" type="button">↺ Reset the page</button>
@@ -853,6 +904,7 @@ const NOTES = [
   function syncVersion(){
     shortBtn.setAttribute('aria-pressed', isShort());
     fullBtn.setAttribute('aria-pressed', body.dataset.notes === 'off' && !isShort());
+    syncSheet();   /* the pill names whatever is on screen, versions included */
   }
   /* every way back to the detail runs through here */
   function exitShort(){
@@ -1171,6 +1223,20 @@ const NOTES = [
     return n;
   };
 
+  /* DOM order is tab order. Cards are absolutely positioned either way, so
+     threading them in beside their anchors costs nothing visually and is the
+     only thing that puts them in the keyboard sequence where the reader met
+     the pin, instead of in a heap after the colophon. */
+  const threadIntoFlow = active => {
+    const cursor = new Map();
+    active.forEach(e => {
+      const block = blockOf(e.el);
+      const after = cursor.get(block) || block;   /* stack, don't leapfrog */
+      if (e.card.previousElementSibling !== after) after.after(e.card);
+      cursor.set(block, e.card);
+    });
+  };
+
   const fadeIn = cards => {
     if (reduce || typeof Element.prototype.animate !== 'function') return;
     cards.forEach((c, i) => {
@@ -1206,9 +1272,10 @@ const NOTES = [
   }
 
   function placeInMargin(active, pb, x, W){
-    active.forEach(e => {
-      if (e.card.parentElement !== layer) layer.append(e.card);
+    threadIntoFlow(active);
+    active.forEach((e, i) => {
       e.card.classList.remove('note--inline');
+      e.card.classList.toggle('note--tilt-b', i % 2 === 1);
     });
     /* READ every rect before writing a single position */
     const boxes = active.map(e => e.el.getBoundingClientRect());
@@ -1231,13 +1298,9 @@ const NOTES = [
        relayouts the page, and a note must not shut itself when the reader
        drags its slider. */
     const open = entries.find(e => e.card.classList.contains('is-open'));
-    const cursor = new Map();
     closeInlineNotes();
+    threadIntoFlow(active);
     active.forEach(e => {
-      const block = blockOf(e.el);
-      const after = cursor.get(block) || block;   /* stack, don't leapfrog */
-      if (e.card.previousElementSibling !== after) after.after(e.card);
-      cursor.set(block, e.card);
       e.card.classList.add('note--inline');
       /* follow the anchor across the column: the dates sit flush right, so
          their card shouldn't land under the opposite corner */
@@ -1291,16 +1354,62 @@ const NOTES = [
       });
     };
     swap();
+    syncSheet();
     if (!keep) toTop();
     try { localStorage.setItem('kw:lens', lens); } catch(e){}
     /* the cards animate themselves in — a page-wide view transition
        would just cross-fade over the top of it */
     requestAnimationFrame(() => { layout({ animate:true }); });
   }
-  buttons.forEach(b => b.addEventListener('click', () =>
-    setLens(body.dataset.notes === b.dataset.lens ? 'off' : b.dataset.lens)));
+  buttons.forEach(b => b.addEventListener('click', () => {
+    setLens(body.dataset.notes === b.dataset.lens ? 'off' : b.dataset.lens);
+    closeSheet();          /* a lens is a one-shot choice: pick it and read */
+  }));
+
+  /* ── the narrow-screen sheet ───────────────────────────────────
+     the pill names the lens being read, so the reader can tell what
+     they are looking at without opening anything. */
+  const sheetBtn = document.getElementById('sheetToggle'),
+        sheet = document.getElementById('pickerSheet'),
+        backdrop = document.getElementById('sheetBackdrop'),
+        sheetLabel = sheetBtn.querySelector('.sheet-toggle__text');
+  /* called from syncVersion, which runs before these consts exist on the very
+     first pass, so it reads the label out of the DOM rather than closing over it */
+  function syncSheet(){
+    const el = document.querySelector('.sheet-toggle__text');
+    if (!el) return;
+    /* the short view hides the lens chips entirely, so naming a lens there
+       would advertise a reading that is not on screen */
+    if (isShort()){ el.textContent = 'View: ' + shortBtn.textContent; return; }
+    /* the full-résumé chip carries data-lens="off", so it matches the lookup —
+       but "off" is the absence of a lens, not one of them */
+    const lens = body.dataset.notes;
+    const hit = lens === 'off' ? null : buttons.find(b => b.dataset.lens === lens);
+    el.textContent = hit ? 'View: ' + hit.textContent : 'View this résumé as';
+  }
+  function openSheet(){
+    body.classList.add('sheet-open');
+    sheetBtn.setAttribute('aria-expanded', 'true');
+    backdrop.hidden = false;
+    /* flush the visibility change before moving focus: you cannot focus into a
+       subtree the browser still considers hidden */
+    void sheet.offsetHeight;
+    const first = sheet.querySelector('.chip');
+    if (first) first.focus();
+  }
+  function closeSheet(){
+    if (!body.classList.contains('sheet-open')) return;
+    body.classList.remove('sheet-open');
+    sheetBtn.setAttribute('aria-expanded', 'false');
+    backdrop.hidden = true;
+    sheetBtn.focus();      /* focus goes back where it came from */
+  }
+  sheetBtn.addEventListener('click', () =>
+    body.classList.contains('sheet-open') ? closeSheet() : openSheet());
+  backdrop.addEventListener('click', closeSheet);
+  addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
   /* home means home: the full-résumé chip also walks back out of the short view */
-  fullBtn.addEventListener('click', exitShort);
+  fullBtn.addEventListener('click', () => { exitShort(); closeSheet(); });
   /* nav promises the document — if the target section is hidden by the current
      view (machine view, or contact in the short view), return to the full
      résumé first. scrolls by hand so the URL never grows a hash. */
@@ -1330,6 +1439,7 @@ const NOTES = [
     Object.assign(state, DEFAULTS);
     body.classList.remove('condensed');
     applyOverrides();
+    closeSheet();   /* the point of resetting is to see the page, not the sheet */
   });
 
   /* ── scheme: a reader preference, not an experiment — persists, never resets ── */
@@ -1342,11 +1452,12 @@ const NOTES = [
     syncScheme();
     applyOverrides();   /* a picked accent re-resolves, and the readout re-judges */
   }
-  schemeBtns.forEach(b => b.addEventListener('click', () => setTheme(b.dataset.scheme)));
+  schemeBtns.forEach(b => b.addEventListener('click', () => { setTheme(b.dataset.scheme); closeSheet(); }));
   syncScheme();
   /* the top-level way into the short view — same rules as the note's button:
      leaving it returns to the plain résumé, not to an annotated one */
   shortBtn.addEventListener('click', () => {
+    closeSheet();
     if (isShort()){ exitShort(); setLens('off'); return; }
     body.classList.add('condensed');
     applyOverrides();
