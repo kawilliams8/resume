@@ -720,7 +720,7 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
       <dl class="kv" data-note="skills">
         <dt class="secondary">Frontend</dt><dd class="secondary">TypeScript · JavaScript (ES6+) · React · React Hooks · Vue · component-driven architecture · SPAs · state management (Redux) · semantic HTML · CSS animations · responsive design · performance optimization · cross-browser compatibility</dd>
         <dt class="secondary">UI &amp; design</dt><dd class="secondary">UI/UX design · Figma · design systems · Storybook · Tailwind CSS · shadcn/ui · Material UI · web accessibility (WCAG)</dd>
-        <dt class="secondary">AI-assisted</dt><dd class="secondary">Claude Code (custom agents · MCP connectors) · LLM integration</dd>
+        <dt class="secondary">AI-assisted</dt><dd class="secondary" data-note="ai-skills">Claude Code (custom agents · MCP connectors) · LLM integration</dd>
         <dt class="secondary">Full-stack &amp; tooling</dt><dd class="secondary">Node.js · Express · PHP · Laravel · Redis · REST APIs · WebSockets · webhooks · runtime schema validation (io-ts · Zod) · API integration · CRM integration (Salesforce · HubSpot) · AWS · Docker · CI/CD (GitHub Actions) · Webpack · Vite · Jest · Vitest · React Testing Library · Playwright</dd>
         <dt class="secondary">Database &amp; ORM</dt><dd class="secondary">MySQL · MongoDB · Mongoose · SQLite · Eloquent ORM</dd>
         <dt class="secondary">Practice</dt><dd class="secondary">Git · Agile/Scrum · unit, integration &amp; E2E testing · code review · mentorship · live presentations &amp; demos · async &amp; cross-functional collaboration · Jira · Linear</dd>
@@ -807,12 +807,14 @@ const NOTES = [
     principle:'Pretty isn\'t always readable',
     control:'accent',
     body:'No color library, just a browser API reading what is actually painted, plus some arithmetic. 4.5 to 1 is the legibility floor.' },
-  { set:'engineering', target:'proximity', discipline:'Machine readers', principle:'The whole résumé, first response',
-    body:'No JavaScript required to read a word of this. An ATS, a crawler or an LLM gets the complete document in the initial HTML, and the layer builds on top afterwards. Rendering that needs a runtime is rendering half the audience cannot see.' },
+  { set:'engineering', target:'ai-skills', discipline:'Using AI for this site',
+    principle:'Built with AI, readable without JS',
+    body:'Written, committed and deployed with Claude Code. An ATS scraper or browser with JavaScript off can read the details, start to finish, on initial load. Good prompting is key.' },
   { set:'engineering', target:'serial-position', discipline:'Performance', principle:'Read pass, then write pass',
     body:'Positions are computed from a single batch of measurements: every rect and card height is read before any card is moved, so the placement pass never interleaves reads and writes.' },
-  { set:'engineering', target:'project', discipline:'Stack', principle:'What I reach for unsupervised',
-    body:'Racer &amp; Pacer is the honest sample; nobody reviewed those choices. Tokens over Chakra, cache-first TanStack Query, dnd-kit, Playwright.' },
+  { set:'engineering', target:'project', discipline:'Design system toolkit',
+    principle:'Every project has different needs',
+    body:'Chakra handles the accessible primitives and the composition. A token layer over the top replaces the default styles with mine. Up and running fast but feels unique.' },
   { set:'engineering', target:'contact', discipline:'Accessibility', principle:'Both ends reachable',
     body:'Cards take focus, pins are real buttons that hand it to them, and the lens control is wired with <em>aria-pressed</em>. Both ends of every pairing work from the keyboard.' },
 
