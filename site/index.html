@@ -152,6 +152,9 @@ a{color:var(--accent)}
   padding:var(--s-2) var(--s-3);border-radius:3px;
   border:1.5px solid var(--rule);background:var(--surface);color:var(--ink-3);
   transition:background var(--dur) var(--ease),color var(--dur) var(--ease),border-color var(--dur) var(--ease)}
+/* any author display rule outranks the UA's [hidden]{display:none}, so a chip
+   for an unfinished lens kept rendering with the attribute set */
+.chip[hidden]{display:none}
 .chip:hover{color:var(--ink);border-color:var(--ink-3)}
 .chip--version[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .chip--short{border-style:dashed}
