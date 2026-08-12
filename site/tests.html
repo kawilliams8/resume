@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Résumé site — test suite</title>
+<style>
+  :root{--ok:#1D9E75;--bad:#D8342F;--ink:#16161A;--ink-2:#55555F;--rule:#E4E4DE;--bg:#FBFBF9}
+  *{box-sizing:border-box}
+  body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+    font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  h1{font-size:19px;margin:0 0 4px}
+  .sub{color:var(--ink-2);margin:0 0 18px;font-size:13px}
+  #summary{position:sticky;top:0;background:var(--bg);padding:10px 0;border-bottom:1px solid var(--rule);
+    margin-bottom:14px;font-weight:600;z-index:2}
+  .grp{margin:0 0 18px}
+  .grp h2{font-size:13px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-2);
+    margin:0 0 6px;font-weight:600}
+  .t{display:flex;gap:9px;padding:3px 0;align-items:baseline;border-bottom:1px solid #F0F0EC}
+  .m{font-family:ui-monospace,Menlo,monospace;font-size:11px;flex:none;width:38px;font-weight:600}
+  .pass .m{color:var(--ok)} .fail .m{color:var(--bad)}
+  .fail{background:#FEF4F3}
+  .why{color:var(--bad);font-family:ui-monospace,Menlo,monospace;font-size:11px;margin-left:auto;
+    text-align:right;max-width:52%}
+  iframe{position:fixed;right:-9999px;height:900px;border:0}
+  button{font:inherit;padding:6px 12px;border-radius:5px;border:1px solid var(--rule);
+    background:#fff;cursor:pointer}
+</style>
+</head>
+<body>
+<h1>Résumé site — test suite</h1>
+<p class="sub">Runs <code>index.html</code> in a real browser at real widths. Every assertion checks
+what the page <em>paints</em>, not the property that was set — that distinction has hidden three
+separate bugs. <button id="rerun">Re-run</button></p>
+<div id="summary">running…</div>
+<div id="out"></div>
+<iframe id="frame" title="page under test"></iframe>
+
+<script>
+const out = document.getElementById('out'), frame = document.getElementById('frame');
+let pass = 0, fail = 0, group;
+
+const G = name => { group = document.createElement('div'); group.className = 'grp';
+  group.innerHTML = '<h2>' + name + '</h2>'; out.append(group); };
+const T = (name, fn) => {
+  let ok = false, why = '';
+  try { const r = fn(); if (r === true || r === undefined) ok = true; else { why = String(r); } }
+  catch (e) { why = e.message; }
+  ok ? pass++ : fail++;
+  const row = document.createElement('div');
+  row.className = 't ' + (ok ? 'pass' : 'fail');
+  row.innerHTML = '<span class="m">' + (ok ? 'PASS' : 'FAIL') + '</span><span>' + name + '</span>' +
+    (why ? '<span class="why">' + why.replace(/</g,'&lt;') + '</span>' : '');
+  group.append(row);
+};
+const eq = (a, b, label) => a === b ? true : (label||'') + ' expected ' + JSON.stringify(b) + ', got ' + JSON.stringify(a);
+
+/* ── harness ────────────────────────────────────────────────────── */
+let D, W;                                     // document + window of the page under test
+const load = (width, lens) => new Promise(res => {
+  frame.style.width = width + 'px';
+  frame.onload = () => {
+    D = frame.contentDocument; W = frame.contentWindow;
+    setTimeout(res, 320);                     // the page schedules its own layout at 200ms
+  };
+  try { localStorage.removeItem('x'); } catch(e){}
+  frame.contentWindow && frame.contentWindow.localStorage &&
+    (lens === undefined ? 0 : frame.contentWindow.localStorage.setItem('kw:lens', lens));
+  frame.src = './index.html?' + Math.random();
+});
+/* set storage then reload, since the page reads it during boot */
+const boot = async (width, lens) => {
+  if (!D) await load(width);
+  try { W.localStorage.setItem('kw:lens', lens); W.localStorage.removeItem('kw:theme'); } catch(e){}
+  await load(width);
+};
+
+const painted = el => { if (!el) return false; const r = el.getBoundingClientRect();
+  return r.width > 0 && r.height > 0 && W.getComputedStyle(el).display !== 'none'
+    && W.getComputedStyle(el).visibility !== 'hidden'; };
+const $ = s => D.querySelector(s);
+const $$ = s => [...D.querySelectorAll(s)];
+const shown = s => $$(s).filter(painted);
+const chip = l => $('.chip--lens[data-lens="' + l + '"]');
+const navLinks = () => shown('.sitenav a[href^="#"]').map(a => a.textContent.trim());
+const cards = () => $$('.note').filter(painted);
+const pins  = () => $$('.pin').filter(painted);
+const pillText = () => $('.sheet-toggle__text').textContent;
+
+/* contrast, composited properly through alpha */
+const parse = s => { const n = (s.match(/[\d.]+/g)||[]).map(Number);
+  return n.length >= 4 ? {c:n.slice(0,3), a:n[3]} : {c:n.slice(0,3), a:n.length?1:0}; };
+const over = (f,b) => f.c.map((v,i) => v*f.a + b[i]*(1-f.a));
+const lum = ([r,g,b]) => { const f = c => { c/=255; return c<=.03928 ? c/12.92 : Math.pow((c+.055)/1.055,2.4); };
+  return .2126*f(r)+.7152*f(g)+.0722*f(b); };
+const ratio = (a,b) => { const [x,y] = [lum(a),lum(b)].sort((m,n)=>n-m); return (x+.05)/(y+.05); };
+const bgOf = el => { const st=[]; let n=el;
+  while (n && n !== D.documentElement){ const p = parse(W.getComputedStyle(n).backgroundColor);
+    if (p.a > 0){ st.push(p); if (p.a === 1) break; } n = n.parentElement; }
+  const base = parse(W.getComputedStyle(D.documentElement).backgroundColor);
+  let acc = base.a ? base.c : [255,255,255];
+  for (let i = st.length-1; i >= 0; i--) acc = over(st[i], acc);
+  return acc; };
+const contrastFailures = () => { const bad = [];
+  $$('main *, nav *, .colophon *, .note *').forEach(el => { if (!painted(el)) return;
+    const t = [...el.childNodes].filter(n=>n.nodeType===3&&n.textContent.trim()).map(n=>n.textContent.trim()).join(' ');
+    if (!t) return;
+    const s = W.getComputedStyle(el), px = parseFloat(s.fontSize);
+    const floor = (px>=24 || (px>=18.66 && +s.fontWeight>=700)) ? 3 : 4.5;
+    const bg = bgOf(el), r = ratio(over(parse(s.color), bg), bg);
+    if (r < floor) bad.push(t.slice(0,22) + ' ' + r.toFixed(2)); });
+  return bad; };
+
+/* ── suites ─────────────────────────────────────────────────────── */
+async function run(){
+  out.innerHTML = ''; pass = 0; fail = 0;
+
+  /* ---------- lens gating ---------- */
+  await boot(1600, 'design');                 // a lens that is switched off
+  G('Lens gating');
+  T('unfinished lens cannot be reached from storage', () => eq(D.body.dataset.notes, 'off'));
+  T('its chip does not paint (attribute alone is not enough)',
+    () => painted(chip('design')) ? 'designer chip is rendering' : true);
+  T('three chips render', () => eq(shown('.chip--lens').length, 3));
+  T('its notes are never built into the DOM', () => {
+    const design = $$('.note').filter(n => /Law of Proximity|Chunking|Peak-end|Tabular/.test(n.getAttribute('aria-label')||''));
+    return design.length ? design.length + ' design cards in DOM' : true; });
+  T('no element with [hidden] is still painting', () => {
+    const ghosts = $$('[hidden]').filter(painted).map(e => e.tagName + '.' + e.className);
+    return ghosts.length ? ghosts.join(', ') : true; });
+
+  /* ---------- nav ---------- */
+  G('Nav');
+  await boot(1600, 'off');
+  T('full résumé shows all four section links', () => eq(navLinks().length, 4));
+  T('every nav target is actually present', () => {
+    const missing = $$('.sitenav a[href^="#"]').filter(a => { const t = D.querySelector(a.getAttribute('href'));
+      return !t || t.offsetParent === null; }).map(a => a.textContent.trim());
+    return missing.length ? 'points at hidden: ' + missing.join(', ') : true; });
+  T('short view drops links to cut sections', () => {
+    $('#shortBtn').click(); return eq(navLinks().join(','), 'Experience,Projects'); });
+  T('remaining short-view links do not eject the reader', () => {
+    const bad = shown('.sitenav a[href^="#"]').filter(a => { a.click();
+      return !D.body.classList.contains('condensed'); }).map(a => a.textContent.trim());
+    return bad.length ? bad.join(', ') + ' ejected' : true; });
+  T('machine view hides section links entirely', () => {
+    $('#fullBtn').click(); chip('parser').click(); return eq(navLinks().length, 0); });
+  T('wordmark returns to the plain full résumé', () => {
+    $('.wordmark').click();
+    return D.body.dataset.notes === 'off' && !D.body.classList.contains('condensed')
+      ? true : 'lens=' + D.body.dataset.notes + ' short=' + D.body.classList.contains('condensed'); });
+
+  /* ---------- versions vs the machine view ---------- */
+  G('Versions and the machine view');
+  await boot(1600, 'off');
+  T('30-second from the machine view actually lands there', () => {
+    chip('parser').click(); $('#shortBtn').click();
+    return painted($('#parserView')) ? 'still showing the text dump'
+      : (D.body.classList.contains('condensed') ? true : 'not condensed'); });
+  T('and the lens is released, not left dangling', () => eq(D.body.dataset.notes, 'off'));
+  T('full résumé button also leaves the machine view', () => {
+    $('#fullBtn').click(); chip('parser').click(); $('#fullBtn').click();
+    return painted($('#parserView')) ? 'machine view still up' : true; });
+  T('machine view builds all three layers', () => {
+    chip('parser').click();
+    const t = $('#parserText').textContent.length, j = $('#parserJson').textContent.length,
+          m = $('#parserMeta').textContent.length;
+    return (t > 500 && j > 100 && m > 50) ? true : 'text=' + t + ' json=' + j + ' meta=' + m; });
+  T('no notes or pins survive the short view', () => {
+    $('#fullBtn').click(); chip('hiring').click(); $('#shortBtn').click();
+    return (cards().length || pins().length) ? cards().length + ' cards, ' + pins().length + ' pins' : true; });
+
+  /* ---------- annotations ---------- */
+  for (const [lens, n] of [['hiring', 4], ['engineering', 7]]) {
+    await boot(1600, lens);
+    G('Annotations — ' + lens);
+    T('builds ' + n + ' cards and ' + n + ' pins', () => {
+      const c = cards().length, p = pins().length;
+      return (c === n && p === n) ? true : c + ' cards, ' + p + ' pins'; });
+    T('pins and cards are numbered 1..n and agree', () => {
+      const ci = cards().map(c => c.querySelector('.note__index').textContent).sort();
+      const pi = pins().map(p => p.textContent).sort();
+      const want = Array.from({length:n}, (_,i) => String(i+1)).sort();
+      return (ci.join() === want.join() && pi.join() === want.join()) ? true
+        : 'cards ' + ci.join(',') + ' pins ' + pi.join(','); });
+    T('every card sits after its own anchor in the DOM', () => {
+      const bad = cards().filter(c => { const i = c.querySelector('.note__index').textContent;
+        const pin = pins().find(p => p.textContent === i);
+        return pin && !(pin.compareDocumentPosition(c) & Node.DOCUMENT_POSITION_FOLLOWING); });
+      return bad.length ? bad.length + ' cards precede their pin' : true; });
+    T('nothing overflows the viewport horizontally',
+      () => D.documentElement.scrollWidth <= W.innerWidth ? true
+        : D.documentElement.scrollWidth + ' > ' + W.innerWidth);
+    T('headings do not announce their pin', () => {
+      const bad = $$('h1,h2,h3').filter(h => h.querySelector('.pin'))
+        .filter(h => (h.getAttribute('aria-label')||'') !== h.textContent.trim().replace(/\d+$/,'').trim());
+      return bad.length ? bad.map(h=>h.tagName).join(',') : true; });
+  }
+
+  /* ---------- controls ---------- */
+  await boot(1600, 'engineering');
+  G('Controls');
+  const rcard = () => cards().find(c => c.querySelector('[data-sync="ratio"]'));
+  T('type scale offers five named stops', () => {
+    const i = rcard().querySelector('input[type=range]');
+    return eq(+i.max - +i.min + 1, 5); });
+  T('each stop resizes the page and announces its name', () => {
+    const i = rcard().querySelector('input[type=range]');
+    const seen = new Set(), names = new Set();
+    for (let v = +i.min; v <= +i.max; v++){ i.value = v; i.dispatchEvent(new W.Event('input',{bubbles:true}));
+      seen.add(W.getComputedStyle($('h1')).fontSize); names.add(i.getAttribute('aria-valuetext')); }
+    $('#resetBtn').click();
+    return (seen.size === 5 && names.size === 5) ? true : seen.size + ' sizes, ' + names.size + ' labels'; });
+  T('dragging a control does not close its own card', () => {
+    const i = rcard().querySelector('input[type=range]');
+    const before = painted(rcard());
+    i.value = 3; i.dispatchEvent(new W.Event('input',{bubbles:true}));
+    const after = rcard() && painted(rcard());
+    $('#resetBtn').click();
+    return (before && after) ? true : 'card vanished mid-drag'; });
+  T('all five specimens render their own typeface', () => {
+    const btns = [...rcard().parentElement.querySelectorAll('.pairbtn')];
+    const b2 = btns.length ? btns : [...cards().find(c=>c.querySelector('[data-sync="pair"]')).querySelectorAll('.pairbtn')];
+    const fonts = new Set(b2.map(b => b.style.fontFamily));
+    const stray = b2.filter(b => [...b.attributes].some(a =>
+      !['class','data-id','aria-pressed','style','title','aria-label'].includes(a.name)));
+    return (b2.length === 5 && fonts.size === 5 && !stray.length) ? true
+      : b2.length + ' buttons, ' + fonts.size + ' distinct faces, ' + stray.length + ' with stray attrs'; });
+  T('accent readout judges live and flags failures', () => {
+    const acard = cards().find(c => c.querySelector('[data-sync="accent"]'));
+    const swatches = [...acard.querySelectorAll('.swatch')];
+    const notes = swatches.map(s => { s.click();
+      const fails = /fails/.test(acard.querySelector('.ratio-out').textContent);
+      const shownNote = painted(acard.querySelector('.rule-note'));
+      return fails === shownNote; });
+    $('#resetBtn').click();
+    return notes.every(Boolean) ? true : 'failure note does not track the verdict'; });
+  T('reset clears every override and hides itself', () => {
+    const i = rcard().querySelector('input[type=range]');
+    i.value = 4; i.dispatchEvent(new W.Event('input',{bubbles:true}));
+    $('#resetBtn').click();
+    return (!D.body.classList.contains('is-overridden') && !painted($('#resetBtn'))) ? true
+      : 'still overridden'; });
+  T('overrides are never persisted', () => {
+    const keys = Object.keys(W.localStorage).filter(k => /ratio|accent|pair/.test(k));
+    return keys.length ? keys.join(',') : true; });
+
+  /* ---------- accessibility ---------- */
+  for (const theme of ['light','dark']) {
+    await boot(1600, 'engineering');
+    try { W.localStorage.setItem('kw:theme', theme); } catch(e){}
+    await load(1600);
+    G('Accessibility — ' + theme);
+    T('every text node clears its contrast floor', () => {
+      const bad = contrastFailures();
+      return bad.length ? bad.slice(0,3).join(' | ') : true; });
+    T('every focusable has an accessible name', () => {
+      const bad = shown('a[href],button,input,[tabindex]:not([tabindex="-1"])').filter(el =>
+        !(el.getAttribute('aria-label') || el.getAttribute('title') || el.textContent.trim()));
+      return bad.length ? bad.length + ' unnamed' : true; });
+    T('non-inline targets meet the 24px minimum', () => {
+      const bad = shown('a[href],button,input').filter(el => !el.closest('p,li,dd,h1,h2,h3'))
+        .filter(el => { const r = el.getBoundingClientRect(); return r.width < 24 || r.height < 24; })
+        .map(el => el.textContent.trim().slice(0,14));
+      return bad.length ? bad.join(',') : true; });
+    T('no dangling aria references', () => {
+      const bad = [];
+      ['aria-controls','aria-labelledby','aria-describedby'].forEach(a =>
+        $$('['+a+']').forEach(el => el.getAttribute(a).split(/\s+/).forEach(id => {
+          if (!D.getElementById(id)) bad.push(a+'='+id); })));
+      return bad.length ? bad.join(',') : true; });
+    T('no duplicate ids', () => {
+      const ids = {}; $$('[id]').forEach(e => ids[e.id] = (ids[e.id]||0)+1);
+      const dup = Object.entries(ids).filter(([,n]) => n>1).map(([i])=>i);
+      return dup.length ? dup.join(',') : true; });
+    T('one h1, no skipped heading levels', () => {
+      const hs = $$('h1,h2,h3,h4,h5,h6').filter(painted);
+      if (hs.filter(h=>h.tagName==='H1').length !== 1) return 'h1 count wrong';
+      let prev = 0, bad = '';
+      hs.forEach(h => { const l = +h.tagName[1];
+        if (prev && l > prev+1) bad = 'h'+prev+' -> h'+l; prev = l; });
+      return bad || true; });
+  }
+  try { W.localStorage.removeItem('kw:theme'); } catch(e){}
+
+  /* ---------- mobile sheet ---------- */
+  await boot(390, 'engineering');
+  G('Mobile sheet — 390px');
+  T('the picker is out of the document flow', () =>
+    eq(W.getComputedStyle($('.notes-control')).position, 'fixed'));
+  T('the pill is on screen and takes taps', () => {
+    const p = $('#sheetToggle'), b = p.getBoundingClientRect();
+    const top = D.elementFromPoint(Math.round(b.left+b.width/2), Math.round(b.top+b.height/2));
+    return (b.bottom <= W.innerHeight && top && (p.contains(top) || top === p)) ? true
+      : 'blocked by ' + (top ? top.id || top.tagName : 'nothing'); });
+  T('closed sheet contributes nothing to the tab order', () => {
+    const n = $$('#pickerSheet a,#pickerSheet button,#pickerSheet input').filter(painted).length;
+    return n ? n + ' still focusable' : true; });
+  T('opening moves focus into the sheet', () => {
+    $('#sheetToggle').click();
+    return $('#pickerSheet').contains(D.activeElement) ? true
+      : 'focus on ' + (D.activeElement.textContent||'').trim().slice(0,18); });
+  T('every control in the open sheet is reachable', () => {
+    const sheet = $('#pickerSheet');
+    sheet.style.transition = 'none'; sheet.style.translate = '0 0'; void sheet.offsetHeight;
+    const blocked = [...sheet.querySelectorAll('button')].filter(b => b.getBoundingClientRect().width > 0)
+      .filter(b => { const r = b.getBoundingClientRect();
+        const el = D.elementFromPoint(Math.round(r.left+r.width/2), Math.round(r.top+r.height/2));
+        return !(el && (b.contains(el) || el === b)); }).map(b => b.textContent.trim().slice(0,14));
+    sheet.style.transition = ''; sheet.style.translate = '';
+    return blocked.length ? blocked.join(',') : true; });
+  T('every choice dismisses the sheet', () => {
+    const pill = $('#sheetToggle');
+    const picks = ['.scheme-opt[data-scheme="dark"]','.scheme-opt[data-scheme="light"]',
+      '.chip--lens[data-lens="hiring"]','#shortBtn','#fullBtn'];
+    const stuck = picks.filter(sel => {
+      if (D.body.classList.contains('sheet-open')) pill.click();
+      pill.click(); $(sel).click();
+      return D.body.classList.contains('sheet-open'); });
+    return stuck.length ? stuck.join(',') : true; });
+  T('the pill names the current view on every route', () => {
+    const seen = {};
+    chip('engineering').click(); seen.lens = pillText();
+    $('#shortBtn').click();      seen.short = pillText();
+    $('#fullBtn').click();       seen.off = pillText();
+    return (/Engineer/.test(seen.lens) && /30-second/.test(seen.short) && /View my résumé as/.test(seen.off))
+      ? true : JSON.stringify(seen); });
+  T('chips and pill stay on one line', () => {
+    const oneLine = el => { const r = D.createRange(); r.selectNodeContents(el); return r.getClientRects().length === 1; };
+    const bad = shown('.chip--lens').filter(c => !oneLine(c)).map(c => c.textContent);
+    if (!oneLine($('.sheet-toggle__text'))) bad.push('pill');
+    return bad.length ? bad.join(',') : true; });
+
+  /* ---------- copy ---------- */
+  await boot(1600, 'engineering');
+  G('Copy and links');
+  T('no stale "Read this résumé as"', () => {
+    const html = D.documentElement.innerHTML;
+    return html.includes('Read this résumé as') ? 'still present' : true; });
+  T('every external link opens a new tab safely', () => {
+    const ext = $$('a[href^="http"]');
+    const bad = ext.filter(a => a.target !== '_blank' || !(a.rel||'').includes('noopener'))
+      .map(a => a.textContent.trim().slice(0,18));
+    return bad.length ? bad.join(',') : true; });
+  T('mailto and in-page links are left alone', () => {
+    const bad = $$('a[href^="mailto"],a[href^="#"]').filter(a => a.target === '_blank');
+    return bad.length ? bad.length + ' mailto/anchor links hijacked' : true; });
+  T('the whole résumé is readable without JavaScript', () => {
+    /* textContent, not innerText: innerText returns rendered text, so CSS
+       text-transform would hide the real source casing a parser actually sees */
+    const text = D.querySelector('main').textContent.replace(/\s+/g,' ');
+    const need = ['multi-tenant AI product','io-ts','Turing School','kawilliams8@gmail.com'];
+    const missing = need.filter(s => !text.includes(s));
+    return missing.length ? 'missing ' + missing.join(',') : true; });
+  T('the machine view reports source casing, not CSS casing', () => {
+    chip('parser').click();
+    const t = $('#parserText').textContent;
+    if (/TURING SCHOOL OF SOFTWARE/.test(t)) return 'shows CSS-uppercased text';
+    return /Turing School of Software/.test(t) ? true : 'education row missing'; });
+  T('the machine view keeps its line structure', () => {
+    /* each line is its own <i>, joined with no separator — textContent has no
+       newlines to count, so count the elements */
+    const lines = $$('#parserText i').length;
+    return lines > 30 ? true : 'collapsed to ' + lines + ' line(s)'; });
+  T('the machine view survives a cold boot straight into it', () => {
+    const first = $$('#parserText i')[0];
+    return first && first.textContent.trim() === 'Katherine Williams'
+      ? true : 'first line is ' + (first ? first.textContent.slice(0,40) : 'missing'); });
+  T('sibling links do not run together', () => {
+    const bad = $$('#parserText i').map(i => i.textContent)
+      .filter(t => /@gmail\.comkatherine|ColoradoRemote/.test(t));
+    return bad.length ? bad[0].slice(0,44) : true; });
+  T('the machine view excludes the page chrome', () => {
+    const t = $('#parserText').textContent;
+    return /Hiring Pro|View my résumé as|Reset the page/.test(t)
+      ? 'picker leaked into the read' : true; });
+  T('the greeting opens the machine view, and is not itself extracted', () => {
+    const hello = $('#parserView .machine-hello');
+    if (!hello) return 'no greeting';
+    /* assert the shape, not the wording — the copy is Katie's to change */
+    if (!/machines|bots|crawlers/i.test(hello.textContent)) return 'greeting does not address the reader';
+    if ($('#parserView').firstElementChild !== hello) return 'not first in the view';
+    return $('#parserText').textContent.includes(hello.textContent.trim())
+      ? 'greeting fed back into its own text layer' : true; });
+  T('the greeting does not skip a heading level', () => {
+    /* the machine view hides the header, so the h1 goes with it and the
+       greeting is the whole visible outline — it just has to start no deeper
+       than h2 and not jump over anything after it */
+    const hello = $('#parserView .machine-hello');
+    if (hello.tagName !== 'H2') return 'greeting is ' + hello.tagName;
+    const levels = $$('h1,h2,h3,h4,h5,h6').filter(painted).map(h => +h.tagName[1]);
+    if (levels[0] > 2) return 'outline starts at h' + levels[0];
+    const skip = levels.find((l, i) => i && l - levels[i-1] > 1);
+    return skip ? 'jumps to h' + skip : true; });
+  T('no caption claims an API the page no longer uses', () => {
+    const caps = $$('.machine-cap').map(c => c.textContent).join(' ');
+    return /innerText|ld\+json/.test(caps) ? caps.slice(0,60) : true; });
+  T('structured data is present and parses', () => {
+    const ld = D.querySelector('script[type="application/ld+json"]');
+    if (!ld) return 'no JSON-LD';
+    const d = JSON.parse(ld.textContent);
+    return d['@type'] === 'Person' && d.name ? true : 'malformed'; });
+
+  document.getElementById('summary').textContent =
+    fail ? fail + ' failing · ' + pass + ' passing' : 'all ' + pass + ' passing';
+  document.getElementById('summary').style.color = fail ? 'var(--bad)' : 'var(--ok)';
+}
+document.getElementById('rerun').onclick = run;
+run();
+</script>
+</body>
+</html>
