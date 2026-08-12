@@ -275,8 +275,15 @@ body[data-notes="parser"] .sitenav ul{display:none}
 #parserText i::before{content:counter(ln,decimal-leading-zero);display:inline-block;width:3ch;
   margin-right:var(--s-3);color:var(--ink-3);opacity:.5;text-align:right;user-select:none}
 #parserJson b,#parserMeta b{color:var(--accent);font-weight:500}
-#parserView .machine-foot{font-family:var(--font-mono);font-size:11px;line-height:1.6;color:var(--ink-3);
-  margin:var(--s-4) 0 0;padding:0 var(--s-3)}   /* spans the blocks, text aligns with theirs */
+/* the greeting opens the view rather than closing it — you say hello on the way
+   in. h2 because the machine view hides every résumé section, so this follows
+   the h1 directly and any lower level would skip. sized small by hand. */
+#parserView .machine-hello{font-family:var(--font-mono);font-size:13px;letter-spacing:.02em;
+  font-weight:600;color:var(--accent);margin:0 0 var(--s-2);padding:0 var(--s-3)}
+/* no measure cap here: it sits above full-width code blocks, so a 66ch column
+   reads as a narrow stripe against them rather than as prose */
+#parserView .machine-intro{font-family:var(--font-mono);font-size:12px;line-height:1.65;color:var(--ink-2);
+  margin:0 0 var(--s-4);padding:0 var(--s-3)}
 /* ═══════════════════════════════════════════════════════════════
    LAYOUT
    One measure. The annotation layer overlays — it never occupies
@@ -533,6 +540,10 @@ body.condensed section[aria-labelledby="h-fit"],
 body.condensed section[aria-labelledby="h-education"],
 body.condensed section[aria-labelledby="h-contact"]{display:none}
 body.condensed .note,body.condensed .pin{display:none!important}
+/* the short view cuts Skills, Education and Contact, so their nav links point
+   at headings that are not rendered — and clicking one silently dropped the
+   reader back into the full résumé */
+body.condensed .sitenav [data-full-only]{display:none}
 body.condensed .short-only{display:block}
 body.condensed .short-contact{display:block}
 body.condensed .role-head > div{display:flex;align-items:baseline;gap:var(--s-2);flex-wrap:wrap}
@@ -617,8 +628,8 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
     <ul>
       <li><a href="#h-experience">Experience</a></li>
       <li><a href="#h-projects">Projects</a></li>
-      <li><a href="#h-fit">Skills</a></li>
-      <li><a href="#h-contact">Contact</a></li>
+      <li data-full-only><a href="#h-fit">Skills</a></li>
+      <li data-full-only><a href="#h-contact">Contact</a></li>
     </ul>
   </nav>
 
@@ -631,9 +642,9 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
         <p class="status status--where">Best role: design, UX, feature work, and the conversations that shape what gets built (and why)</p>
         <div class="contact__row contact__links">
           <a href="mailto:kawilliams8@gmail.com">kawilliams8@gmail.com</a>
-          <a href="https://katherinewilliams.co">katherinewilliams.co</a>
-          <a href="https://linkedin.com/in/kawilliamsco">linkedin.com/in/kawilliamsco</a>
-          <a href="https://github.com/kawilliams8">github.com/kawilliams8</a>
+          <a href="https://katherinewilliams.co" target="_blank" rel="noopener">katherinewilliams.co</a>
+          <a href="https://linkedin.com/in/kawilliamsco" target="_blank" rel="noopener">linkedin.com/in/kawilliamsco</a>
+          <a href="https://github.com/kawilliams8" target="_blank" rel="noopener">github.com/kawilliams8</a>
         </div>
         <div class="contact__row contact__where">
           <span>Colorado</span>
@@ -646,7 +657,7 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
              becomes a sheet this pill opens. inert above 900px. -->
         <button type="button" class="sheet-toggle" id="sheetToggle"
                 aria-expanded="false" aria-controls="pickerSheet">
-          <span class="sheet-toggle__text">View this résumé as</span>
+          <span class="sheet-toggle__text">View my résumé as</span>
           <span class="sheet-toggle__caret" aria-hidden="true">▾</span>
         </button>
         <div class="sheet-backdrop" id="sheetBackdrop" hidden></div>
@@ -655,12 +666,12 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
             <button type="button" class="chip chip--version" id="fullBtn" data-lens="off" aria-pressed="true">The full résumé</button>
             <button type="button" class="chip chip--version chip--short" id="shortBtn" aria-pressed="false">30-second version</button>
           </div>
-          <div class="notes-control__label">View this résumé as</div>
+          <div class="notes-control__label">View my résumé as</div>
           <div class="lenses" role="group" aria-label="Annotation lens">
-            <button type="button" class="chip chip--lens" data-lens="hiring" aria-pressed="false" aria-controls="annotations">Hiring manager</button>
-            <button type="button" class="chip chip--lens" data-lens="engineering" aria-pressed="false" aria-controls="annotations">Engineer</button>
-            <button type="button" class="chip chip--lens" data-lens="design" aria-pressed="false" aria-controls="annotations">Designer</button>
-            <button type="button" class="chip chip--lens" data-lens="parser" aria-pressed="false" aria-controls="parserView">ATS parser</button>
+            <button type="button" class="chip chip--lens" data-lens="hiring" aria-pressed="false" aria-controls="annotations">A Hiring Pro</button>
+            <button type="button" class="chip chip--lens" data-lens="engineering" aria-pressed="false" aria-controls="annotations">An Engineer</button>
+            <button type="button" class="chip chip--lens" data-lens="design" aria-pressed="false" aria-controls="annotations">A Designer</button>
+            <button type="button" class="chip chip--lens" data-lens="parser" aria-pressed="false" aria-controls="parserView">An ATS or Bot</button>
           </div>
           <div class="picker-foot">
             <button class="reset" id="resetBtn" type="button">↺ Reset the page</button>
@@ -678,19 +689,20 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
 
     <!-- ══ the machine's copy — filled from the live DOM when the parser lens opens ══ -->
     <div id="parserView" aria-label="Machine-readable view">
+      <h2 class="machine-hello">Machines, bots and crawlers, welcome!</h2>
+      <p class="machine-intro">This view is for you. My entire résumé is in the first response: no JavaScript, no bundler, no minification, no tables to untangle, no text trapped in an image. No muss, no fuss.</p>
       <div class="machine-block">
-        <p class="machine-cap">01 · text layer — main.innerText</p>
+        <p class="machine-cap">01 · text layer — the résumé, minus the interface</p>
         <pre id="parserText"></pre>
       </div>
       <div class="machine-block">
-        <p class="machine-cap">02 · structured layer — application/ld+json</p>
+        <p class="machine-cap">02 · structured layer — the same facts, typed</p>
         <pre id="parserJson"></pre>
       </div>
       <div class="machine-block">
-        <p class="machine-cap">03 · meta layer — what a crawler reads first</p>
+        <p class="machine-cap">03 · meta layer — what you read first</p>
         <pre id="parserMeta"></pre>
       </div>
-      <p class="machine-foot">Extracted live from this page's DOM — nothing here is hand-maintained, so it cannot drift from the résumé it describes. The whole document ships in the initial HTML: an ATS, a crawler, or an LLM gets all of it without executing a line of JavaScript.</p>
     </div>
 
     <section aria-labelledby="h-experience">
@@ -769,7 +781,7 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
         <div class="role-head">
           <div>
             <h3 class="role-title" data-note="project">Racer &amp; Pacer</h3>
-            <p class="role-org">Founder, solo developer · <a href="https://racerandpacer.com">racerandpacer.com</a></p>
+            <p class="role-org">Founder, solo developer · <a href="https://racerandpacer.com" target="_blank" rel="noopener">racerandpacer.com</a></p>
           </div>
           <p class="role-dates">2026 — Present</p>
         </div>
@@ -812,7 +824,7 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
 
     <div class="colophon">
       <p class="colo-line">Katherine Williams · Senior Software Engineer</p>
-      <p class="colo-sub">This site runs on <a href="https://github.com/kawilliams8/resume/blob/main/site/index.html">one file</a> of good old HTML, CSS and <a href="https://github.com/kawilliams8/resume#why-vanilla-js">vanilla JavaScript</a>. Built with Claude Code. Updated August, 2026.</p>
+      <p class="colo-sub">This site runs on <a href="https://github.com/kawilliams8/resume/blob/main/site/index.html" target="_blank" rel="noopener">one file</a> of good old HTML, CSS and <a href="https://github.com/kawilliams8/resume#why-vanilla-js" target="_blank" rel="noopener">vanilla JavaScript</a>. Built with Claude Code. Updated August, 2026.</p>
     </div>
   </main>
 
@@ -873,7 +885,7 @@ const NOTES = [
     body:'No color library, just a browser API reading what is actually painted, plus some arithmetic. 4.5 to 1 is the legibility floor.' },
   { set:'engineering', target:'ai-skills', discipline:'Using AI for this site',
     principle:'Built with AI, readable without JS',
-    body:'Written, committed and deployed with Claude Code. An ATS scraper or browser with JavaScript off can read the details, start to finish, on initial load. Good prompting is key.' },
+    body:'Written, committed and deployed with Claude Code. An ATS, a bot or a browser with JavaScript off can read the details, start to finish, on initial load. Good prompting is key.' },
   { set:'engineering', target:'multi-model', discipline:'Output you can\'t predict',
     principle:'An LLM can succeed and still be wrong',
     body:'No model answers the same way twice, so each step needs careful prompt control and fallback strategies to produce something that informs the user.' },
@@ -1326,13 +1338,37 @@ const NOTES = [
     if (open && active.includes(open)) openInline(open, false);
   }
 
-  /* ── the machine's copy: captured once from the plain DOM, so the
-        parser view can never disagree with the page it lives on. the picker
-        is chrome, not résumé — hide it for the read. ── */
-  const nc = document.querySelector('.notes-control');
-  nc.style.display = 'none';
-  const machineText = document.querySelector('main').innerText.replace(/\n{3,}/g, '\n\n').trim();
-  nc.style.display = '';
+  /* ── the machine's copy: walked out of the markup, so the parser view can
+        never disagree with the page it lives on.
+
+        This deliberately does not use innerText. innerText reports *rendered*
+        text, which broke it three ways: at parse time no layout exists yet, so
+        it silently degrades to textContent and returned the whole résumé as a
+        single unbroken line; it applies text-transform, so the education and
+        company rows came back shouting in capitals no scraper would ever see;
+        and it cannot be deferred until layout exists, because by then the
+        machine view has hidden the résumé sections and the read would capture
+        its own output. Walking the DOM depends on none of that: newlines come
+        from block boundaries in the markup, casing is whatever was authored,
+        and chrome is skipped by selector rather than by being invisible. ── */
+  const BLOCK = /^(DIV|P|LI|H[1-6]|SECTION|HEADER|FOOTER|UL|OL|DL|DT|DD|ARTICLE|ASIDE|PRE|BR|TR)$/;
+  const CHROME = '.notes-control,.picker-rail,#parserView,.note,.pin,.sheet-toggle,.sheet-backdrop,script,style';
+  const machineText = (() => {
+    const parts = [];
+    (function walk(node){
+      /* whitespace between sibling inline elements is a real separator: drop it
+         and the four contact links run together into one unreadable token */
+      if (node.nodeType === 3){ const t = node.textContent.replace(/\s+/g, ' ');
+        if (t) parts.push(t.trim() ? t : ' '); return; }
+      if (node.nodeType !== 1 || node.matches(CHROME)) return;
+      const block = BLOCK.test(node.tagName);
+      if (block) parts.push('\n');
+      node.childNodes.forEach(walk);
+      if (block) parts.push('\n');
+    })(main);
+    return parts.join('').replace(/[ \t]+/g, ' ')
+      .replace(/ *\n+ */g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+  })();
   const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
   function fillParserView(){
     document.getElementById('parserText').innerHTML =
@@ -1400,7 +1436,10 @@ const NOTES = [
        but "off" is the absence of a lens, not one of them */
     const lens = body.dataset.notes;
     const hit = lens === 'off' ? null : buttons.find(b => b.dataset.lens === lens);
-    el.textContent = hit ? 'View: ' + hit.textContent : 'View this résumé as';
+    /* the chips read as a list under "View my résumé as", so they carry their
+       article. the pill is a label, not a sentence, so it drops it. */
+    el.textContent = hit ? 'View: ' + hit.textContent.replace(/^an?\s+/i, '')
+                         : 'View my résumé as';
   }
   function openSheet(){
     body.classList.add('sheet-open');
@@ -1474,6 +1513,9 @@ const NOTES = [
   shortBtn.addEventListener('click', () => {
     closeSheet();
     if (isShort()){ exitShort(); setLens('off'); return; }
+    /* the machine view replaces the résumé body, so it is the one lens a
+       version cannot sit inside: condensing under it changed nothing on screen */
+    if (body.dataset.notes === 'parser') setLens('off', true);
     body.classList.add('condensed');
     applyOverrides();
     toTop();
