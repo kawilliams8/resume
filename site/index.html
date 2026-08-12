@@ -141,7 +141,7 @@ a{color:var(--accent)}
 .picker-rail{display:contents}
 .notes-control__label{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:var(--s-3);
   display:flex;align-items:center;gap:var(--s-3);flex-wrap:wrap}
-/* lenses hidden until their copy is done — see LENSES_LIVE in the script */
+/* only if no lens at all is finished — see LENSES in the script */
 :root[data-lenses="off"] .lenses,
 :root[data-lenses="off"] .notes-control__label{display:none}
 :root[data-lenses="off"] .versions{margin-bottom:0}
@@ -256,6 +256,10 @@ body[data-notes="parser"] main > :not(#parserView):not(header){display:none}
 /* the machine view IS the page in this lens — the visible header would only
    duplicate what the text layer already carries. the picker stays. */
 body[data-notes="parser"] header > :not(.picker-rail){display:none}
+/* the machine view replaces the résumé body, so the section links point at
+   headings that are not rendered. offering them meant a nav click silently
+   dropped the reader out of the view they had chosen. */
+body[data-notes="parser"] .sitenav ul{display:none}
 .machine-block{margin:0 0 var(--s-4)}
 #parserView .machine-cap{font-family:var(--font-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
   margin:0;padding:var(--s-2) var(--s-3);background:var(--rule-2);
@@ -822,15 +826,12 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
    In the Vite app this is notes.ts.
    ═══════════════════════════════════════════════════════════════ */
 /* ─────────────────────────────────────────────────────────────
-   The annotation lenses are still being written, so they run
-   everywhere except the live site: localhost and the dev URL get
-   the four "Read this résumé as" buttons, the note cards and the
-   ATS parser view; katherinewilliams.co doesn't. Delete the check
-   to ship them.
+   One entry per lens whose copy is finished. A lens that is not
+   listed has its chip hidden and its notes never built, so an
+   unwritten reading cannot be reached by a stale saved value or a
+   hand-typed one. Add `design:1` when that copy is done.
    ───────────────────────────────────────────────────────────── */
-const LENSES_LIVE = !/(^|\.)katherinewilliams\.co$/.test(location.hostname);
-
-const LENSES = { design:1, engineering:1, hiring:1 };
+const LENSES = { engineering:1, hiring:1 };
 
 const NOTES = [
   /* ── designer ─────────────────────────────────────────────── */
@@ -1119,10 +1120,15 @@ const NOTES = [
     return wrap;
   }
 
-  if (!LENSES_LIVE) document.documentElement.dataset.lenses = 'off';
+  /* a lens with no entry in LENSES is unfinished: drop its chip so it cannot
+     be chosen, and hide the whole group if none of them are ready */
+  document.querySelectorAll('.chip--lens[data-lens]').forEach(b => {
+    if (b.dataset.lens !== 'parser' && !LENSES[b.dataset.lens]) b.hidden = true;
+  });
+  if (!Object.keys(LENSES).length) document.documentElement.dataset.lenses = 'off';
 
   /* ── build every card and pin once; visibility is per lens ── */
-  const entries = (LENSES_LIVE ? NOTES : []).map(n => {
+  const entries = NOTES.filter(n => LENSES[n.set]).map(n => {
     const el = document.querySelector(`[data-note="${n.target}"]`);
     if (!el) return null;
 
@@ -1159,6 +1165,12 @@ const NOTES = [
                : el.tagName === 'DL'  ? el.querySelector('dd:last-of-type')
                : el.tagName === 'DIV' ? (el.querySelector('h3') || el)
                : el;
+    /* a pin dropped into a heading becomes part of that heading's accessible
+       name, so the h1 announced as "Katherine Williams 1". Fix the name to the
+       text that was there first; the button is still reached and read on its
+       own. Guarded because two lenses can annotate one heading. */
+    if (/^H[1-6]$/.test(host.tagName) && !host.hasAttribute('aria-label'))
+      host.setAttribute('aria-label', host.textContent.trim());
     host.append(pin);
 
     const entry = { note:n, el, card, pin };
@@ -1469,7 +1481,7 @@ const NOTES = [
   });
 
   let start = 'off';
-  if (LENSES_LIVE) try { const saved = localStorage.getItem('kw:lens');
+  try { const saved = localStorage.getItem('kw:lens');
     if (saved && (saved === 'off' || saved === 'parser' || LENSES[saved])) start = saved; } catch(e){}
   applyOverrides();
   setLens(start);
