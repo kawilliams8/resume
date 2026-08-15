@@ -1,9 +1,20 @@
 version: 1
 frontend:
   phases:
+    preBuild:
+      commands:
+        # The résumé at site/index.html has no build step and must never depend
+        # on one. If /design fails to compile, the static site still ships —
+        # a broken portfolio should not take the résumé down with it.
+        - nvm use $(cat .nvmrc) || true
+        - cd design && npm ci --no-audit --no-fund || echo "design install failed, shipping site only"
     build:
-      commands: []
+      commands:
+        - cd design && npm run build || echo "design build failed, shipping site only"
   artifacts:
     baseDirectory: site
     files:
       - '**/*'
+  cache:
+    paths:
+      - design/node_modules/**/*
