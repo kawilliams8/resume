@@ -6,19 +6,6 @@
   overflow: hidden;
 }
 
-.demo__controls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--s-3) var(--s-4);
-  padding: var(--s-3) var(--s-4);
-  border-bottom: 1px solid var(--rule-2);
-  background: var(--bg);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--ink-3);
-}
-
 /* the stage is the only place the demo's own styling applies, so a component
    under test cannot leak into the page around it */
 .demo__stage {

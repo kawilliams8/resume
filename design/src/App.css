@@ -78,11 +78,13 @@
 }
 .sitenav a:not(.wordmark):hover { color: var(--accent); }
 
-.loading {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--ink-3);
-  padding: var(--s-5) 0;
+/* Holds the exact space the demo will occupy, so nothing moves when it
+   arrives. Every metric here mirrors Demo.css (.demo, .demo__stage,
+   .demo__foot, .demo__caption, .demo__toggle) — if one changes, change the
+   other. The spacers stand in for the six RPButtons (40px tall, widths set
+   inline from the rendered buttons) and wrap at the same points; the foot
+   text is invisible but keeps the real line-box height. */
+@media (max-width: 560px) {
 }
 
 /* ── footer ── */

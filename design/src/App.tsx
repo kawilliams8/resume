@@ -1,14 +1,22 @@
-import { Suspense, lazy } from "react";
+/* DM Sans 500 is the one weight the rendered components use — the browser
+   only fetches faces that render, so unused weights were pure noise. Re-add
+   weights as demos need them. */
+import "@fontsource/dm-sans/500.css";
+import { ChakraProvider } from "@chakra-ui/react";
+import { system } from "./rp/theme";
+import { Demo } from "./components/Demo";
+import RPButtonIntents from "./demos/RPButtonIntents";
+import rpButtonIntentsSource from "./demos/RPButtonIntents?raw";
 import "./tokens.css";
 import "./App.css";
 
 /**
- * Chakra is 108 kB gzipped and only one section needs it, so it loads behind a
- * boundary instead of blocking the page. See the colophon: this is the argument
- * the page makes about itself.
+ * A plain SPA, on purpose. This page went through lazy loading, Suspense,
+ * runtime preloads and build-time prerendering chasing a flashless first
+ * paint, and every layer added a failure mode of its own. One static import
+ * and one client render is the version that holds no surprises. The section
+ * is the content, so splitting it bought nothing but a visible late mount.
  */
-const RPComponents = lazy(() => import("./sections/RPComponents"));
-
 export default function App() {
   return (
     <>
@@ -32,9 +40,14 @@ export default function App() {
         </div>
 
         <main id="main">
-          <Suspense fallback={<div className="loading">Loading components…</div>}>
-            <RPComponents />
-          </Suspense>
+          <ChakraProvider value={system}>
+            <Demo
+              source={rpButtonIntentsSource}
+              caption="Racer & Pacer's own RPButton, rendered from its own theme. Not a rebuild."
+            >
+              <RPButtonIntents />
+            </Demo>
+          </ChakraProvider>
         </main>
       </div>
 

@@ -6,8 +6,6 @@ interface DemoProps {
   source: string;
   /** What the reader is looking at, one line. */
   caption?: string;
-  /** Optional controls row, rendered above the stage. */
-  controls?: React.ReactNode;
   children: React.ReactNode;
 }
 
@@ -19,14 +17,12 @@ interface DemoProps {
  * and the two cannot drift. Same reasoning as the résumé's machine view, which
  * reads the live DOM rather than a hand-maintained copy.
  */
-export function Demo({ source, caption, controls, children }: DemoProps) {
+export function Demo({ source, caption, children }: DemoProps) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
 
   return (
     <figure className="demo">
-      {controls ? <div className="demo__controls">{controls}</div> : null}
-
       <div className="demo__stage">{children}</div>
 
       <div className="demo__foot">
