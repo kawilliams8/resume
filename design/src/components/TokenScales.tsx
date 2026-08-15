@@ -7,7 +7,14 @@ import "./TokenScales.css";
  * does not ship. Same rule as the Demo source panels.
  */
 const STOPS = ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "lt"];
-const SCALES = ["green", "earth", "amber", "stone"];
+/* Why each scale exists — wording drawn from the theme file's own comments,
+   so the rationale shown is the rationale that shipped. */
+const SCALES: Array<[string, string]> = [
+  ["green", "Forest greens. The core brand color, and the pacer's side of every screen."],
+  ["earth", "Warm beige and bark tones. Page backgrounds and soft surfaces."],
+  ["amber", "Saturated gold. The racer's side, warm against the forest."],
+  ["stone", "Neutral grays. Body text and quiet detail."],
+];
 const ACCENTS = ["accent.amber", "accent.terracotta", "accent.sky"];
 
 const token = (path: string): string | undefined => {
@@ -28,13 +35,16 @@ const dark = (hex: string) => {
 export function TokenScales() {
   return (
     <div className="scales">
-      {SCALES.map((name) => {
+      {SCALES.map(([name, why]) => {
         const stops = STOPS.map((s) => ({ stop: s, hex: token(`${name}.${s}`) })).filter(
           (x): x is { stop: string; hex: string } => !!x.hex
         );
         return (
           <div className="scale" key={name}>
-            <span className="scale__name">{name}</span>
+            <span className="scale__label">
+              <span className="scale__name">{name}</span>
+              <span className="scale__why">{why}</span>
+            </span>
             <div className="scale__row">
               {stops.map(({ stop, hex }) => (
                 <span
@@ -51,7 +61,10 @@ export function TokenScales() {
         );
       })}
       <div className="scale">
-        <span className="scale__name">accent</span>
+        <span className="scale__label">
+          <span className="scale__name">accent</span>
+          <span className="scale__why">Named one-off colors: gold, terracotta, and sky, each tied to a job.</span>
+        </span>
         <div className="scale__row">
           {ACCENTS.map((path) => {
             const hex = token(path);

@@ -4,8 +4,9 @@ import "./Demo.css";
 interface DemoProps {
   /** Read with `?raw` at the call site so the snippet is the file that runs. */
   source: string;
-  /** What the reader is looking at, one line. */
-  caption?: string;
+  /** What the reader is looking at, one line. Markup allowed, so component
+      names can render as code. */
+  caption?: React.ReactNode;
   children: React.ReactNode;
 }
 

@@ -16,14 +16,13 @@ export default function RacerAndPacer() {
   return (
     <section className="study" aria-labelledby="rp-title">
       <header className="study__head">
-        <p className="study__kicker">Case study 01 · Authorship</p>
+        <p className="study__kicker">Case study 01 · Building a design system from scratch</p>
         <h2 id="rp-title">Racer &amp; Pacer</h2>
         <p className="study__meta">
           <a href="https://racerandpacer.com" target="_blank" rel="noopener">
             racerandpacer.com
           </a>{" "}
-          · founder and sole engineer · React 18, TypeScript, Vite, Chakra UI ·
-          live with real users
+          · founder and sole engineer · React 18, TypeScript, Vite, Chakra UI
         </p>
       </header>
 
@@ -32,61 +31,56 @@ export default function RacerAndPacer() {
         <span>Hero screenshot pending · racerandpacer.com · 2400 × 1350</span>
       </figure>
 
+      {/* DRAFT — Katie owns this pitch line */}      <h3>The project</h3>
       <p className="study__human">
-        A runner planning a hundred-miler needs to tell six friends where to be
-        at 2am, and nobody in ultrarunning has a tool for that.
+        Ultramarathon racers rely on personal pacers for safety and
+        motivation, but finding them is mostly word of mouth in a niche
+        sport. Racer &amp; Pacer introduces athletes to each other.
       </p>
 
       <p className="study__call">
-        The call: keep Chakra for the behavior, replace its whole visual
-        identity with my own tokens. A solo product has to look like a product,
-        not like its component library.
+        My design and engineering approach: rely on Chakra UI for fast
+        iteration and built-in behaviors, but replace how everything looks
+        with my own color system and aesthetics. A solo product needs to look distinct, not generic or unfinished.
       </p>
 
-      <h3>Tokens over defaults</h3>
+      <h3>The color system</h3>
       <p>
-        Four custom scales replace Chakra's palette, and mine overrides
-        Chakra's own <code>green</code> so no component can reach the stock
-        color by accident. Every swatch below is read from the app's real theme
-        file, not retyped.
+        Design tokens are the named colors a product is built from. Four custom scales replace Chakra's defaults, and mine overrides its own <code>green</code> so no component can reach the stock color by accident. The colors are functional, not just aesthetic: pacers see green, racers see gold, so the palette itself reinforces which side of the match you're on.
       </p>
       <TokenScales />
 
       <h3>What earns a component its name</h3>
       <p>
-        46 components, four promoted. A component earns its RP name when it
-        closes an open styling surface into a named vocabulary that more than
-        one feature needs. The names describe role, never appearance:{" "}
+        Racer &amp; Pacer has 46 components, and only four get the <code>RP</code> name. A component earns its RP name when it stops accepting arbitrary styling and starts offering a short list of named options that more than one screen needs. The names describe role, never appearance:{" "}
         <code>onLight</code> says where it sits, <code>racer</code> says who
         it is for.
       </p>
       <Demo
         source={rpButtonIntentsSource}
-        caption="RPButton's full API. There is no eighth intent and no way to pass a color."
+        caption={<>Every option <code>RPButton</code> accepts. There is no eighth, and no way to pass your own color.</>}
       >
         <RPButtonIntents />
       </Demo>
       <Demo
         source={rpBadgeVocabularySource}
-        caption="RPBadge's ten variants. The app's whole badge vocabulary, enforced by TypeScript."
+        caption={<><code>RPBadge</code>'s ten variants, all ten badge styles the app has. The code rejects anything else.</>}
       >
         <RPBadgeVocabulary />
       </Demo>
 
-      <h3>What it cost</h3>
+      <h3>The tradeoff</h3>
       <p>
-        The vocabulary is enforced, the rendering is not. RPPill shares
-        RPBadge's variant type, but each declares its own values, and two have
-        drifted. This is what tech debt looks like in a design system.
+        The names are shared, the colors are not. RPPill uses RPBadge's exact list of variant names, but each component fills in its own colors, and two have drifted apart. This is what tech debt looks like in a design system. Known, logged, and low priority next to features users asked for. That's the honest math of a solo product.
       </p>
       <Demo
         source={badgeVsPillSource}
-        caption="amber and red, rendered by RPBadge and RPPill. The type system says these agree. The pixels disagree."
+        caption={<><code>amber</code> and <code>red</code>, rendered by <code>RPBadge</code> and <code>RPPill</code>. The names match. The pixels don't.</>}
       >
         <BadgeVsPill />
       </Demo>
 
-      <h3>The hard interactions</h3>
+      <h3>Map and planner interactions</h3>
       {/* [PENDING] Katie: what made the map and the planner hard — constraints, not features */}
       <p className="pending">
         [PENDING · Katie's constraint stories for the Mapbox race map and the
@@ -103,8 +97,8 @@ export default function RacerAndPacer() {
         </figure>
       </div>
 
-      {/* [PENDING] Katie: one direction tried and killed */}
-      <h3>What I tried and killed</h3>
+      {/* [PENDING] Katie: one direction tried and thrown away */}
+      <h3>What I tried and threw away</h3>
       <p className="pending">[PENDING · Katie's rejected direction]</p>
     </section>
   );

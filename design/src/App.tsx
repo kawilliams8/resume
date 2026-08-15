@@ -5,6 +5,7 @@ import "@fontsource/dm-sans/500.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import { system } from "./rp/theme";
 import RacerAndPacer from "./studies/RacerAndPacer";
+import ArrayTheming from "./studies/ArrayTheming";
 import "./tokens.css";
 import "./App.css";
 
@@ -33,22 +34,33 @@ export default function App() {
       <div className="page">
         <div className="masthead">
           <p className="eyebrow">Portfolio</p>
-          <h1>Design work</h1>
+          <h1>Design engineering</h1>
           {/* DRAFT premise — Katie rewrites */}
           <p className="lede">
-            I'm a frontend engineer with a good eye for visual detail. I turn
-            that eye into tokens, component APIs, and unit tests so a whole
-            team ships the right color without thinking about it. Below are
-            three production systems with live components you can poke.
+            I'm a frontend engineer with a strong eye for visual detail,
+            backed by coursework in typography and page layout. I codify that
+            strength through theming systems, reusable components, and
+            automated tests, so whole teams and AI agents can ship fast and
+            stay on brand.
           </p>
         </div>
 
         <main id="main">
           <ChakraProvider value={system}>
             <RacerAndPacer />
+            <ArrayTheming />
           </ChakraProvider>
         </main>
       </div>
+
+      {/* DRAFT wording — Katie owns this */}
+      <aside className="cta">
+        <p>
+          Hiring for design engineering?{" "}
+          <a href="mailto:kawilliams8@gmail.com">kawilliams8@gmail.com</a> ·
+          the <a href="/">résumé</a> has the rest.
+        </p>
+      </aside>
 
       <footer className="colophon">
         <p className="colo-line">Katherine Williams · Senior Software Engineer</p>
@@ -57,7 +69,6 @@ export default function App() {
           <a href="/">katherinewilliams.co</a> is one hand-written file with no
           build step. This page is React, TypeScript and Vite, because it renders
           live components from a production app and shows the source beside them.
-          Different job, different tool.
         </p>
       </footer>
     </>
