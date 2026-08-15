@@ -53,11 +53,25 @@ export default function RacerAndPacer() {
       </p>
       <TokenScales />
 
-      <h3>What earns a component its name</h3>
+      <h3>Keeping 46 components consistent</h3>
       <p>
-        Racer &amp; Pacer has 46 components, and only four get the <code>RP</code> name. A component earns its RP name when it stops accepting arbitrary styling and starts offering a short list of named options that more than one screen needs. The names describe role, never appearance:{" "}
-        <code>onLight</code> says where it sits, <code>racer</code> says who
-        it is for.
+        Most of the app's 46 components are used in just one place. Four of
+        them repeat everywhere: the button, the badge, the pill, and the icon
+        box, which alone appears in 19 files. Anything that repeats is where inconsistency shows first, so those
+        four only accept a short list of named options, never a custom color.
+        The <code>RP</code> prefix marks them as the shared set, and that
+        shared set is what keeps every screen on brand, whether I wrote it or
+        an AI did.
+      </p>
+      <p>
+        The app's 11 modals need the same level of discipline. There are
+        three ways to add a race and they share one search step, one form,
+        their typography, general layout and adapt to use the appropriate
+        color palette, but the flow behaves the same wherever you start it.
+        There's no{" "}
+        <code>RPModal</code> yet: each of the eleven builds its own header,
+        buttons, and spacing, which is eleven chances to drift. That's the
+        next one to nail down.
       </p>
       <Demo
         source={rpButtonIntentsSource}
