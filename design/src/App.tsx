@@ -4,9 +4,7 @@
 import "@fontsource/dm-sans/500.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import { system } from "./rp/theme";
-import { Demo } from "./components/Demo";
-import RPButtonIntents from "./demos/RPButtonIntents";
-import rpButtonIntentsSource from "./demos/RPButtonIntents?raw";
+import RacerAndPacer from "./studies/RacerAndPacer";
 import "./tokens.css";
 import "./App.css";
 
@@ -36,17 +34,18 @@ export default function App() {
         <div className="masthead">
           <p className="eyebrow">Portfolio</p>
           <h1>Design work</h1>
-          <p className="lede">Scaffold. Case studies pending the outline.</p>
+          {/* DRAFT premise — Katie rewrites */}
+          <p className="lede">
+            I'm a frontend engineer with a good eye for visual detail. I turn
+            that eye into tokens, component APIs, and unit tests so a whole
+            team ships the right color without thinking about it. Below are
+            three production systems with live components you can poke.
+          </p>
         </div>
 
         <main id="main">
           <ChakraProvider value={system}>
-            <Demo
-              source={rpButtonIntentsSource}
-              caption="Racer & Pacer's own RPButton, rendered from its own theme. Not a rebuild."
-            >
-              <RPButtonIntents />
-            </Demo>
+            <RacerAndPacer />
           </ChakraProvider>
         </main>
       </div>
