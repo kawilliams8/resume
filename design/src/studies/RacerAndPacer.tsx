@@ -46,7 +46,10 @@ export default function RacerAndPacer() {
 
       <h3>The color system</h3>
       <p>
-        Design tokens are the named colors a product is built from. Four custom scales replace Chakra's defaults, and mine overrides its own <code>green</code> so no component can reach the stock color by accident. The colors are functional, not just aesthetic: pacers see green, racers see gold, so the palette itself reinforces which side of the match you're on.
+        Software products define their color palette through design tokens in
+        the code. I built four scales, overrode Chakra's built-in colors, and
+        use them to reinforce user roles: green means pacer, gold means racer,
+        on every screen.
       </p>
       <TokenScales />
 

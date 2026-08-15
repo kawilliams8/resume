@@ -15,7 +15,8 @@ const SCALES: Array<[string, string]> = [
   ["amber", "Saturated gold. The racer's side, warm against the forest."],
   ["stone", "Neutral grays. Body text and quiet detail."],
 ];
-const ACCENTS = ["accent.amber", "accent.terracotta", "accent.sky"];
+/* accent.amber is amber.500 again, so showing it twice said nothing */
+const ACCENTS = ["accent.terracotta", "accent.sky"];
 
 const token = (path: string): string | undefined => {
   const v = system.token(`colors.${path}`);
@@ -63,7 +64,7 @@ export function TokenScales() {
       <div className="scale">
         <span className="scale__label">
           <span className="scale__name">accent</span>
-          <span className="scale__why">Named one-off colors: gold, terracotta, and sky, each tied to a job.</span>
+          <span className="scale__why">Terracotta marks warnings and delete actions. Sky is waiting for its job.</span>
         </span>
         <div className="scale__row">
           {ACCENTS.map((path) => {
