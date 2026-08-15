@@ -1,0 +1,82 @@
+.demo {
+  margin: var(--s-5) 0;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.demo__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3) var(--s-4);
+  padding: var(--s-3) var(--s-4);
+  border-bottom: 1px solid var(--rule-2);
+  background: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+/* the stage is the only place the demo's own styling applies, so a component
+   under test cannot leak into the page around it */
+.demo__stage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-5) var(--s-4);
+}
+
+.demo__foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-2) var(--s-4) var(--s-3);
+  border-top: 1px solid var(--rule-2);
+}
+
+.demo__caption {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+
+.demo__toggle {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  background: none;
+  border: 0;
+  padding: 4px 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--rule);
+}
+.demo__toggle:hover { text-decoration-color: var(--accent); }
+
+.demo__source {
+  margin: 0;
+  padding: var(--s-4);
+  border-top: 1px solid var(--rule-2);
+  background: #fbfbf9;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--ink-2);
+  overflow-x: auto;
+  tab-size: 2;
+}
+
+/* [hidden] loses to any author display rule, and this element has one */
+.demo__source[hidden] { display: none; }
+
+@media (max-width: 560px) {
+  .demo__stage { padding: var(--s-4) var(--s-3); }
+  .demo__foot { flex-direction: column; align-items: flex-start; gap: var(--s-1); }
+}
