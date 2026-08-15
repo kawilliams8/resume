@@ -63,16 +63,6 @@ export default function RacerAndPacer() {
         shared set is what keeps every screen on brand, whether I wrote it or
         an AI did.
       </p>
-      <p>
-        The app's 11 modals need the same level of discipline. There are
-        three ways to add a race and they share one search step, one form,
-        their typography, general layout and adapt to use the appropriate
-        color palette, but the flow behaves the same wherever you start it.
-        There's no{" "}
-        <code>RPModal</code> yet: each of the eleven builds its own header,
-        buttons, and spacing, which is eleven chances to drift. That's the
-        next one to nail down.
-      </p>
       <Demo
         source={rpButtonIntentsSource}
         caption={<>Every option <code>RPButton</code> accepts. There is no eighth, and no way to pass your own color.</>}
@@ -96,6 +86,28 @@ export default function RacerAndPacer() {
       >
         <BadgeVsPill />
       </Demo>
+
+      <h3>The modals</h3>
+      <p>
+        The app's 11 modals need the same level of discipline. There are
+        three ways to add a race and they share one search step, one form,
+        their typography, general layout and adapt to use the appropriate
+        color palette, but the flow behaves the same wherever you start it.
+        There's no{" "}
+        <code>RPModal</code> yet: each of the eleven builds its own header,
+        buttons, and spacing, which is eleven chances to drift. That's the
+        next one to nail down.
+      </p>
+      <div className="shot-row">
+        {/* [PENDING] same shared step, racer context: 1200×900 @2x, gold accents visible */}
+        <figure className="shot shot--pending">
+          <span>Add-race step, racer side (gold) · 1200 × 900</span>
+        </figure>
+        {/* [PENDING] same shared step, pacer context: 1200×900 @2x, green accents visible */}
+        <figure className="shot shot--pending">
+          <span>Same step, pacer side (green) · 1200 × 900</span>
+        </figure>
+      </div>
 
       <h3>Map and planner interactions</h3>
       {/* [PENDING] Katie: what made the map and the planner hard — constraints, not features */}
