@@ -7,6 +7,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { system } from "./rp/theme";
 import RacerAndPacer from "./studies/RacerAndPacer";
 import ArrayTheming from "./studies/ArrayTheming";
+import FluintLogin from "./studies/FluintLogin";
 import "./tokens.css";
 import "./App.css";
 
@@ -57,11 +58,12 @@ export default function App() {
           <ChakraProvider value={system}>
             <RacerAndPacer />
             <ArrayTheming />
+            <FluintLogin />
           </ChakraProvider>
         </main>
 
         <section className="outro" aria-label="Closing thoughts">
-          <h3>Two design systems from opposite directions</h3>
+          <h3>Three design systems, three different starting points</h3>
           <p>
             Frontend engineering has fully progressed into a team of humans
             and AI agents. Both need the rules encoded, because neither ships
@@ -72,7 +74,7 @@ export default function App() {
           </p>
           <p>
             I built Racer &amp; Pacer alone with my agents. I fixed Array from
-            inside, out.
+            inside, out. I shipped Fluint's login designs as working product.
           </p>
           <p>
             <b className="outro__hi">The next design system could be yours.</b>
