@@ -3,9 +3,9 @@ import DynamicPalette from "../demos/DynamicPalette";
 import dynamicPaletteSource from "../demos/DynamicPalette?raw";
 
 /**
- * Case study 2 · Stewardship. DRAFT copy throughout; [PENDING] blocks need
- * Katie. No Array code or UI appears here: the widget reimplements the
- * derivation algorithm from scratch, and the token names are factual.
+ * Case study 2 — the Array theming system. No Array code or UI appears here:
+ * the widget reimplements the derivation algorithm from scratch, and the
+ * token names are factual.
  */
 const TOKENS = [
   "pollingAnswer", "pollingText", "pollingBackground",
@@ -20,7 +20,7 @@ const TOKENS = [
 
 export default function ArrayTheming() {
   return (
-    <section className="study" aria-labelledby="array-title">
+    <section className="study" id="array" aria-labelledby="array-title">
       <header className="study__head">
         <p className="study__kicker">Case study 02 · Fixing a design system I inherited</p>
         <h2 id="array-title">Array: white-label theming</h2>
@@ -78,9 +78,6 @@ export default function ArrayTheming() {
         correctness stopped depending on who was looking. Frontend is becoming a team of humans and AI agents. Both need correctness encoded, because neither ships it by default. That's the work I do.
       </p>
 
-      {/* [PENDING] Katie: one direction tried and thrown away at Array */}
-      <h3>What I tried and threw away</h3>
-      <p className="pending">[PENDING · Katie's rejected direction]</p>
     </section>
   );
 }

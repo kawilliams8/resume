@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 /* DM Sans 500 is the one weight the rendered components use — the browser
    only fetches faces that render, so unused weights were pure noise. Re-add
    weights as demos need them. */
@@ -17,6 +18,14 @@ import "./App.css";
  * is the content, so splitting it bought nothing but a visible late mount.
  */
 export default function App() {
+  /* Deep links from the résumé (#racer-and-pacer, #array). The page renders
+     client-side, so the target does not exist when the browser first tries the
+     fragment — scroll once the sections are real. */
+  useEffect(() => {
+    if (!location.hash) return;
+    document.querySelector(location.hash)?.scrollIntoView();
+  }, []);
+
   return (
     <>
       <a className="skip" href="#main">Skip to content</a>
@@ -33,8 +42,8 @@ export default function App() {
 
       <div className="page">
         <div className="masthead">
-          <p className="eyebrow">Portfolio</p>
-          <h1>Design engineering</h1>
+          <p className="eyebrow">Portfolio · Design engineering</p>
+          <h1>Where design meets development</h1>
           {/* DRAFT premise — Katie rewrites */}
           <p className="lede">
             I'm a frontend engineer with a strong eye for visual detail,
@@ -53,22 +62,22 @@ export default function App() {
         </main>
       </div>
 
-      {/* DRAFT wording — Katie owns this */}
-      <aside className="cta">
-        <p>
-          Hiring for design engineering?{" "}
-          <a href="mailto:kawilliams8@gmail.com">kawilliams8@gmail.com</a> ·
-          the <a href="/">résumé</a> has the rest.
-        </p>
-      </aside>
-
       <footer className="colophon">
+        <p className="colo-cta">
+          Hiring for design or frontend-leaning engineering? Please reach out
+          at <a href="mailto:kawilliams8@gmail.com">kawilliams8@gmail.com</a>
+        </p>
         <p className="colo-line">Katherine Williams · Senior Software Engineer</p>
         <p className="colo-sub">
           The résumé at{" "}
           <a href="/">katherinewilliams.co</a> is one hand-written file with no
           build step. This page is React, TypeScript and Vite, because it renders
-          live components from a production app and shows the source beside them.
+          live components from a production app and shows the source beside
+          them. Its{" "}
+          <a href="https://github.com/kawilliams8/resume/tree/main/design" target="_blank" rel="noopener">
+            code
+          </a>{" "}
+          is public too.
         </p>
       </footer>
     </>

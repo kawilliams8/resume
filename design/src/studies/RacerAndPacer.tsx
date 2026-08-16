@@ -7,14 +7,10 @@ import rpBadgeVocabularySource from "../demos/RPBadgeVocabulary?raw";
 import BadgeVsPill from "../demos/BadgeVsPill";
 import badgeVsPillSource from "../demos/BadgeVsPill?raw";
 
-/**
- * Case study 1 · Authorship. All prose is DRAFT copy for Katie to rewrite —
- * structure is the agreed seven beats. [PENDING] blocks need her input and are
- * intentionally visible on the dev build.
- */
+/** Case study 1 — building the Racer & Pacer design system from scratch. */
 export default function RacerAndPacer() {
   return (
-    <section className="study" aria-labelledby="rp-title">
+    <section className="study" id="racer-and-pacer" aria-labelledby="rp-title">
       <header className="study__head">
         <p className="study__kicker">Case study 01 · Building a design system from scratch</p>
         <h2 id="rp-title">Racer &amp; Pacer</h2>
@@ -109,26 +105,7 @@ export default function RacerAndPacer() {
         </figure>
       </div>
 
-      <h3>Map and planner interactions</h3>
-      {/* [PENDING] Katie: what made the map and the planner hard — constraints, not features */}
-      <p className="pending">
-        [PENDING · Katie's constraint stories for the Mapbox race map and the
-        dnd-kit crew planner]
-      </p>
-      <div className="shot-row">
-        {/* [PENDING] map screenshot 1600×1000 @2x */}
-        <figure className="shot shot--pending">
-          <span>Race map, custom markers · 1600 × 1000</span>
-        </figure>
-        {/* [PENDING] planner mid-drag 1600×1000 @2x */}
-        <figure className="shot shot--pending">
-          <span>Crew planner, mid-drag · 1600 × 1000</span>
-        </figure>
-      </div>
 
-      {/* [PENDING] Katie: one direction tried and thrown away */}
-      <h3>What I tried and threw away</h3>
-      <p className="pending">[PENDING · Katie's rejected direction]</p>
     </section>
   );
 }
