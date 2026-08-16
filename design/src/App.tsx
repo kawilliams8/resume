@@ -7,6 +7,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { system } from "./rp/theme";
 import RacerAndPacer from "./studies/RacerAndPacer";
 import ArrayTheming from "./studies/ArrayTheming";
+import FluintLogin from "./studies/FluintLogin";
 import "./tokens.css";
 import "./App.css";
 
@@ -57,25 +58,30 @@ export default function App() {
           <ChakraProvider value={system}>
             <RacerAndPacer />
             <ArrayTheming />
+            <FluintLogin />
           </ChakraProvider>
         </main>
 
         <section className="outro" aria-label="Closing thoughts">
-          <h3>Two design systems from opposite directions</h3>
+          <p className="outro__kicker">The closing argument</p>
           <p>
             Frontend engineering has fully progressed into a team of humans
             and AI agents. Both need the rules encoded, because neither ships
             a complex system correctly all of the time. A user interprets an
             app with design drift as broken, even if every feature still
-            technically works and they can't name the issue. That's the work
-            I do.
+            technically works and they can't name the issue. That's my
+            favorite problem to solve.
           </p>
           <p>
             I built Racer &amp; Pacer alone with my agents. I fixed Array from
-            inside, out.
+            the inside, out. I took Fluint from two Figma concepts to a fully
+            designed app.
           </p>
           <p>
             <b className="outro__hi">The next design system could be yours.</b>
+          </p>
+          <p>
+            <a href="mailto:kawilliams8@gmail.com">Tell me all about it!</a>
           </p>
         </section>
       </div>
