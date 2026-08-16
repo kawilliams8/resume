@@ -1,5 +1,6 @@
 import LoginStates from "../demos/LoginStates";
 import OnboardingSteps from "../demos/OnboardingSteps";
+import ChatSurface from "../demos/ChatSurface";
 
 /**
  * Case study 3 — the Fluint login flow. Rebuilt from scratch: no Fluint code
@@ -9,8 +10,8 @@ export default function FluintLogin() {
   return (
     <section className="study" id="fluint" aria-labelledby="fluint-title">
       <header className="study__head">
-        <p className="study__kicker">Case study 03 · Engineering behind a designed surface</p>
-        <h2 id="fluint-title">Fluint: the login flow</h2>
+        <p className="study__kicker">Case study 03 · Design consistency on an AI product</p>
+        <h2 id="fluint-title">Fluint: consistency and trust in an AI app</h2>
         <p className="study__meta">
           <a href="https://fluint.io" target="_blank" rel="noopener">
             fluint.io
@@ -22,35 +23,37 @@ export default function FluintLogin() {
 
       <p className="study__human">
         A designer handed me mockups for the login screen, then left the
-        company. Every state the mockups never drew still had to ship: sent
-        links, expired links, lost organizations, a broken onboarding flow.
+        company. The mockups stopped at the happy path. Everything else
+        still had to ship: sent links, expired links, finding your
+        organization, onboarding.
       </p>
       <p className="study__human">
-        Someone had to be the designer. I was already there.
+        Someone had to be the designer. I knew it was my chance to shine.
       </p>
 
       <p className="study__call">
         My approach: extend the designer's decisions, not my preferences.
-        Every screen I added had to look like it came from the same Figma
-        file, seamlessly.
+        Build the consistency in with shared layouts and components. Every
+        screen should look like it came from the same Figma file,
+        seamlessly. Fix the big problems before the small ones. Land
+        responsive improvements with every commit.
       </p>
 
       <h3>The project</h3>
       <p>
-        Fluint helps B2B sellers build the business case with their buyer,
-        with an AI assistant drafting alongside them. All of it sits behind a
-        passwordless login: magic links, with Google and Microsoft SSO. The
-        login is the first screen every customer sees, on every device, and
-        it is still in production today.
+        Fluint helps B2B sellers build the business case alongside their
+        buyer, an AI assistant drafting with them. All of it sits behind a
+        passwordless login: magic links, plus Google and Microsoft SSO. The
+        login is the first screen every customer sees, on every device.
+        Everything on this page is still in production today.
       </p>
 
-      <h3>From mockup to production</h3>
+      <h3>The login flow: From Figma to production</h3>
       <p>
-        The Figma covered the two happy screens: log in and create an
-        account. Production needed the rest, and not just the layouts: I
-        wrote the words too. Every error message, confirmation, and
-        organization screen carries my copy. Each screen below is tagged
-        honestly. Colors are the app's real theme values.
+        The Figma file covered the two happy screens: log in and create an
+        account. Real users needed the rest. Not just the buttons and forms,
+        but real copy. I wrote that, too. Every error message, confirmation,
+        and organization screen carries my words.
       </p>
       <figure className="demo">
         <div className="demo__stage">
@@ -58,8 +61,9 @@ export default function FluintLogin() {
         </div>
         <figcaption className="demo__foot">
           <span className="shot__tag">
-            Principles in action: Visibility of system status &middot; Error
-            recovery &middot; Consistency
+            Principles in action: Jakob's law of familiar patterns &middot;
+            Visibility of system status &middot; Error recovery &middot;
+            Peak-end rule
           </span>
         </figcaption>
       </figure>
@@ -86,12 +90,32 @@ export default function FluintLogin() {
         </figcaption>
       </figure>
 
+      <h3>The chat surface</h3>
+      <p>
+        The pivot made Fluint an AI assistant, and the chat surface became
+        mine end to end: the composer and its menus, streaming responses,
+        document cards, error states, and Olli's voice in every message. AI
+        output streaming into a designed container is the new frontend
+        problem, and I have already shipped it.
+      </p>
+      <figure className="demo">
+        <div className="demo__stage">
+          <ChatSurface />
+        </div>
+        <figcaption className="demo__foot">
+          <span className="shot__tag">
+            Principles in action: Recognition over recall &middot; Perceived
+            performance &middot; Progressive disclosure
+          </span>
+        </figcaption>
+      </figure>
+
       <h3>The engineering underneath</h3>
       <p>
-        Passwordless login is a state machine. A magic link is single-use and
-        short-lived, it can land in a different browser than the one that
-        asked for it, and the user's organization can only be discovered
-        after their identity. Add the SSO round-trips and every failure needs
+        Passwordless login is a state machine. A magic link from Stytch is
+        single-use and short-lived, it can land in a different browser than
+        the one that asked for it, and the user's organization can only be
+        discovered after their identity. Add the SSO round-trips and every failure needs
         its own screen, because at least one user will see it. The old layout
         also broke on phones; rebuilding it responsive was half the work.
       </p>
