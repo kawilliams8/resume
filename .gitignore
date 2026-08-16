@@ -34,3 +34,6 @@ amplifytools.xcconfig
 
 # TypeScript
 *.tsbuildinfo
+# design app
+design/node_modules/
+site/portfolio/

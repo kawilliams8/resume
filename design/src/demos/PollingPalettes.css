@@ -1,0 +1,202 @@
+.dyn { width: 100%; display: grid; gap: var(--s-4); }
+
+.dyn__inputs {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-2);
+}
+.dyn__inputs label { display: flex; align-items: center; gap: var(--s-2); }
+.dyn__inputs input {
+  width: 44px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: none;
+  cursor: pointer;
+}
+.dyn__note { color: var(--ink-3); margin-left: auto; }
+
+
+.dyn__tokens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-1) var(--s-3);
+}
+.dyn__token {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--ink-3);
+}
+.dyn__token i { width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--rule); }
+.dyn__token b { font-weight: 400; color: var(--ink-2); }
+
+@media (max-width: 560px) {
+  .dyn__inputs { flex-wrap: wrap; }
+  .dyn__note { margin-left: 0; width: 100%; }
+}
+
+.dyn__palettes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-1);
+  margin-bottom: var(--s-3);
+}
+.dyn__pal {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-2);
+  background: none;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 5px 9px;
+  cursor: pointer;
+}
+.dyn__pal:hover { border-color: var(--ink-3); }
+.dyn__pal--on {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
+}
+
+.dyn__pal { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.dyn__pal i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+}
+.dyn__inputs label b { font-weight: 400; font-size: 11px; color: var(--ink-3); }
+.dyn__inputs input:hover { border-color: var(--ink-3); }
+
+.dyn__previews {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 1fr;
+  gap: var(--s-3);
+}
+/* every cell stretches its app frame to the row height */
+.dyn__previews > div { display: flex; flex-direction: column; }
+.dyn__previews .dyn__app { flex: 1; display: flex; flex-direction: column; }
+.dyn__previews .dyn__stage { flex: 1; align-content: start; }
+@media (max-width: 640px) { .dyn__previews { grid-template-columns: 1fr; } }
+.dyn__prevlabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 6px;
+}
+
+/* the app frame: white branding bar over the polling stage, as shipped */
+.dyn__app {
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.dyn__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  padding: 8px 12px;
+}
+.dyn__logo {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: #999;
+  border: 1px dashed #ccc;
+  border-radius: 3px;
+  padding: 4px 8px;
+}
+.dyn__avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.dyn__stage { padding: var(--s-4); display: grid; gap: 7px; }
+.dyn__q { font-weight: 600; font-size: 15px; margin-bottom: var(--s-1); }
+.dyn__opt {
+  padding: 12px 14px;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: left;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+.dyn__opt:hover { filter: brightness(0.9); }
+.dyn__row {
+  display: grid;
+  gap: 4px;
+  padding: 8px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+.dyn__row > span:first-child { font-weight: 600; }
+.dyn__barline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+.dyn__barline b { min-width: 20px; text-align: right; font-weight: 600; }
+.dyn__barline i {
+  height: 12px;
+  border-radius: 2px;
+  max-width: 70%;
+}
+
+/* deck slide artwork is the client's own, so it stays neutral gray */
+.dyn__deck {
+  background: #fff;
+  border-radius: 4px;
+  aspect-ratio: 16 / 9;
+  padding: 12px 14px;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+}
+.dyn__deck b { font-size: 13px; color: #333; }
+.dyn__deck i { height: 8px; border-radius: 2px; background: #e2e2e2; }
+.dyn__nav { display: flex; justify-content: space-between; }
+.dyn__nav button {
+  border: 0;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.dyn__notes {
+  background: #fff;
+  border-radius: 4px;
+  padding: 8px 10px;
+  font-size: 11px;
+  color: #555;
+  display: grid;
+  gap: 2px;
+}
+.dyn__notes span {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #999;
+}
+
+.dyn__try { font-size: var(--step-1); font-weight: 600; color: var(--ink); margin-bottom: calc(-1 * var(--s-2)); }

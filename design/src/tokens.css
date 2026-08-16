@@ -1,0 +1,84 @@
+/*
+  Ported from the résumé at site/index.html so the two pages read as one site.
+  Simplified deliberately: one accent (the institutional blue), no scheme
+  switching, no runtime overrides. The résumé earns those because they are its
+  subject matter. Here they would be decoration.
+*/
+:root {
+  --bg: #fdfdfb;
+  --surface: #ffffff;
+  --ink: #16161a;
+  --ink-2: #42424c;
+  --ink-3: #6e6e78;
+  --rule: #e2e2dc;
+  --rule-2: #efefea;
+  --accent: #1f4fd8;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui,
+    sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas,
+    monospace;
+
+  --base: 16px;
+  --ratio: 1.25;
+  --step-0: var(--base);
+  --step-1: calc(var(--base) * var(--ratio));
+  --step-3: clamp(28px, 6vw, calc(var(--base) * var(--ratio) * var(--ratio) * var(--ratio)));
+
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 20px;
+  --s-5: 32px;
+  --s-6: 52px;
+  --s-7: 84px;
+
+  --measure: 66ch;
+  --column: 940px;
+  --radius: 3px;
+
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  /* the résumé's nav starts one spacing unit down the page; match it so the
+     bar sits at the same height when switching between the two */
+  padding-top: var(--s-5);
+  background: var(--bg);
+  color: var(--ink-2);
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  color: var(--ink);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+p { margin: 0; }
+
+a { color: var(--accent); }
+
+/* one focus rule for everything interactive, since a portfolio that argues
+   about accessibility has to survive a keyboard */
+:where(a, button, input, select, summary):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

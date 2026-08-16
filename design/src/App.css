@@ -1,0 +1,253 @@
+.page {
+  max-width: var(--column);
+  margin: 0 auto;
+  padding: var(--s-6) var(--s-4) var(--s-4);
+}
+
+.masthead { margin-bottom: var(--s-6); }
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: var(--s-2);
+}
+
+.masthead h1 { font-size: var(--step-3); letter-spacing: -0.03em; }
+
+.lede {
+  max-width: none;
+  margin-top: var(--s-3);
+  font-size: var(--step-1);
+  color: var(--ink-2);
+}
+
+/* ── skip link ── */
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: var(--s-2);
+  padding: var(--s-2) var(--s-3);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  z-index: 10;
+}
+.skip:focus { left: var(--s-4); }
+
+/* ── header ── */
+/* mirrors the résumé's nav: same 1500px container, same side padding, same
+   ink rule and sticky behavior, so switching pages doesn't jump the bar */
+.sitenav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3) var(--s-4);
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: var(--bg);
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: var(--s-2) var(--s-5);
+  border-bottom: 1px solid var(--ink);
+}
+.wordmark {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+}
+.sitenav ul {
+  display: flex;
+  gap: var(--s-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sitenav a:not(.wordmark) {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  text-decoration: none;
+  padding: var(--s-2) 0;
+}
+.sitenav a:not(.wordmark):hover { color: var(--accent); }
+
+/* Holds the exact space the demo will occupy, so nothing moves when it
+   arrives. Every metric here mirrors Demo.css (.demo, .demo__stage,
+   .demo__foot, .demo__caption, .demo__toggle) — if one changes, change the
+   other. The spacers stand in for the six RPButtons (40px tall, widths set
+   inline from the rendered buttons) and wrap at the same points; the foot
+   text is invisible but keeps the real line-box height. */
+@media (max-width: 560px) {
+}
+
+/* ── footer ── */
+.colophon {
+  max-width: var(--column);
+  margin: var(--s-5) auto 0;
+  padding: var(--s-5) var(--s-4) var(--s-6);
+  border-top: 1px solid var(--rule);
+}
+.colo-cta {
+  margin-bottom: var(--s-4);
+  font-size: var(--step-0);
+  color: var(--ink);
+}
+.colo-cta a { text-underline-offset: 3px; }
+
+.colo-line {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: var(--s-3);
+}
+.colo-sub {
+  max-width: none;
+  font-size: 10.5px;
+  line-height: 1.65;
+  color: var(--ink-3);
+}
+.colo-sub a { text-decoration-color: var(--rule); text-underline-offset: 3px; }
+
+/* ── case studies ── */
+.study { margin-top: var(--s-6); }
+.study__kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: var(--s-2);
+}
+.study h2 { font-size: var(--step-2, 25px); letter-spacing: -0.02em; }
+.study__meta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-top: var(--s-2);
+}
+.study h3 {
+  font-size: var(--step-1);
+  margin: var(--s-6) 0 var(--s-3);
+}
+.study p { max-width: none; }
+.study p + p { margin-top: var(--s-3); }
+.study code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--rule-2);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.study__human {
+  font-size: var(--step-1);
+  color: var(--ink);
+  margin: var(--s-5) 0 var(--s-3);
+}
+/* .study p + p outranks a lone class — the extra .study keeps this margin */
+.study .study__call {
+  font-weight: 600;
+  color: var(--ink);
+  border-left: 3px solid var(--accent);
+  padding-left: var(--s-4);
+  margin: var(--s-5) 0 0;
+}
+.pending {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink-3);
+  background: var(--rule-2);
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--radius);
+}
+
+/* ── screenshot placeholders ── */
+.shot {
+  margin: var(--s-4) 0;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+}
+.shot--pending {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--rule);
+  background: var(--rule-2);
+  aspect-ratio: 16 / 10;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.shot--hero { aspect-ratio: 16 / 9; }
+.shot-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-4);
+}
+@media (max-width: 700px) { .shot-row { grid-template-columns: 1fr; } }
+
+.study__tokens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-1) var(--s-2);
+  max-width: none;
+}
+/* Array's default blue, one uniform tint for the whole vocabulary */
+.study__tokens code {
+  background: color-mix(in srgb, #2f4a62 10%, transparent);
+  color: #2f4a62;
+}
+/* the brand inputs are outlined, not filled: the client supplies these two */
+.study__tokens code.tok-input {
+  background: transparent;
+  border: 1px solid color-mix(in srgb, #2f4a62 45%, transparent);
+}
+
+
+.shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.shot__caption {
+  padding: var(--s-2) var(--s-4) var(--s-3);
+  border-top: 1px solid var(--rule-2);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+
+.shot__tag {
+  display: block;
+  margin-bottom: 2px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+
+/* ── closing thoughts ── */
+.outro { margin-top: var(--s-6); }
+.outro__hi { font-weight: 600; color: var(--accent); }
+.outro h3 { font-size: var(--step-1); margin-bottom: var(--s-3); }
+.outro p { max-width: none; font-size: var(--step-1); color: var(--ink); }
+.outro p + p { margin-top: var(--s-3); }
