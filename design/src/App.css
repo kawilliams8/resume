@@ -1,7 +1,7 @@
 .page {
   max-width: var(--column);
   margin: 0 auto;
-  padding: var(--s-6) var(--s-4) var(--s-7);
+  padding: var(--s-6) var(--s-4) var(--s-4);
 }
 
 .masthead { margin-bottom: var(--s-6); }
@@ -96,7 +96,7 @@
 /* ── footer ── */
 .colophon {
   max-width: var(--column);
-  margin: var(--s-7) auto 0;
+  margin: var(--s-5) auto 0;
   padding: var(--s-5) var(--s-4) var(--s-6);
   border-top: 1px solid var(--rule);
 }
@@ -158,12 +158,13 @@
   color: var(--ink);
   margin: var(--s-5) 0 var(--s-3);
 }
-.study__call {
+/* .study p + p outranks a lone class — the extra .study keeps this margin */
+.study .study__call {
   font-weight: 600;
   color: var(--ink);
   border-left: 3px solid var(--accent);
   padding-left: var(--s-4);
-  margin: var(--s-4) 0 0;
+  margin: var(--s-5) 0 0;
 }
 .pending {
   font-family: var(--font-mono);
@@ -207,6 +208,16 @@
   gap: var(--s-1) var(--s-2);
   max-width: none;
 }
+/* Array's default blue, one uniform tint for the whole vocabulary */
+.study__tokens code {
+  background: color-mix(in srgb, #2f4a62 10%, transparent);
+  color: #2f4a62;
+}
+/* the brand inputs are outlined, not filled: the client supplies these two */
+.study__tokens code.tok-input {
+  background: transparent;
+  border: 1px solid color-mix(in srgb, #2f4a62 45%, transparent);
+}
 
 
 .shot img {
@@ -232,3 +243,11 @@
   text-transform: uppercase;
   color: var(--ink-3);
 }
+
+
+/* ── closing thoughts ── */
+.outro { margin-top: var(--s-6); }
+.outro__hi { font-weight: 600; color: var(--accent); }
+.outro h3 { font-size: var(--step-1); margin-bottom: var(--s-3); }
+.outro p { max-width: none; font-size: var(--step-1); color: var(--ink); }
+.outro p + p { margin-top: var(--s-3); }

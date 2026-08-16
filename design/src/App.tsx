@@ -59,6 +59,25 @@ export default function App() {
             <ArrayTheming />
           </ChakraProvider>
         </main>
+
+        <section className="outro" aria-label="Closing thoughts">
+          <h3>Two design systems from opposite directions</h3>
+          <p>
+            Frontend engineering has fully progressed into a team of humans
+            and AI agents. Both need the rules encoded, because neither ships
+            a complex system correctly all of the time. A user interprets an
+            app with design drift as broken, even if every feature still
+            technically works and they can't name the issue. That's the work
+            I do.
+          </p>
+          <p>
+            I built Racer &amp; Pacer alone with my agents. I fixed Array from
+            inside, out.
+          </p>
+          <p>
+            <b className="outro__hi">The next design system could be yours.</b>
+          </p>
+        </section>
       </div>
 
       <footer className="colophon">
