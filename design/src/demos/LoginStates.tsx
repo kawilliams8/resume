@@ -49,15 +49,15 @@ function Screen({ state }: { state: StateKey }) {
             written message.
           </p>
           <div className="fls__ssorow">
-            <button type="button"><GoogleG /> Google</button>
-            <button type="button"><MsLogo /> Microsoft</button>
+            <button type="button" tabIndex={-1}><GoogleG /> Google</button>
+            <button type="button" tabIndex={-1}><MsLogo /> Microsoft</button>
           </div>
           <div className="fls__or">OR</div>
           <label>
             Email
-            <input placeholder="Email" readOnly />
+            <input tabIndex={-1} placeholder="Email" readOnly />
           </label>
-          <button type="button" className="fls__cta">Continue with email</button>
+          <button type="button" tabIndex={-1} className="fls__cta">Continue with email</button>
         </div>
       );
     case "Check your email":
@@ -67,9 +67,9 @@ function Screen({ state }: { state: StateKey }) {
           <p className="fls__sub">
             An email was sent to <b>katie@company.com</b>
           </p>
-          <button type="button" className="fls__provider"><GoogleG /> Open in Gmail</button>
-          <button type="button" className="fls__provider"><MsLogo /> Open in Outlook</button>
-          <button type="button" className="fls__provider"><b className="fls__yahoo">y!</b> Open in Yahoo</button>
+          <button type="button" tabIndex={-1} className="fls__provider"><GoogleG /> Open in Gmail</button>
+          <button type="button" tabIndex={-1} className="fls__provider"><MsLogo /> Open in Outlook</button>
+          <button type="button" tabIndex={-1} className="fls__provider"><b className="fls__yahoo">y!</b> Open in Yahoo</button>
           <div className="fls__foot">
             <p className="fls__aux">Didn't get an email? <a>Try again</a></p>
             <p className="fls__aux"><a>Back to login</a></p>
@@ -84,7 +84,7 @@ function Screen({ state }: { state: StateKey }) {
           <p className="fls__sub">
             Magic links are single-use and expire after a few minutes.
           </p>
-          <button type="button" className="fls__cta">Send a new link</button>
+          <button type="button" tabIndex={-1} className="fls__cta">Send a new link</button>
           <p className="fls__aux"><a>Back to log in</a></p>
         </div>
       );
@@ -110,23 +110,23 @@ function Screen({ state }: { state: StateKey }) {
           <div className="fls__brand"><Logo /> <b>Fluint</b></div>
           <label>
             Email
-            <input placeholder="you@company.com" readOnly />
+            <input tabIndex={-1} placeholder="you@company.com" readOnly />
           </label>
           <div className="fls__namerow">
             <label>
               First Name
-              <input placeholder="First" readOnly />
+              <input tabIndex={-1} placeholder="First" readOnly />
             </label>
             <label>
               Last Name
-              <input placeholder="Last" readOnly />
+              <input tabIndex={-1} placeholder="Last" readOnly />
             </label>
           </div>
           <label>
             Organization Name
-            <input placeholder="Acme Company" readOnly />
+            <input tabIndex={-1} placeholder="Acme Company" readOnly />
           </label>
-          <button type="button" className="fls__cta">Create Account</button>
+          <button type="button" tabIndex={-1} className="fls__cta">Create Account</button>
           </div>
         </div>
       );
@@ -150,7 +150,7 @@ function Screen({ state }: { state: StateKey }) {
           <div className="fls__org">
             <i>N</i> Northwind Sales <span>›</span>
           </div>
-          <button type="button" className="fls__ghost">
+          <button type="button" tabIndex={-1} className="fls__ghost">
             Create a new organization
           </button>
         </div>
@@ -182,7 +182,7 @@ export default function LoginStates() {
           </span>
         ))}
       </div>
-      <div className="fls__stage">
+      <div className="fls__stage" aria-hidden="true">
         <Screen state={state} />
       </div>
     </div>

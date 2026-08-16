@@ -3,8 +3,8 @@ import OnboardingSteps from "../demos/OnboardingSteps";
 import ChatSurface from "../demos/ChatSurface";
 
 /**
- * Case study 3 — the Fluint login flow. Rebuilt from scratch: no Fluint code
- * or assets appear here. Copy is placeholder until Katie writes it.
+ * Case study 3 — Fluint. Every screen rebuilt from scratch against the live
+ * product; no Fluint code or assets appear here.
  */
 export default function FluintLogin() {
   return (
@@ -48,7 +48,7 @@ export default function FluintLogin() {
         Everything on this page is still in production today.
       </p>
 
-      <h3>The login flow: From Figma to production</h3>
+      <h3>The login flow: from Figma to production</h3>
       <p>
         The Figma file covered the two happy screens: log in and create an
         account. Real users needed the rest. Not just the buttons and forms,
@@ -92,11 +92,13 @@ export default function FluintLogin() {
 
       <h3>The chat surface</h3>
       <p>
-        The pivot made Fluint an AI assistant, and the chat surface became
-        mine end to end: the composer and its menus, streaming responses,
-        document cards, error states, and Olli's voice in every message. AI
-        output streaming into a designed container is the new frontend
-        problem, and I have already shipped it.
+        Chat is where users work with Olli day to day: the composer and its
+        menus, streaming responses, document cards, error states. My work
+        there was refinement: building in consistency, adding
+        responsiveness, and keeping Olli's voice in every message, a
+        standard I held up in every code review. AI output streaming into a
+        designed container is the modern frontend challenge, and I have
+        already shipped it.
       </p>
       <figure className="demo">
         <div className="demo__stage">
@@ -105,7 +107,7 @@ export default function FluintLogin() {
         <figcaption className="demo__foot">
           <span className="shot__tag">
             Principles in action: Recognition over recall &middot; Perceived
-            performance &middot; Progressive disclosure
+            performance &middot; Progressive disclosure &middot; Wayfinding
           </span>
         </figcaption>
       </figure>
@@ -115,10 +117,18 @@ export default function FluintLogin() {
         Passwordless login is a state machine. A magic link from Stytch is
         single-use and short-lived, it can land in a different browser than
         the one that asked for it, and the user's organization can only be
-        discovered after their identity. Add the SSO round-trips and every failure needs
-        its own screen, because at least one user will see it. The old layout
-        also broke on phones; rebuilding it responsive was half the work.
+        discovered after their identity. Every failure needs its own screen,
+        because at least one user will see it.
       </p>
+      <p>
+        Under all of it sits one principle: consistency. A designer's two
+        screens, my dozen, another engineer's flow, an AI's output: they all
+        read as one product, because someone made them match. When every
+        screen holds together, users trust the app, take Olli's answers
+        seriously, file fewer support tickets, and show it off in their own
+        demos.
+      </p>
+      <p>That isn't "polish." That's revenue.</p>
     </section>
   );
 }

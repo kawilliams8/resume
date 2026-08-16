@@ -47,7 +47,7 @@ function StepScreen({ step }: { step: Step }) {
           <p className="fls__sub">
             Let's pick 1 specific deal to get rolling on together.
           </p>
-          <button type="button" className="fls__cta fls__cta--olli">Let's Go</button>
+          <button type="button" tabIndex={-1} className="fls__cta fls__cta--olli">Let's Go</button>
         </div>
       );
     case "What":
@@ -62,9 +62,9 @@ function StepScreen({ step }: { step: Step }) {
           </p>
           <label className="obs__field">
             Company Domain
-            <input placeholder="example.com" readOnly />
+            <input tabIndex={-1} placeholder="example.com" readOnly />
           </label>
-          <button type="button" className="fls__cta obs__cta--wait">
+          <button type="button" tabIndex={-1} className="fls__cta obs__cta--wait">
             Research my product &amp; value props
           </button>
         </div>
@@ -80,14 +80,14 @@ function StepScreen({ step }: { step: Step }) {
           </p>
           <label className="obs__field">
             What's their domain?
-            <input placeholder="acme.com" readOnly />
+            <input tabIndex={-1} placeholder="acme.com" readOnly />
           </label>
           <p className="obs__toggle">
             Got any transcripts or notes you want to add? <i />
           </p>
           <div className="obs__btnrow">
-            <button type="button" className="obs__back">Back</button>
-            <button type="button" className="fls__cta obs__cta--wait">
+            <button type="button" tabIndex={-1} className="obs__back">Back</button>
+            <button type="button" tabIndex={-1} className="fls__cta obs__cta--wait">
               Build my first deal content
             </button>
           </div>
@@ -115,8 +115,8 @@ function StepScreen({ step }: { step: Step }) {
             there.
           </div>
           <div className="obs__btnrow">
-            <button type="button" className="obs__back">Back</button>
-            <button type="button" className="fls__cta obs__cta--wait">
+            <button type="button" tabIndex={-1} className="obs__back">Back</button>
+            <button type="button" tabIndex={-1} className="fls__cta obs__cta--wait">
               Let's create a business case
             </button>
           </div>
@@ -135,8 +135,8 @@ function StepScreen({ step }: { step: Step }) {
             <span><Doc /> Value Story</span>
           </div>
           <div className="obs__btnrow">
-            <button type="button" className="obs__back">Back</button>
-            <button type="button" className="fls__cta obs__cta">
+            <button type="button" tabIndex={-1} className="obs__back">Back</button>
+            <button type="button" tabIndex={-1} className="fls__cta obs__cta">
               Generate business case
             </button>
           </div>
@@ -161,7 +161,7 @@ export default function OnboardingSteps() {
           </button>
         ))}
       </div>
-      <div className="fls__stage">
+      <div className="fls__stage" aria-hidden="true">
         <StepScreen step={step} />
         <span className="obs__skip"><a>Skip Onboarding</a></span>
       </div>

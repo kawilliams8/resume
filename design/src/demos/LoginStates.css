@@ -691,3 +691,231 @@
   background: #f4f9fd;
 }
 .fls__cta.obs__cta { width: auto; padding: 9px 18px; }
+
+/* a saved document inside its deal, chat docked alongside */
+.cs__split { flex: 1; display: flex; gap: 14px; min-height: 0; }
+.cs__docpage {
+  flex: 1.5;
+  background: #fff;
+  border: 1px solid var(--fl-border);
+  border-radius: 8px;
+  padding: 16px 18px;
+  text-align: left;
+  display: grid;
+  gap: 9px;
+  align-content: start;
+  font-size: 12px;
+  line-height: 1.55;
+}
+.cs__crumb {
+  font-size: 10px;
+  color: var(--fl-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.cs__docpage h5 { font-size: 16px; font-weight: 800; }
+.cs__docpage i {
+  height: 8px;
+  border-radius: 4px;
+  background: #efefef;
+}
+.cs__chatpanel {
+  flex: 1;
+  border-left: 1px solid var(--fl-border);
+  padding-left: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  text-align: left;
+}
+.cs__line--panel { padding-left: 0; }
+.cs__minicomposer {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid var(--fl-border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 11px;
+  color: var(--fl-muted);
+}
+
+/* the deal view, matched to production: sidebar panel + document sheet */
+.cs__dealbar {
+  flex: none;
+  width: 168px;
+  background: #fff;
+  border-right: 1px solid var(--fl-border);
+  margin: calc(-1 * var(--s-4)) 0 calc(-1 * var(--s-4)) calc(-1 * var(--s-5));
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  text-align: left;
+  font-size: 10.5px;
+}
+.cs__dealhead { display: flex; align-items: center; justify-content: space-between; }
+.cs__deallogo {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: #3455db;
+  color: #fff;
+  font-weight: 800;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.cs__dealhead em { font-style: normal; color: var(--fl-muted); font-size: 9.5px; }
+.cs__dealname {
+  font-size: 13.5px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cs__dealname svg { width: 12px; height: 12px; color: var(--fl-muted); }
+.cs__dealmeta {
+  color: var(--fl-muted);
+  font-size: 9.5px;
+  display: grid;
+  gap: 3px;
+}
+.cs__dealmeta span { display: flex; align-items: center; gap: 4px; }
+.cs__dealmeta svg { width: 10px; height: 10px; flex: none; }
+/* section rules run the full sidebar width, as shipped */
+.cs__collab {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--fl-border);
+  border-bottom: 1px solid var(--fl-border);
+  margin: 0 -12px;
+  padding: 7px 12px;
+  font-weight: 600;
+}
+.cs__collab i {
+  font-style: normal;
+  font-size: 8.5px;
+  font-weight: 700;
+  border: 1.2px solid #e8a03c;
+  background: #fdf3df;
+  border-radius: 4px;
+  padding: 2px 3px;
+}
+.cs__dealsearch {
+  border: 1px solid var(--fl-border);
+  border-radius: 6px;
+  padding: 5px 7px;
+  color: var(--fl-muted);
+  font-size: 9.5px;
+}
+.cs__dealnav { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.cs__dealnav li {
+  padding: 4px 7px;
+  border-radius: 5px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.cs__dealnav svg { width: 11px; height: 11px; color: var(--fl-muted); flex: none; }
+.cs__dealnav li.cs__on svg { color: #258bbe; }
+.cs__dealnav li.cs__on { background: #e4f0fa; }
+.cs__dealsec {
+  color: var(--fl-muted);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: 2px;
+  display: flex;
+  justify-content: space-between;
+}
+.cs__dealsec em { font-style: normal; font-size: 12px; line-height: 1; }
+.cs__dealdoc {
+  font-weight: 600;
+  padding-left: 7px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.cs__dealdoc span {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cs__dealdoc svg { width: 11px; height: 11px; color: var(--fl-muted); }
+.cs__docmain {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+  min-width: 0;
+}
+.cs__dochdr { display: flex; align-items: center; justify-content: space-between; }
+.cs__ollibtn {
+  width: 32px;
+  height: 32px;
+  border: 2px solid transparent;
+  border-radius: 9px;
+  padding: 3px;
+  background: linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(150deg, #f0a97a, #8fb4dd) border-box;
+}
+.cs__docbar { display: flex; gap: 6px; align-items: center; }
+.cs__doctools {
+  display: inline-flex;
+  gap: 9px;
+  border: 1px solid var(--fl-border);
+  border-radius: 7px;
+  background: #fff;
+  padding: 5px 9px;
+}
+.cs__doctools svg { width: 12px; height: 12px; color: var(--fl-ink); }
+.cs__docsp { flex: 1; }
+.cs__crumb b { color: var(--fl-ink); font-weight: 700; text-transform: none; }
+.cs__docbtn {
+  border: 1px solid var(--fl-border);
+  background: #fff;
+  border-radius: 6px;
+  padding: 4px 9px;
+  font-size: 10px;
+  font-weight: 600;
+}
+.cs__docbtn--dark { background: #000; border-color: #000; color: #fff; }
+.cs__docsheet {
+  flex: 1;
+  background: #fff;
+  border: 1px solid var(--fl-border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  font-size: 11px;
+  line-height: 1.55;
+}
+.cs__docsheet h5 { font-size: 17px; font-weight: 800; }
+.cs__docsheet b { font-size: 12.5px; }
+
+
+/* reduced motion: skip the waiting theater, land on the result */
+@media (prefers-reduced-motion: reduce) {
+  .cs__typing { display: none; }
+  .cs__reveal { animation: none; opacity: 1; max-height: none; }
+  .obs__skel { display: none; }
+  .obs__found {
+    animation: none;
+    opacity: 1;
+    max-height: none;
+    padding: 12px 14px;
+    border-width: 1px;
+  }
+}

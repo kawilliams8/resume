@@ -6,9 +6,9 @@ import olliFace from "./olli-face.svg";
  * Fluint's chat surface, rebuilt from scratch against production: one app
  * shell with the sidebar rail and docked composer, content changing between
  * them. The conversation replays its streaming sequence on every visit.
- * The error copy is quoted because Katie wrote it.
+ * The error copy is quoted from the shipped product.
  */
-const VIEWS = ["Home", "Conversation", "Error"] as const;
+const VIEWS = ["Home", "Conversation", "Error", "Deal document"] as const;
 type View = (typeof VIEWS)[number];
 
 const OlliRow = () => (
@@ -87,7 +87,7 @@ function Main({ view }: { view: View }) {
                 <b>Draft an executive-ready business case...</b><i>Generate</i>
               </span>
             </div>
-            <button type="button" className="fls__cta fls__cta--olli">
+            <button type="button" tabIndex={-1} className="fls__cta fls__cta--olli">
               <s className="cs__spark">✦</s> What can Olli do?
             </button>
           </div>
@@ -99,13 +99,14 @@ function Main({ view }: { view: View }) {
         <>
           <div className="cs__thread">
             <p className="cs__bubble">
-              Please save a summary of what you can do into a new document.
+              Save a summary of what you can do to the Acme Company deal.
             </p>
             <OlliRow />
             <p className="cs__typing"><i /><i /><i /></p>
             <div className="cs__reveal">
               <p className="cs__line">
-                I'll create a document with a summary of my capabilities.
+                I'll create a document with a summary of my capabilities and
+                save it to the Acme Company deal.
               </p>
               <div className="cs__doc">
                 <p className="cs__dochead">Olli Capabilities Summary</p>
@@ -125,6 +126,70 @@ function Main({ view }: { view: View }) {
           </div>
           <Composer />
         </>
+      );
+    case "Deal document":
+      return (
+        <div className="cs__split">
+          <aside className="cs__dealbar">
+            <div className="cs__dealhead">
+              <span className="cs__deallogo">A</span>
+              <em>&#8676; Collapse</em>
+            </div>
+            <b className="cs__dealname">Acme Company <I d="M4 16 L5 12 L13 4 L16 7 L8 15 Z M12 5 L15 8" /></b>
+            <p className="cs__dealmeta">
+              <span><I d="M10 6 V10 L13 12 M10 17 A7 7 0 1 1 10 3 A7 7 0 0 1 10 17 Z" /> 248 days old</span>
+              <span><I d="M5 4 V13 M10 4 V16 M15 4 V10" /> Problem Identified</span>
+            </p>
+            <div className="cs__collab">Collaborators <i>KW</i></div>
+            <div className="cs__dealsearch">Search documents and meetings</div>
+            <ul className="cs__dealnav">
+              <li className="cs__on"><I d="M6 3 H12 L15 6 V17 H6 Z M12 3 V6 H15" /> All documents</li>
+              <li><I d="M4 8 V12 M7 5 V15 M10 3 V17 M13 6 V14 M16 8 V12" /> All meetings</li>
+              <li><I d="M13 4 L6.5 10.5 A3 3 0 0 0 10.7 14.7 L16 9.5 A4.5 4.5 0 0 0 9.6 3.2 L5 7.8" /> Files</li>
+              <li><I d="M7 9 A2.5 2.5 0 1 0 7 4 A2.5 2.5 0 0 0 7 9 Z M2.5 16 C2.5 12.5 11.5 12.5 11.5 16 M13 9 A2.5 2.5 0 1 0 13 4.2 M17.5 16 C17.5 13.2 14.8 12.6 13 13" /> Sharing</li>
+              <li><I d="M3 4 H17 V13 H3 Z M8 17 H12 M10 13 V17" /> Slides</li>
+            </ul>
+            <p className="cs__dealsec">Documents <em>+</em></p>
+            <p className="cs__dealdoc"><I d="M6 3 H12 L15 6 V17 H6 Z M12 3 V6 H15" /> <span>Olli Capabilities Su...</span></p>
+          </aside>
+          <div className="cs__docmain">
+            <div className="cs__dochdr">
+              <p className="cs__crumb">Deals / Acme Company / Documents / <b>Olli Capabilities Su...</b></p>
+              <img src={olliFace} alt="" className="cs__ollibtn" />
+            </div>
+            <div className="cs__docbar">
+              <span className="cs__doctools">
+                <I d="M10 3 L11.5 8.5 L17 10 L11.5 11.5 L10 17 L8.5 11.5 L3 10 L8.5 8.5 Z" />
+                <I d="M4 16 L5 12 L13 4 L16 7 L8 15 Z" />
+                <I d="M10 6 V10 L13 12 M10 17 A7 7 0 1 1 10 3 A7 7 0 0 1 10 17 Z" />
+                <I d="M5 4 H15 V16 H5 Z M7.5 8 H12.5 M7.5 11 H12.5" />
+                <I d="M4 4 H16 V13 H9 L5.5 16 V13 H4 Z" />
+              </span>
+              <span className="cs__docsp" />
+              <span className="cs__docbtn">Download PDF</span>
+              <span className="cs__docbtn">Copy</span>
+              <span className="cs__docbtn cs__docbtn--dark">Share</span>
+            </div>
+            <div className="cs__docsheet">
+              <h5>What Olli Does for Sales Teams</h5>
+              <p>
+                Olli is an AI-powered sales assistant that helps reps close
+                deals faster: analyzing deals, creating content, and guiding
+                the sales process.
+              </p>
+              <b>1. Deal Analysis &amp; Strategy</b>
+              <p>
+                <strong>Deal health assessments.</strong> Olli flags risks,
+                gaps in your buying committee, and stalled deals before they
+                surprise you.
+              </p>
+              <p>
+                <strong>Stakeholder mapping.</strong> Identifies who's
+                involved, who's missing, and where each person stands.
+              </p>
+            </div>
+          </div>
+        </div>
       );
     case "Error":
       return (
@@ -162,7 +227,7 @@ export default function ChatSurface() {
         ))}
       </div>
       <div className="fls__stage fls__stage--flush">
-        <div className="cs__app">
+        <div className="cs__app" aria-hidden="true">
           <Sidebar />
           <main className="cs__main" key={view}>
             <Main view={view} />
