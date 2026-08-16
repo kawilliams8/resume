@@ -6,14 +6,15 @@ frontend:
         # The résumé at site/index.html has no build step and must never depend
         # on one. If /design fails to compile, the static site still ships —
         # a broken portfolio should not take the résumé down with it.
-        # cwd persists between commands, so every command anchors to the repo
-        # root first — a second bare `cd design` runs from inside design/ and
-        # silently triggers the fallback.
+        # cwd persists between commands and across phases, so each cd runs in
+        # a subshell — the next command always starts back at the repo root.
+        # ($CODEBUILD_SRC_DIR is NOT the repo root here; the checkout lands in
+        # a subdirectory of it.)
         - nvm use $(cat .nvmrc) || true
-        - cd "$CODEBUILD_SRC_DIR/design" && npm ci --no-audit --no-fund || echo "design install failed, shipping site only"
+        - (cd design && npm ci --no-audit --no-fund) || echo "design install failed, shipping site only"
     build:
       commands:
-        - cd "$CODEBUILD_SRC_DIR/design" && npm run build || echo "design build failed, shipping site only"
+        - (cd design && npm run build) || echo "design build failed, shipping site only"
   artifacts:
     baseDirectory: site
     files:
