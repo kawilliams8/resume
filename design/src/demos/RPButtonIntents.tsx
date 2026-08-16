@@ -1,8 +1,8 @@
 import { RPButton } from "../rp/RPButton";
 
 /**
- * Every intent the component accepts. There is no eighth option, and no way to
- * pass a colour: the API is the constraint.
+ * Every option the button accepts. There is no way to add another, or to
+ * pass a different color.
  */
 export default function RPButtonIntents() {
   return (

@@ -48,7 +48,7 @@ body {
   margin: 0;
   /* the résumé's nav starts one spacing unit down the page; match it so the
      bar sits at the same height when switching between the two */
-  padding-top: var(--s-6);
+  padding-top: var(--s-5);
   background: var(--bg);
   color: var(--ink-2);
   font-family: var(--font-sans);

@@ -44,7 +44,6 @@ export default function App() {
         <div className="masthead">
           <p className="eyebrow">Portfolio · Design engineering</p>
           <h1>Where design meets development</h1>
-          {/* DRAFT premise — Katie rewrites */}
           <p className="lede">
             I'm a frontend engineer with a strong eye for visual detail,
             backed by coursework in typography and page layout. I codify that

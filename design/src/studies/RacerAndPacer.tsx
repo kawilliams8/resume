@@ -1,4 +1,7 @@
 import { Demo } from "../components/Demo";
+import heroShot from "../shots/hero.webp";
+import modalRacer from "../shots/modal-racer.webp";
+import modalPacer from "../shots/modal-pacer.webp";
 import { TokenScales } from "../components/TokenScales";
 import RPButtonIntents from "../demos/RPButtonIntents";
 import rpButtonIntentsSource from "../demos/RPButtonIntents?raw";
@@ -22,12 +25,23 @@ export default function RacerAndPacer() {
         </p>
       </header>
 
-      {/* [PENDING] hero screenshot: best full screen, 2400×1350 @2x, WebP <200KB */}
-      <figure className="shot shot--pending shot--hero">
-        <span>Hero screenshot pending · racerandpacer.com · 2400 × 1350</span>
+      <figure className="shot">
+        <img
+          src={heroShot}
+          width={2588}
+          height={1398}
+          alt="The Racer & Pacer landing page. 'Ultrarunning is a team sport' in dark green serif type on cream, beside a sign-up card listing 51 ultramarathons and 48 runner profiles."
+        />
+        <figcaption className="shot__caption">
+          <span className="shot__tag">Principles in action: Visual hierarchy &middot; White space &middot; Social proof &middot; Rule of three</span>
+          The serif headline leads and everything else steps down from it.
+          White space does the layout work, and the live race and runner
+          counts prove real athletes are here. The closing ribbon makes three
+          short claims in parallel: the rule of three, read in one pass.
+        </figcaption>
       </figure>
 
-      {/* DRAFT — Katie owns this pitch line */}      <h3>The project</h3>
+      <h3>The project</h3>
       <p className="study__human">
         Ultramarathon racers rely on personal pacers for safety and
         motivation, but finding them is mostly word of mouth in a niche
@@ -61,20 +75,28 @@ export default function RacerAndPacer() {
       </p>
       <Demo
         source={rpButtonIntentsSource}
-        caption={<>Every option <code>RPButton</code> accepts. There is no eighth, and no way to pass your own color.</>}
+        caption={<>Every iteration of <code>RPButton</code>. With no way to pass a different color, consistency is locked in.</>}
       >
         <RPButtonIntents />
       </Demo>
       <Demo
         source={rpBadgeVocabularySource}
-        caption={<><code>RPBadge</code>'s ten variants, all ten badge styles the app has. The code rejects anything else.</>}
+        caption={<><code>RPBadge</code>'s ten variants. The code won't allow anything else, so a dev or AI produces the same thing, quickly.</>}
       >
         <RPBadgeVocabulary />
       </Demo>
 
       <h3>The tradeoff</h3>
       <p>
-        The names are shared, the colors are not. RPPill uses RPBadge's exact list of variant names, but each component fills in its own colors, and two have drifted apart. This is what tech debt looks like in a design system. Known, logged, and low priority next to features users asked for. That's the honest math of a solo product.
+        The names are shared, the colors are not. RPPill uses RPBadge's exact
+        list of variant names, but each component fills in its own colors, and
+        two have drifted apart. This is the drift that weak design systems
+        allow: the code checks the names but nothing defends the colors. My
+        kind of work makes it impossible: define the colors once, in one
+        shared place, and product designers, devs, and AI all produce the same
+        thing. In Racer &amp; Pacer, this is known and logged, but low
+        priority compared to any features users asked for. That's the honest
+        process of a solo product.
       </p>
       <Demo
         source={badgeVsPillSource}
@@ -95,13 +117,33 @@ export default function RacerAndPacer() {
         next one to nail down.
       </p>
       <div className="shot-row">
-        {/* [PENDING] same shared step, racer context: 1200×900 @2x, gold accents visible */}
-        <figure className="shot shot--pending">
-          <span>Add-race step, racer side (gold) · 1200 × 900</span>
+        <figure className="shot">
+          <img
+            src={modalRacer}
+            width={1536}
+            height={1536}
+            loading="lazy"
+            alt="The add-race dialog for racing Leadville Trail 100: gold flag, gold option outlines, gold Add to My Races button."
+          />
+          <figcaption className="shot__caption">
+            <span className="shot__tag">Chunking &middot; Color coding</span>
+            The add-race flow, chunked into short steps: find the race, set
+            your role, confirm. Gold ties every control to the racer side.
+          </figcaption>
         </figure>
-        {/* [PENDING] same shared step, pacer context: 1200×900 @2x, green accents visible */}
-        <figure className="shot shot--pending">
-          <span>Same step, pacer side (green) · 1200 × 900</span>
+        <figure className="shot">
+          <img
+            src={modalPacer}
+            width={1536}
+            height={1536}
+            loading="lazy"
+            alt="The same dialog for pacing Leadville Trail 100: identical layout, with the flag, outlines and Add Availability button all in green."
+          />
+          <figcaption className="shot__caption">
+            <span className="shot__tag">Consistency &middot; Recognition over recall</span>
+            The same step in pacer green. The structure never changes between
+            roles, so the flow is recognized, not relearned.
+          </figcaption>
         </figure>
       </div>
 

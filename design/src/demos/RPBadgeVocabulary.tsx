@@ -1,9 +1,8 @@
 import { RPBadge } from "../rp/RPBadge";
 
 /**
- * The full vocabulary. Ten names, and no way to pass a color that is not one
- * of them. The names describe where a badge sits or what it means, never what
- * it looks like.
+ * All ten badge styles. Each name says where the badge sits or what it
+ * means, never what it looks like.
  */
 export default function RPBadgeVocabulary() {
   return (

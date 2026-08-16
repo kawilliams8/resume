@@ -2,10 +2,9 @@ import { RPBadge } from "../rp/RPBadge";
 import { RPPill } from "../rp/RPPill";
 
 /**
- * The drift, live. RPPill imports RPBadge's variant type, so TypeScript
- * enforces one shared vocabulary — but each component declares its own values,
- * and two have quietly diverged. Same name, two renders. This is how design
- * systems rot: the contract is checked, the rendering is not.
+ * RPPill reuses RPBadge's exact list of variant names, so the names always
+ * match. But each component picks its own colors, and two have drifted
+ * apart. Same name, different look.
  */
 export default function BadgeVsPill() {
   return (
