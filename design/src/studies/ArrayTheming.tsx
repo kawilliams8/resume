@@ -1,6 +1,4 @@
-import { Demo } from "../components/Demo";
-import DynamicPalette from "../demos/DynamicPalette";
-import dynamicPaletteSource from "../demos/DynamicPalette?raw";
+import PollingPalettes from "../demos/PollingPalettes";
 
 /**
  * Case study 2 — the Array theming system. No Array code or UI appears here:
@@ -17,6 +15,8 @@ const TOKENS = [
   "pollingMultipleChoiceSelectedTop", "pollingMultipleChoiceSelectedBottom",
   "surveyHeader", "surveyButtons",
 ];
+/* the two inputs, set apart from the sixteen stored tokens */
+const BRAND_INPUTS = ["colorPrimary", "colorSecondary"];
 
 export default function ArrayTheming() {
   return (
@@ -31,10 +31,12 @@ export default function ArrayTheming() {
       </header>
 
       <p className="study__human">
-        An organization picks two brand colors on Tuesday and presents to a
-        thousand people on Thursday. Every other color is computed from those
-        two, and a wrong one shows up on stage.
+        An organization sets its colors on Tuesday and presents to a thousand
+        people on Thursday. They pick one of six palettes, or a custom primary
+        and secondary, and can override any of sixteen tokens. That's 393,216
+        possible configurations before a single color value is chosen.
       </p>
+      <p className="study__human">A wrong color anywhere shows up on stage.</p>
 
       <p className="study__call">
         My approach: the issue wasn't the complexity, it was the missing guardrails. Engineers kept reaching for the wrong color in the wrong place, so I turned my eye for wrong colors into automated tests that ran on every change.
@@ -44,38 +46,54 @@ export default function ArrayTheming() {
       <p>
         A bug ticket would come in, someone would fix the color in one place
         and break it in another, and the cycle repeated. One step forward, one
-        step back, until the tests made good changes distinguishable from breakage. That check caught it: a wrong color now failed before merge instead of on stage.
+        step back, until the tests made good changes distinguishable from
+        breakage. That check caught it: a wrong color now failed before merge
+        instead of on stage. Automated tests ran on every change. Weeks of
+        broken theme tickets basically stopped.
       </p>
 
-      <h3>Eighteen colors, automatically checked</h3>
+      <h3>Sixteen tokens plus two brand colors, automatically checked</h3>
       <p>
-        Sixteen named colors plus the two brand inputs. Every palette an org saves is checked automatically, using a validation library that rejects anything malformed before it can reach an audience.
+        Eighteen color fields in every saved palette. Each one is checked
+        automatically, using a validation library that rejects anything
+        malformed before it can reach an audience.
       </p>
       <p className="study__tokens">
+        {BRAND_INPUTS.map((t) => (
+          <code key={t} className="tok-input">{t}</code>
+        ))}
         {TOKENS.map((t) => (
           <code key={t}>{t}</code>
         ))}
       </p>
 
-      <h3>Computing a palette from two brand colors</h3>
+      <h3>Six palettes, two of them computed</h3>
       <p>
-        The Dynamic palettes compute everything from the two brand colors. This widget rebuilds that math from scratch, so what you are trying is the design decision, not Array's code.
+        Array's clients have six pre-built palette options for each live
+        presentation. Four are fixed sets: the system's default blues and a
+        black and white pair, each in light and dark. The two dynamic palettes
+        compute everything from the organization's two brand colors.
       </p>
-      <Demo
-        source={dynamicPaletteSource}
-        caption="Pick two brand colors and the other fourteen update instantly. Show source displays the code that computes them."
-      >
-        <DynamicPalette />
-      </Demo>
+      <p>This widget demos all six from scratch.</p>
+      <figure className="demo">
+        <div className="demo__stage">
+          <PollingPalettes />
+        </div>
+        <figcaption className="demo__foot">
+          <span className="shot__tag">
+            Principles in action: Direct manipulation &middot; Feedback
+            &middot; Constraints &middot; Consistency
+          </span>
+        </figcaption>
+      </figure>
 
-      <h3>Six palettes, sixteen tokens, two brand colors</h3>
+      <h3>Test coverage stops the bugs</h3>
       <p>
-        A white-label platform has to offer this much control, and the
-        business couldn't walk it back: six pre-built palettes, sixteen tokens
-        an org can override on top, plus every value computed from their two
-        brand colors, all applied across every slide type. That's more than a team can eyeball,
-        and every unchecked fix quietly moved the product backwards. Checking that many color combinations by eye is its own skill. I codified it into unit tests for every palette variation, so
-        correctness stopped depending on who was looking. Frontend is becoming a team of humans and AI agents. Both need correctness encoded, because neither ships it by default. That's the work I do.
+        The business promised all of this control and we couldn't walk it
+        back. Checking that many color combinations by eye is its own skill,
+        and it is mine. I codified it into unit tests for every palette
+        variation, so correctness stopped depending on who was looking. More
+        efficient progress, no regressions.
       </p>
 
     </section>
