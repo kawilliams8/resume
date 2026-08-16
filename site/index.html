@@ -304,7 +304,7 @@ main{max-width:880px;margin:0 auto}
    ═══════════════════════════════════════════════════════════════ */
 .sitenav{display:flex;justify-content:space-between;align-items:center;gap:var(--s-4);flex-wrap:wrap;
   position:sticky;top:0;z-index:60;background:var(--bg);
-  padding:var(--s-3) 0;border-bottom:1px solid var(--ink);margin-bottom:var(--s-6);
+  padding:var(--s-2) 0;border-bottom:1px solid var(--ink);margin-bottom:var(--s-5);
   transition:background-color var(--dur) var(--ease)}
 .sitenav .wordmark{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.18em;font-weight:600;
   color:var(--ink);text-decoration:none}
@@ -315,6 +315,9 @@ main{max-width:880px;margin:0 auto}
    an even gap above the rule. the padding is the tap target — it sets the bar's
    height rather than the text's line box. */
 .sitenav a,.sitenav .wordmark{line-height:1;padding:var(--s-2) 0}
+/* the portfolio is the one nav item that leaves the page — the wash pill
+   separates it from the section anchors without adding a second link */
+.sitenav a.nav-cta{background:var(--accent);color:var(--bg);padding:var(--s-2) var(--s-2);border-radius:3px}
 /* phone: the wordmark is redundant with the name right below it, and dropping
    it keeps the links on one row instead of doubling the sticky bar's height */
 @media (max-width:640px){
@@ -400,8 +403,8 @@ h2{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transfor
    ═══════════════════════════════════════════════════════════════ */
 .kv{display:grid;grid-template-columns:fit-content(300px) minmax(0,1fr);gap:2px var(--s-5);margin:var(--s-4) 0 0}
 /* school names read as one line — the column has the room */
-section[aria-labelledby="h-education"] .kv dt{white-space:nowrap}
-@media (max-width:720px){ section[aria-labelledby="h-education"] .kv dt{white-space:normal} }
+section[aria-labelledby="education"] .kv dt{white-space:nowrap}
+@media (max-width:720px){ section[aria-labelledby="education"] .kv dt{white-space:normal} }
 .kv dt{font-family:var(--font-mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;
   color:var(--ink-3);padding-top:6px}
 .kv dd{margin:0 0 var(--s-3);font-size:var(--step-0);color:var(--ink-2)}
@@ -536,9 +539,9 @@ body.condensed .colophon,
 body.condensed .lenses,
 body.condensed .notes-control__label,
 body.condensed .reset,
-body.condensed section[aria-labelledby="h-fit"],
-body.condensed section[aria-labelledby="h-education"],
-body.condensed section[aria-labelledby="h-contact"]{display:none}
+body.condensed section[aria-labelledby="fit"],
+body.condensed section[aria-labelledby="education"],
+body.condensed section[aria-labelledby="contact"]{display:none}
 body.condensed .note,body.condensed .pin{display:none!important}
 /* the short view cuts Skills, Education and Contact, so their nav links point
    at headings that are not rendered — and clicking one silently dropped the
@@ -626,11 +629,11 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
   <nav class="sitenav" aria-label="Primary">
     <a href="/" class="wordmark">KATHERINE WILLIAMS</a>
     <ul>
-      <li><a href="#h-experience">Experience</a></li>
-      <li><a href="#h-projects">Projects</a></li>
-      <li data-full-only><a href="#h-fit">Skills</a></li>
-      <li data-full-only><a href="#h-contact">Contact</a></li>
-      <li><a href="/portfolio/">Portfolio</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li data-full-only><a href="#fit">Skills</a></li>
+      <li data-full-only><a href="#contact">Contact</a></li>
+      <li><a href="/portfolio/" class="nav-cta">Portfolio</a></li>
     </ul>
   </nav>
 
@@ -706,8 +709,8 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
       </div>
     </div>
 
-    <section aria-labelledby="h-experience">
-      <h2 id="h-experience" data-note="proximity">Experience</h2>
+    <section aria-labelledby="experience">
+      <h2 id="experience" data-note="proximity">Experience</h2>
 
       <article class="role-entry">
         <div class="role-head">
@@ -776,8 +779,8 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
       </article>
     </section>
 
-    <section aria-labelledby="h-projects">
-      <h2 id="h-projects">Projects</h2>
+    <section aria-labelledby="projects">
+      <h2 id="projects">Projects</h2>
       <article class="role-entry">
         <div class="role-head">
           <div>
@@ -795,8 +798,8 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
       </article>
     </section>
 
-    <section aria-labelledby="h-fit">
-      <h2 id="h-fit">Skills</h2>
+    <section aria-labelledby="fit">
+      <h2 id="fit">Skills</h2>
       <dl class="kv" data-note="skills">
         <dt class="secondary">Frontend</dt><dd class="secondary">TypeScript · JavaScript (ES6+) · React · React Hooks · Vue · component-driven architecture · SPAs · state management (Redux) · semantic HTML · CSS animations · responsive design · performance optimization · cross-browser compatibility</dd>
         <dt class="secondary">UI &amp; design</dt><dd class="secondary">UI/UX design · Figma · design systems · Storybook · Tailwind CSS · shadcn/ui · Material UI · <span data-note="a11y">web accessibility (WCAG)</span></dd>
@@ -807,8 +810,8 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
       </dl>
     </section>
 
-    <section aria-labelledby="h-education">
-      <h2 id="h-education">Education &amp; certifications</h2>
+    <section aria-labelledby="education">
+      <h2 id="education">Education &amp; certifications</h2>
       <dl class="kv">
         <dt>Turing School of Software and Design</dt><dd>Front-End Engineering Certificate</dd>
         <dt>Colorado Mountain College</dt><dd>Graphic Technologies Certificate</dd>
@@ -816,8 +819,8 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
       </dl>
     </section>
 
-    <section aria-labelledby="h-contact">
-      <h2 id="h-contact">Contact</h2>
+    <section aria-labelledby="contact">
+      <h2 id="contact">Contact</h2>
       <p class="lede" data-note="contact">Get my attention via <a href="mailto:kawilliams8@gmail.com">kawilliams8@gmail.com</a>. I answer ASAP and I'll tell you straight if I don't think I'm right for your role. Might even have a great recommendation from my network!</p>
     </section>
 
