@@ -172,7 +172,7 @@ async function run(){
     return (cards().length || pins().length) ? cards().length + ' cards, ' + pins().length + ' pins' : true; });
 
   /* ---------- annotations ---------- */
-  for (const [lens, n] of [['hiring', 4], ['engineering', 7]]) {
+  for (const [lens, n] of [['hiring', 5], ['engineering', 7]]) {
     await boot(1600, lens);
     G('Annotations — ' + lens);
     T('builds ' + n + ' cards and ' + n + ' pins', () => {
