@@ -35,7 +35,7 @@ export default function App() {
         <a className="wordmark" href="/">Katherine Williams</a>
         <nav aria-label="Primary">
           <ul>
-            <li><a href="/">Résumé</a></li>
+            <li><a className="nav-cta" href="/">Résumé</a></li>
             <li><a href="mailto:kawilliams8@gmail.com">Contact</a></li>
           </ul>
         </nav>

@@ -83,6 +83,15 @@
   padding: var(--s-2) 0;
 }
 .sitenav a:not(.wordmark):hover { color: var(--accent); }
+/* mirrors the resume nav: the one link that leaves the page is a solid
+   accent pill, identical on both sites */
+.sitenav a.nav-cta {
+  background: var(--accent);
+  color: var(--bg);
+  padding: var(--s-2) var(--s-2);
+  border-radius: 3px;
+}
+.sitenav a.nav-cta:hover { color: var(--ink); }
 
 /* Holds the exact space the demo will occupy, so nothing moves when it
    arrives. Every metric here mirrors Demo.css (.demo, .demo__stage,
