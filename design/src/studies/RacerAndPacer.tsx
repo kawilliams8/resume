@@ -54,7 +54,7 @@ export default function RacerAndPacer() {
         with my own color system and aesthetics. A solo product needs to look distinct, not generic or unfinished.
       </p>
 
-      <h3>The color system</h3>
+      <h3>A color for every role</h3>
       <p>
         Software products define their color palette through design tokens in
         the code. I built four scales, overrode Chakra's built-in colors, and
@@ -86,7 +86,7 @@ export default function RacerAndPacer() {
         <RPBadgeVocabulary />
       </Demo>
 
-      <h3>The tradeoff</h3>
+      <h3>Where two components disagree</h3>
       <p>
         The names are shared, the colors are not. RPPill uses RPBadge's exact
         list of variant names, but each component fills in its own colors, and
@@ -105,7 +105,7 @@ export default function RacerAndPacer() {
         <BadgeVsPill />
       </Demo>
 
-      <h3>The modals</h3>
+      <h3>Eleven modals, one to-do</h3>
       <p>
         The app's 11 modals need the same level of discipline. There are
         three ways to add a race and they share one search step, one form,
