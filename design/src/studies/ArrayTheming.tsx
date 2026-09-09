@@ -42,7 +42,7 @@ export default function ArrayTheming() {
         My approach: the issue wasn't the complexity, it was the missing guardrails. Engineers kept reaching for the wrong color in the wrong place, so I turned my eye for wrong colors into automated tests that ran on every change.
       </p>
 
-      <h3>The problem</h3>
+      <h3>Why fixes kept undoing themselves</h3>
       <p>
         A bug ticket would come in, someone would fix the color in one place
         and break it in another, and the cycle repeated. One step forward, one

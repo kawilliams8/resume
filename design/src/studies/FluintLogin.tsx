@@ -68,7 +68,7 @@ export default function FluintLogin() {
         </figcaption>
       </figure>
 
-      <h3>The onboarding flow</h3>
+      <h3>Onboarding without a blueprint</h3>
       <p>
         After login, Olli sets up your first deal in four steps: what you
         sell, which deal, research, first business case. Another engineer
@@ -90,7 +90,7 @@ export default function FluintLogin() {
         </figcaption>
       </figure>
 
-      <h3>The chat surface</h3>
+      <h3>Keeping Olli on brand</h3>
       <p>
         Chat is where users work with Olli day to day: the composer and its
         menus, streaming responses, document cards, error states. My work
@@ -112,7 +112,7 @@ export default function FluintLogin() {
         </figcaption>
       </figure>
 
-      <h3>The engineering underneath</h3>
+      <h3>The machinery behind one click</h3>
       <p>
         Passwordless login is a state machine. A magic link from Stytch is
         single-use and short-lived, it can land in a different browser than
