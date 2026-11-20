@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 /* DM Sans 500 is the one weight the rendered components use — the browser
    only fetches faces that render, so unused weights were pure noise. Re-add
    weights as demos need them. */
@@ -18,6 +18,23 @@ import "./App.css";
  * and one client render is the version that holds no surprises. The section
  * is the content, so splitting it bought nothing but a visible late mount.
  */
+/* the nav's light / dark button, the same as the résumé's: shares its saved choice */
+function ThemeToggle() {
+  const [dark, setDark] = useState(() => document.documentElement.dataset.theme === "dark");
+  const toggle = () => {
+    const t = dark ? "light" : "dark";
+    document.documentElement.dataset.theme = t;
+    try { localStorage.setItem("kw:theme", t); } catch { /* private mode */ }
+    setDark(!dark);
+  };
+  return (
+    <button type="button" className="theme-toggle" aria-label="Dark mode" aria-pressed={dark} onClick={toggle}>
+      <svg className="i-moon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 10.2A6 6 0 0 1 5.8 2.5a6 6 0 1 0 7.7 7.7z" /></svg>
+      <svg className="i-sun" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3" /><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.4 1.4M11.6 11.6 13 13M3 13l1.4-1.4M11.6 4.4 13 3" /></svg>
+    </button>
+  );
+}
+
 export default function App() {
   /* Deep links from the résumé (#racer-and-pacer, #array). The page renders
      client-side, so the target does not exist when the browser first tries the
@@ -65,6 +82,7 @@ export default function App() {
             </li>
             <li className="nav-btn"><a href="/portfolio/" aria-current="page">Portfolio</a></li>
             <li className="nav-btn"><a href="mailto:kawilliams8@gmail.com">Contact</a></li>
+            <li className="nav-btn"><ThemeToggle /></li>
           </ul>
         </nav>
       </header>
