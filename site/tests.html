@@ -83,7 +83,9 @@ const $ = s => D.querySelector(s);
 const $$ = s => [...D.querySelectorAll(s)];
 const shown = s => $$(s).filter(painted);
 const chip = l => $('.chip--lens[data-lens="' + l + '"]');
-const navLinks = () => shown('.sitenav a[href^="#"]').map(a => a.textContent.trim());
+/* section links live in the résumé button's menu: open it, then read what paints */
+const navLinks = () => { const m = $('.nav-sections'); if (m) m.open = true;
+  return shown('.sitenav a[href^="#"]').map(a => a.textContent.trim()); };
 const cards = () => $$('.note').filter(painted);
 const pins  = () => $$('.pin').filter(painted);
 const pillText = () => $('.sheet-toggle__text').textContent;
@@ -133,7 +135,8 @@ async function run(){
   /* ---------- nav ---------- */
   G('Nav');
   await boot(1600, 'off');
-  T('full résumé shows all four section links', () => eq(navLinks().length, 4));
+  T('full résumé menu shows all three section links', () => eq(navLinks().join(','), 'Experience,Projects,Skills'));
+  T('résumé, portfolio and contact always show', () => eq(shown('.sitenav .nav-btn > a').map(a => a.textContent.trim()).join(','), 'Résumé,Portfolio,Contact'));
   T('every nav target is actually present', () => {
     const missing = $$('.sitenav a[href^="#"]').filter(a => { const t = D.querySelector(a.getAttribute('href'));
       return !t || t.offsetParent === null; }).map(a => a.textContent.trim());

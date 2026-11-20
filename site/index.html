@@ -320,7 +320,25 @@ main{max-width:880px;margin:0 auto}
 .sitenav a,.sitenav .wordmark{line-height:1;padding:var(--s-2) 0}
 /* the portfolio is the one nav item that leaves the page — the wash pill
    separates it from the section anchors without adding a second link */
-.sitenav a.nav-cta{background:var(--accent);color:var(--bg);padding:var(--s-2) var(--s-2);border-radius:3px}
+/* three plain buttons, the same on every page. the section links only scroll,
+   so they fold into a menu on the résumé button: <details> keeps it working
+   with JavaScript off. */
+.sitenav ul{gap:var(--s-2)}
+.sitenav .nav-btn{display:flex;align-items:stretch}
+.sitenav .nav-btn > a,.nav-sections summary{padding:var(--s-2);border:1.5px solid var(--accent);border-radius:3px;
+  color:var(--accent);font-weight:600}
+.sitenav .nav-btn > a:hover,.nav-sections summary:hover{background:var(--accent-wash);color:var(--accent)}
+.nav-resume > a{border-radius:3px 0 0 3px!important}
+.nav-sections{position:relative;display:flex}
+.nav-sections summary{list-style:none;cursor:pointer;border-left:0!important;border-radius:0 3px 3px 0!important;
+  font-family:var(--font-mono);font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;min-width:34px;padding:0 var(--s-3)}
+.nav-sections summary::-webkit-details-marker{display:none}
+.nav-sections[open] summary{background:var(--accent);color:var(--bg)}
+.nav-sections .nav-menu{position:absolute;top:calc(100% + 6px);right:0;z-index:70;display:flex;flex-direction:column;gap:0;
+  min-width:200px;padding:var(--s-2) 0;background:var(--bg);border:1px solid var(--rule);border-radius:3px;box-shadow:var(--shadow)}
+.sitenav .nav-menu li{display:block}
+.sitenav .nav-menu a{display:block;width:100%;padding:var(--s-3) var(--s-4);font-size:11px}
+.sitenav .nav-menu a:hover{background:var(--accent-wash)}
 /* phone: the wordmark is redundant with the name right below it, and dropping
    it keeps the links on one row instead of doubling the sticky bar's height */
 @media (max-width:640px){
@@ -553,6 +571,7 @@ body.condensed .note,body.condensed .pin{display:none!important}
    at headings that are not rendered — and clicking one silently dropped the
    reader back into the full résumé */
 body.condensed .sitenav [data-full-only]{display:none}
+body.condensed .nav-menu [data-full-only]{display:none}
 body.condensed .short-only{display:block}
 body.condensed .short-contact{display:block}
 body.condensed .role-head > div{display:flex;align-items:baseline;gap:var(--s-2);flex-wrap:wrap}
@@ -635,11 +654,16 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
   <nav class="sitenav" aria-label="Primary">
     <a href="/" class="wordmark">KATHERINE WILLIAMS</a>
     <ul>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li data-full-only><a href="#fit">Skills</a></li>
-      <li data-full-only><a href="#contact">Contact</a></li>
-      <li><a href="/portfolio/" class="nav-cta">Portfolio</a></li>
+      <li class="nav-btn nav-resume"><a href="/" aria-current="page">Résumé</a><details class="nav-sections">
+          <summary aria-label="Résumé sections"><span aria-hidden="true">▾</span></summary>
+          <ul class="nav-menu">
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li data-full-only><a href="#fit">Skills</a></li>
+          </ul>
+        </details></li>
+      <li class="nav-btn"><a href="/portfolio/">Portfolio</a></li>
+      <li class="nav-btn"><a href="mailto:kawilliams8@gmail.com">Contact</a></li>
     </ul>
   </nav>
 
@@ -1503,6 +1527,13 @@ const NOTES = [
   /* nav promises the document — if the target section is hidden by the current
      view (machine view, or contact in the short view), return to the full
      résumé first. scrolls by hand so the URL never grows a hash. */
+  /* the sections menu closes on a choice, an outside click or Escape */
+  const navMenu = document.querySelector('.nav-sections');
+  if (navMenu){
+    navMenu.addEventListener('click', e => { if (e.target.closest('a')) navMenu.open = false; });
+    document.addEventListener('click', e => { if (!navMenu.contains(e.target)) navMenu.open = false; });
+    addEventListener('keydown', e => { if (e.key === 'Escape' && navMenu.open){ navMenu.open = false; navMenu.querySelector('summary').focus(); } });
+  }
   document.querySelectorAll('.sitenav a[href^="#"]').forEach(a =>
     a.addEventListener('click', e => {
       e.preventDefault();

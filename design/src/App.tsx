@@ -22,6 +22,23 @@ export default function App() {
   /* Deep links from the résumé (#racer-and-pacer, #array). The page renders
      client-side, so the target does not exist when the browser first tries the
      fragment — scroll once the sections are real. */
+  /* the sections menu closes on a choice, an outside click or Escape,
+     the same as on the résumé */
+  useEffect(() => {
+    const menu = document.querySelector<HTMLDetailsElement>(".nav-sections");
+    if (!menu) return;
+    const onClick = (e: MouseEvent) => {
+      const t = e.target as Element;
+      if (!menu.contains(t) || t.closest("a")) menu.open = false;
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && menu.open) { menu.open = false; menu.querySelector("summary")?.focus(); }
+    };
+    document.addEventListener("click", onClick);
+    addEventListener("keydown", onKey);
+    return () => { document.removeEventListener("click", onClick); removeEventListener("keydown", onKey); };
+  }, []);
+
   useEffect(() => {
     if (!location.hash) return;
     document.querySelector(location.hash)?.scrollIntoView();
@@ -35,8 +52,19 @@ export default function App() {
         <a className="wordmark" href="/">Katherine Williams</a>
         <nav aria-label="Primary">
           <ul>
-            <li><a className="nav-cta" href="/">Résumé</a></li>
-            <li><a href="mailto:kawilliams8@gmail.com">Contact</a></li>
+            <li className="nav-btn nav-resume">
+              <a href="/">Résumé</a>
+              <details className="nav-sections">
+                <summary aria-label="Résumé sections"><span aria-hidden="true">▾</span></summary>
+                <ul className="nav-menu">
+                  <li><a href="/#experience">Experience</a></li>
+                  <li><a href="/#projects">Projects</a></li>
+                  <li><a href="/#fit">Skills</a></li>
+                </ul>
+              </details>
+            </li>
+            <li className="nav-btn"><a href="/portfolio/" aria-current="page">Portfolio</a></li>
+            <li className="nav-btn"><a href="mailto:kawilliams8@gmail.com">Contact</a></li>
           </ul>
         </nav>
       </header>
