@@ -393,6 +393,9 @@ h2{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transfor
 .role-note{font-weight:400;font-size:15px;color:var(--ink-3)}
 .role-dates{font-family:var(--font-mono);font-size:12.5px;color:var(--ink-2);white-space:nowrap;
   font-variant-numeric:tabular-nums lining-nums}
+.role-project{margin:var(--s-4) 0 0;font-size:14px;font-weight:500;color:var(--ink-2)}
+.role-project + .bullets{margin-top:var(--s-2)}
+body.condensed .role-project{display:none}
 .bullets{list-style:none;margin:var(--s-3) 0 0;padding:0;max-width:var(--measure)}
 .bullets li{font-size:var(--step-0);line-height:1.6;color:var(--ink-2);
   padding-left:18px;position:relative;margin-bottom:var(--s-2)}
@@ -720,12 +723,18 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
           </div>
           <p class="role-dates"><span class="secondary">Aug </span>2026 — present</p>
         </div>
-        <p class="short-only role-summary">Shipping React and shadcn/ui features from the first week, with an AI-driven workflow.</p>
+        <p class="short-only role-summary">Design system lead on a pre-launch coaching platform in Next.js and React Native, plus marketing data pipelines for a medical practice.</p>
+        <h4 class="role-project">Pre-launch fitness coaching platform</h4>
         <ul class="bullets">
-          <li>Shipped React features from the first week, unifying scattered client UI onto shadcn/ui components and consistent UX patterns.</li>
-          <li>Became the team's go-to for design and UX decisions within the first month, weighing in on UI work across the project and setting frontend best practices.</li>
-          <li>Build every feature with Claude Code in an agentic workflow, and back it all with heavy test coverage and GitHub-to-AWS delivery.</li>
-          <li>Now building HIPAA-compliant data pipelines that consolidate CRM, Zenoti, and other clinic systems into Monday.com dashboards, so sales tracking lives in one place.</li>
+          <li>Lead the design system on Next.js and React Native/Expo, merging 68 PRs in 5 weeks that touched over 1,100 components across web and mobile.</li>
+          <li>Unified the Next.js web app and the React Native iOS and Android apps onto one shared spec: design tokens, a single type scale, and one set of buttons, fields, list rows, sheets, toasts and empty states, with lint and test guards that catch screens drifting from it.</li>
+          <li>Wrote and enforce about 40 numbered design rules covering accessibility, destructive actions, keyboard handling and contrast, so teammates and AI agents build new UI the same way.</li>
+          <li>Rebuilt the marketing site's home, pricing and audience pages on the system, and shipped offline-safe saving and an Expo SDK 58 upgrade on mobile.</li>
+        </ul>
+        <h4 class="role-project">HIPAA-covered medical practice</h4>
+        <ul class="bullets">
+          <li>Built marketing-operations data pipelines: 101 merged PRs bringing ads, CRM leads, bookings and sales into Snowflake, with 34-table parity checks that caught nearly 1,900 dropped sales records before cutover.</li>
+          <li>Built HIPAA safeguards into an AI-driven workflow, plus a live nightly Snowflake-to-Monday.com sync and daily alerts when ad leads stop reaching the booking system.</li>
         </ul>
       </article>
 
@@ -818,7 +827,8 @@ body:not([data-notes="off"]) .has-note{cursor:pointer}
     <section aria-labelledby="fit">
       <h2 id="fit">Skills</h2>
       <dl class="kv" data-note="skills">
-        <dt class="secondary">Frontend</dt><dd class="secondary">TypeScript · JavaScript (ES6+) · React · React Hooks · Vue · component-driven architecture · SPAs · state management (Redux) · semantic HTML · CSS animations · responsive design · performance optimization · cross-browser compatibility</dd>
+        <dt class="secondary">Web frontend</dt><dd class="secondary">TypeScript · JavaScript (ES6+) · React · React Hooks · Vue · component-driven architecture · SPAs · state management (Redux) · semantic HTML · CSS animations · responsive design · performance optimization · cross-browser compatibility</dd>
+        <dt class="secondary">Mobile</dt><dd class="secondary">React Native · Expo · Expo Router · iOS &amp; Android · React Native Testing Library · offline-first sync · mobile accessibility</dd>
         <dt class="secondary">UI &amp; design</dt><dd class="secondary">UI/UX design · Figma · design systems · Storybook · Tailwind CSS · shadcn/ui · Material UI · <span data-note="a11y">web accessibility (WCAG)</span></dd>
         <dt class="secondary">AI-assisted</dt><dd class="secondary" data-note="ai-skills">Claude Code (custom agents · MCP connectors) · LLM integration</dd>
         <dt class="secondary">Full-stack &amp; tooling</dt><dd class="secondary">Node.js · Express · PHP · Laravel · Redis · REST APIs · gRPC · WebSockets · webhooks · runtime schema validation (io-ts · Zod) · API integration · CRM integration (Salesforce · HubSpot) · AWS · Railway · Docker · CI/CD (GitHub Actions) · monorepos (npm workspaces) · pnpm · yarn · Webpack · Vite · ESLint · Jest · Vitest · React Testing Library · Supertest · Playwright · error monitoring (Sentry) · structured logging (pino)</dd>
