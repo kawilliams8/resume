@@ -60,11 +60,13 @@
 .wordmark {
   font-family: var(--font-mono);
   font-size: 10.5px;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   font-weight: 600;
   color: var(--ink);
   text-decoration: none;
+  line-height: 1;
+  padding: var(--s-2) 0;
 }
 .sitenav ul {
   display: flex;
@@ -76,22 +78,55 @@
 .sitenav a:not(.wordmark) {
   font-family: var(--font-mono);
   font-size: 10px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
   color: var(--ink-3);
   text-decoration: none;
   padding: var(--s-2) 0;
+  line-height: 1;
+  white-space: nowrap;
 }
 .sitenav a:not(.wordmark):hover { color: var(--accent); }
-/* mirrors the resume nav: the one link that leaves the page is a solid
-   accent pill, identical on both sites */
-.sitenav a.nav-cta {
-  background: var(--accent);
-  color: var(--bg);
-  padding: var(--s-2) var(--s-2);
+/* mirrors the résumé nav exactly: three plain buttons, section links folded
+   into a menu on Résumé. values copied from index.html; keep them in step. */
+.sitenav ul { gap: var(--s-2); }
+.sitenav .nav-btn { display: flex; align-items: stretch; }
+.sitenav .nav-btn > a,
+.nav-sections summary {
+  padding: var(--s-2);
+  border: 1.5px solid var(--accent);
   border-radius: 3px;
+  color: var(--accent);
+  font-weight: 600;
 }
-.sitenav a.nav-cta:hover { color: var(--ink); }
+.sitenav .nav-btn > a:hover,
+.nav-sections summary:hover { background: color-mix(in srgb, var(--accent) 9%, transparent); color: var(--accent); }
+.nav-resume > a { border-radius: 3px 0 0 3px !important; }
+.nav-sections { position: relative; display: flex; }
+.nav-sections summary {
+  list-style: none; cursor: pointer; border-left: 0 !important; border-radius: 0 3px 3px 0 !important;
+  font-family: var(--font-mono); font-size: 16px; line-height: 1; display: flex; align-items: center;
+  justify-content: center; min-width: 34px; padding: 0 var(--s-3);
+}
+.nav-sections summary::-webkit-details-marker { display: none; }
+.nav-sections[open] summary { background: var(--accent); color: var(--bg); }
+.nav-sections .nav-menu {
+  position: absolute; top: calc(100% + 6px); right: 0; z-index: 70;
+  display: flex; flex-direction: column; gap: 0; min-width: 200px; padding: var(--s-2) 0;
+  background: var(--bg); border: 1px solid var(--rule); border-radius: 3px; box-shadow: 0 6px 20px -10px rgba(22,22,26,.35);
+}
+.sitenav .nav-menu li { display: block; }
+.sitenav .nav-menu a { display: block; width: 100%; padding: var(--s-3) var(--s-4); font-size: 11px; }
+.sitenav .nav-menu a:hover { background: color-mix(in srgb, var(--accent) 9%, transparent); }
+/* the résumé narrows its page padding below 900px; the bar follows it */
+@media (max-width: 900px) {
+  body { padding-top: var(--s-5); }
+  .sitenav { padding-left: var(--s-4); padding-right: var(--s-4); }
+}
+@media (max-width: 640px) {
+  .sitenav { justify-content: center; }
+  .sitenav .wordmark { display: none; }
+}
 
 /* Holds the exact space the demo will occupy, so nothing moves when it
    arrives. Every metric here mirrors Demo.css (.demo, .demo__stage,

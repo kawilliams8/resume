@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found · Katherine Williams</title>
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<script>
+/* same saved scheme as the résumé, resolved before first paint */
+(function(){try{var t=localStorage.getItem('kw:theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}})();
+</script>
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="%2316161A"/><text x="16" y="21.5" text-anchor="middle" font-family="Menlo,Consolas,monospace" font-size="13" font-weight="600" fill="%23FDFDFB">KW</text></svg>'>
+<style>
+/* tokens copied from index.html's :root; keep them in step */
+:root{
+  --bg:#FDFDFB;--ink:#16161A;--ink-2:#42424C;--ink-3:#6E6E78;--rule:#E2E2DC;--shadow:0 6px 20px -10px rgba(22,22,26,.35);--s-1:4px;
+  --accent:#1F4FD8;--accent-wash:rgba(31,79,216,.09);--fail:#C0392B;color-scheme:light;
+  --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;
+  --font-mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  --font-note:"Marker Felt","Ink Free","Segoe Script",Georgia,serif;
+  --s-2:8px;--s-3:12px;--s-4:20px;--s-5:32px;--s-6:52px;
+}
+:root[data-theme="dark"]{
+  --bg:#32312B;--ink:#FAFAF8;--ink-2:#CCCBC1;--ink-3:#A6A59B;--rule:#525148;--shadow:0 8px 22px -10px rgba(0,0,0,.7);
+  --accent:#8FA9FF;--accent-wash:rgba(143,169,255,.16);--fail:#FF7A66;color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink-2);font-family:var(--font-sans);line-height:1.6}
+.wrap{max-width:1500px;margin:0 auto;padding:var(--s-6) var(--s-5) 0}
+@media (max-width:900px){.wrap{padding:var(--s-5) var(--s-4) 0}}
+
+/* nav: same links and switch as the résumé and portfolio */
+.sitenav{display:flex;justify-content:space-between;align-items:center;gap:var(--s-4);flex-wrap:wrap;
+  padding:var(--s-2) 0;border-bottom:1px solid var(--ink)}
+.sitenav .wordmark{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.18em;font-weight:600;color:var(--ink);text-decoration:none;line-height:1;padding:var(--s-2) 0}
+.sitenav ul{list-style:none;display:flex;gap:var(--s-4);margin:0;padding:0}
+.sitenav li{display:flex}
+.sitenav a:not(.wordmark){font-family:var(--font-mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-3);text-decoration:none;white-space:nowrap;line-height:1;padding:var(--s-2) 0}
+.sitenav a:not(.wordmark):hover{color:var(--ink)}
+/* three plain buttons, the same on every page. the section links only scroll,
+   so they fold into a menu on the résumé button: <details> keeps it working
+   with JavaScript off. */
+.sitenav ul{gap:var(--s-2)}
+.sitenav .nav-btn{display:flex;align-items:stretch}
+.sitenav .nav-btn > a,.nav-sections summary{padding:var(--s-2);border:1.5px solid var(--accent);border-radius:3px;
+  color:var(--accent);font-weight:600}
+.sitenav .nav-btn > a:hover,.nav-sections summary:hover{background:var(--accent-wash);color:var(--accent)}
+.nav-resume > a{border-radius:3px 0 0 3px!important}
+.nav-sections{position:relative;display:flex}
+.nav-sections summary{list-style:none;cursor:pointer;border-left:0!important;border-radius:0 3px 3px 0!important;
+  font-family:var(--font-mono);font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;min-width:34px;padding:0 var(--s-3)}
+.nav-sections summary::-webkit-details-marker{display:none}
+.nav-sections[open] summary{background:var(--accent);color:var(--bg)}
+.nav-sections .nav-menu{position:absolute;top:calc(100% + 6px);right:0;z-index:70;display:flex;flex-direction:column;gap:0;
+  min-width:200px;padding:var(--s-2) 0;background:var(--bg);border:1px solid var(--rule);border-radius:3px;box-shadow:var(--shadow)}
+.sitenav .nav-menu li{display:block}
+.sitenav .nav-menu a{display:block;width:100%;padding:var(--s-3) var(--s-4);font-size:11px}
+.sitenav .nav-menu a:hover{background:var(--accent-wash)}
+@media (max-width:640px){
+  .sitenav{justify-content:center}.sitenav .wordmark{display:none}
+}
+
+main{max-width:720px;margin:0 auto;padding:var(--s-6) 0}
+.kicker{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0}
+h1{font-size:clamp(32px,7vw,52px);line-height:1.1;color:var(--ink);margin:var(--s-2) 0 var(--s-4);letter-spacing:-.01em}
+p{font-size:17px;margin:0 0 var(--s-3);max-width:60ch}
+
+/* the course: an elevation profile with the reader marked well off it */
+.course{margin:var(--s-5) 0 var(--s-4);position:relative}
+.course svg{display:block;width:100%;height:auto;overflow:visible}
+.course .trail{fill:none;stroke:var(--ink-3);stroke-width:2;stroke-linejoin:round}
+.course .ground{fill:var(--accent-wash)}
+.course .pin path{fill:var(--accent)}
+.course .pin circle{fill:var(--bg)}
+.course .stray{fill:none;stroke:var(--fail);stroke-width:2;stroke-dasharray:4 5}
+.course .you{fill:var(--fail)}
+.course .ring{fill:none;stroke:var(--fail);stroke-width:2;transform-origin:center;transform-box:fill-box;animation:ping 2.2s var(--ease,ease-out) infinite}
+.course text{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;fill:var(--ink-3)}
+.course .note{font-family:var(--font-note);font-size:17px;letter-spacing:0;fill:var(--fail)}
+@keyframes ping{from{transform:scale(.6);opacity:1}to{transform:scale(2.4);opacity:0}}
+@media (prefers-reduced-motion:reduce){.course .ring{animation:none;opacity:.5}}
+
+.aid{list-style:none;padding:0;margin:var(--s-4) 0 0;display:flex;gap:var(--s-3);flex-wrap:wrap}
+.aid a{display:inline-block;font-family:var(--font-mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;font-weight:600;
+  text-decoration:none;padding:10px var(--s-3);border-radius:3px;border:1.5px solid var(--accent);color:var(--accent)}
+.aid a:hover{background:var(--accent-wash)}
+.aid a.primary{background:var(--accent);color:var(--bg)}
+.aid a:focus-visible,.sitenav a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.path{font-family:var(--font-mono);font-size:13px;color:var(--ink-3);word-break:break-all}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="sitenav" aria-label="Primary">
+    <a href="/" class="wordmark">KATHERINE WILLIAMS</a>
+    <ul>
+      <li class="nav-btn nav-resume"><a href="/">Résumé</a><details class="nav-sections">
+          <summary aria-label="Résumé sections"><span aria-hidden="true">▾</span></summary>
+          <ul class="nav-menu">
+            <li><a href="/#experience">Experience</a></li>
+            <li><a href="/#projects">Projects</a></li>
+            <li><a href="/#fit">Skills</a></li>
+          </ul>
+        </details></li>
+      <li class="nav-btn"><a href="/portfolio/">Portfolio</a></li>
+      <li class="nav-btn"><a href="mailto:kawilliams8@gmail.com">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <p class="kicker">404 · Page not found</p>
+    <h1>You wandered off trail.</h1>
+    <p>This page doesn't exist. The link may be broken or the page may have moved.</p>
+    <p class="path" id="path" hidden></p>
+
+    <figure class="course" aria-hidden="true">
+      <svg viewBox="0 0 640 220" role="img">
+        <path class="ground" d="M0 190 L60 170 L110 178 L170 120 L215 135 L270 70 L320 95 L370 60 L430 130 L480 115 L540 160 L600 150 L640 165 L640 220 L0 220Z"/>
+        <path class="trail" d="M0 190 L60 170 L110 178 L170 120 L215 135 L270 70 L320 95 L370 60 L430 130 L480 115 L540 160 L600 150 L640 165"/>
+        <g class="pin" transform="translate(110 178)"><path d="M0 0 C-5 -7 -8 -11 -8 -16 A8 8 0 1 1 8 -16 C8 -11 5 -7 0 0Z"/><circle cx="0" cy="-16" r="3"/></g>
+        <g class="pin" transform="translate(270 70)"><path d="M0 0 C-5 -7 -8 -11 -8 -16 A8 8 0 1 1 8 -16 C8 -11 5 -7 0 0Z"/><circle cx="0" cy="-16" r="3"/></g>
+        <g class="pin" transform="translate(540 160)"><path d="M0 0 C-5 -7 -8 -11 -8 -16 A8 8 0 1 1 8 -16 C8 -11 5 -7 0 0Z"/><circle cx="0" cy="-16" r="3"/></g>
+        
+        
+        <path class="stray" d="M320 95 C 340 40, 380 20, 430 26"/>
+        <circle class="ring" cx="436" cy="26" r="9"/>
+        <circle class="you" cx="436" cy="26" r="5"/>
+        <text class="note" x="452" y="31">you are here</text>
+      </svg>
+    </figure>
+
+    <ul class="aid" aria-label="Back on the trail">
+      <li><a class="primary" href="/">Back to my résumé</a></li>
+      <li><a href="/portfolio/">See my portfolio</a></li>
+      <li><a href="mailto:kawilliams8@gmail.com">Email me</a></li>
+    </ul>
+  </main>
+</div>
+<script>
+(function(){
+  /* the sections menu closes on a choice, an outside click or Escape */
+  var navMenu = document.querySelector('.nav-sections');
+  if (navMenu){
+    navMenu.addEventListener('click', e => { if (e.target.closest('a')) navMenu.open = false; });
+    document.addEventListener('click', e => { if (!navMenu.contains(e.target)) navMenu.open = false; });
+    addEventListener('keydown', e => { if (e.key === 'Escape' && navMenu.open){ navMenu.open = false; navMenu.querySelector('summary').focus(); } });
+  }
+})();
+/* show the reader which turn they took, as text, never as markup */
+(function(){var p=location.pathname;if(p&&p!=='/404.html'&&p!=='/'){var el=document.getElementById('path');el.textContent='Nothing at '+p;el.hidden=false}})();
+</script>
+</body>
+</html>
