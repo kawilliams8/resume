@@ -169,6 +169,25 @@
 
 /* ── case studies ── */
 .study { margin-top: var(--s-6); }
+/* dark scheme: each study is a light gray card carrying the light tokens */
+:root[data-theme="dark"] .study {
+  --bg: #f3f3ef;
+  --surface: #ffffff;
+  --ink: #16161a;
+  --ink-2: #42424c;
+  --ink-3: #62626c;
+  --rule: #dcdcd5;
+  --rule-2: #e8e8e2;
+  --accent: #1f4fd8;
+  color-scheme: light;
+  background: var(--bg);
+  color: var(--ink-2);
+  border-radius: 6px;
+  padding: var(--s-5);
+}
+@media (max-width: 640px) {
+  :root[data-theme="dark"] .study { padding: var(--s-4) 16px; margin-left: -8px; margin-right: -8px; }
+}
 .study__kicker {
   font-family: var(--font-mono);
   font-size: 13px;
@@ -312,3 +331,15 @@
 }
 .outro p { max-width: none; font-size: var(--step-1); color: var(--ink); }
 .outro p + p { margin-top: var(--s-3); }
+
+/* the nav's light / dark button: copied from index.html; keep them in step */
+.theme-toggle {
+  display: flex; align-items: center; justify-content: center; width: 31px; padding: 0; cursor: pointer;
+  background: none; border: 1.5px solid var(--accent); border-radius: 3px; color: var(--accent);
+}
+.theme-toggle:hover { background: color-mix(in srgb, var(--accent) 9%, transparent); }
+.theme-toggle svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.theme-toggle .i-moon path { fill: currentColor; stroke: none; }
+.theme-toggle .i-sun circle { fill: currentColor; stroke: none; }
+.theme-toggle .i-sun, :root[data-theme="dark"] .theme-toggle .i-moon { display: none; }
+:root[data-theme="dark"] .theme-toggle .i-sun { display: block; }

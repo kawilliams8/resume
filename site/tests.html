@@ -136,6 +136,12 @@ async function run(){
   G('Nav');
   await boot(1600, 'off');
   T('full résumé menu shows all three section links', () => eq(navLinks().join(','), 'Experience,Projects,Skills'));
+  T('the nav button flips light and dark, and says which', () => {
+    const b = $('.theme-toggle'), was = D.documentElement.dataset.theme;
+    b.click(); const now = D.documentElement.dataset.theme; const pressed = b.getAttribute('aria-pressed');
+    b.click();
+    return now !== was && pressed === String(now === 'dark') && D.documentElement.dataset.theme === was
+      ? true : 'was ' + was + ', now ' + now + ', pressed ' + pressed; });
   T('résumé, portfolio and contact always show', () => eq(shown('.sitenav .nav-btn > a').map(a => a.textContent.trim()).join(','), 'Résumé,Portfolio,Contact'));
   T('every nav target is actually present', () => {
     const missing = $$('.sitenav a[href^="#"]').filter(a => { const t = D.querySelector(a.getAttribute('href'));
@@ -315,8 +321,7 @@ async function run(){
     return blocked.length ? blocked.join(',') : true; });
   T('every choice dismisses the sheet', () => {
     const pill = $('#sheetToggle');
-    const picks = ['.scheme-opt[data-scheme="dark"]','.scheme-opt[data-scheme="light"]',
-      '.chip--lens[data-lens="hiring"]','#shortBtn','#fullBtn'];
+    const picks = ['.chip--lens[data-lens="hiring"]','#shortBtn','#fullBtn'];
     const stuck = picks.filter(sel => {
       if (D.body.classList.contains('sheet-open')) pill.click();
       pill.click(); $(sel).click();

@@ -1,8 +1,8 @@
 /*
   Ported from the résumé at site/index.html so the two pages read as one site.
-  Simplified deliberately: one accent (the institutional blue), no scheme
-  switching, no runtime overrides. The résumé earns those because they are its
-  subject matter. Here they would be decoration.
+  Light and dark follow the résumé's saved choice (kw:theme), with the same
+  Light / Dark control. No runtime overrides: the résumé earns those because
+  they are its subject matter. Here they would be decoration.
 */
 :root {
   --bg: #fdfdfb;
@@ -38,6 +38,21 @@
   --radius: 3px;
 
   color-scheme: light;
+}
+
+/* dark: the page chrome follows the résumé's saved scheme. The studies stay
+   light, each on its own card (App.css), so demos and screenshots show the
+   products as they really look. Values copied from index.html. */
+:root[data-theme="dark"] {
+  --bg: #32312b;
+  --surface: #3a3932;
+  --ink: #fafaf8;
+  --ink-2: #cccbc1;
+  --ink-3: #a6a59b;
+  --rule: #525148;
+  --rule-2: #424138;
+  --accent: #8fa9ff;
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
